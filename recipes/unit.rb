@@ -1,4 +1,4 @@
-Chef::Log.error("=======\n#{node['truck']['recipe']}\n========")
+Chef::Log.error("=======\n#{node['truck']['application']}\n========")
 
 execute 'unit tests' do
   cwd node['delivery']['workspace']['repo']
