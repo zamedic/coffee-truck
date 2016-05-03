@@ -10,7 +10,7 @@ http_request 'files-changed' do
   # ignore_failure true
   headers('Content-Type' => 'application/json')
   message({
-    application: 'SBG Platform',
+    application: node['delivery']['config']['truck']['application'],
     changes: gitlog
   }.to_json)
 end
