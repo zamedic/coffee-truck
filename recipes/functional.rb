@@ -1,7 +1,7 @@
 # include_recipe 'sbgtest::setup'
 # include_recipe 'sbgtest::install'
 
-search_query = "(recipes:sbg-platform*) " \
+search_query = "(recipes:#{node['truck']['recipe']}*) " \
                  "AND chef_environment:#{delivery_environment} " \
                  "AND recipes:push-jobs*"
 

@@ -8,3 +8,5 @@ normal['maven']['3']['version'] = '3.3.9'
 normal['maven']['3']['checksum'] = '077ed466455991d5abb4748a1d022e2d2a54dc4d557c723ecbacdc857c61d51b'
 normal['git']['repo'] = nil
 normal['maven']['settings'] = '/tmp/maven/settings.xml'
+normal['truck']['recipe'] = 'sbg-platform'
+normal['sonar']['host'] = 'http://dchop169.standardbank.co.za:9000/'
