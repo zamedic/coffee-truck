@@ -1,6 +1,6 @@
 require 'json'
 
-Chef::Resource::HttpRequest.send(:include, SbgTruck::Helper)
+Chef::Resource::HttpRequest.send(:include, CoffeeTruck::Helper)
 
 include_recipe 'delivery-truck::publish'
 
