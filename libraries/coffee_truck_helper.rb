@@ -10,7 +10,7 @@ module CoffeeTruck
     def sonarmetrics
       cwd = node['delivery']['workspace']['repo']
       command = "curl -X GET '#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=ncloc,coverage,tests,test_errors,test_failures,complexity,function_complexity,file_complexity'"
-      JSON.parse(`cd #{cwd} && #{command}`
+      JSON.parse `cd #{cwd} && #{command}`
     end
   end
 end
