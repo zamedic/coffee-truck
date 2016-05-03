@@ -1,5 +1,3 @@
-Chef::Log.error("=======\n#{node['delivery']['config']['truck']['application']}\n========")
-
 execute 'unit tests' do
   cwd node['delivery']['workspace']['repo']
   environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
