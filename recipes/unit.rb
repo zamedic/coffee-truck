@@ -22,6 +22,6 @@ http_request 'sonar-results' do
   headers('Content-Type' => 'application/json')
   message({
     application: node['delivery']['config']['truck']['application'],
-    changes: sonarmetrics
+    results: sonarmetrics
   }.to_json)
 end
