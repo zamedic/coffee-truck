@@ -15,16 +15,16 @@ module CoffeeTruck
         [msr['key'], msr['val']]
       end.to_h
       {
-        'lines': metrics['ncloc'],
-        'coverage': metrics['coverage'],
-        'unit': {
-          'total': metrics['tests'],
-          'errors': metrics['test_errors'],
-          'failures': metrics['test_failures']
+        lines: metrics['ncloc'],
+        coverage: metrics['coverage'],
+        unit: {
+          total: metrics['tests'],
+          errors: metrics['test_errors'],
+          failures: metrics['test_failures']
         },
-        'integration': {
+        integration: {
         },
-        'acceptance': {
+        acceptance: {
         }
       }
     end
