@@ -29,7 +29,7 @@ module CoffeeTruck
 
   module DSL
 
-    def sonarmetrics
+    def sonarmetrics(node)
       CoffeeTruck::Helpers::Unit.sonarmetrics(node)
     end
   end

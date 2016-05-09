@@ -12,7 +12,7 @@ module CoffeeTruck
 
   module DSL
 
-    def gitlog
+    def gitlog(node)
       CoffeeTruck::Helpers::Publish.gitlog(node)
     end
   end
