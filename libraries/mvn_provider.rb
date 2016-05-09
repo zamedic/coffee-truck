@@ -27,10 +27,10 @@ class  Chef
       end
 
       action :upload do
-        command = "mvn clean deploy -U #{args} --quiet"
+        command = "mvn clean deploy:deploy -U #{args} --quiet"
         converge_by "Uploading: #{command}" do
           exec command
-          raise RuntimeError 'Stop the bus!'
+          raise RuntimeError, 'Stop the bus!'
         end
       end
 

@@ -16,5 +16,5 @@ mvn 'upload' do
   cwd node['delivery']['workspace']['repo']
   environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
   settings node['maven']['settings']
-  definitions('skipTests' => nil)
+  definitions('skipTests' => nil, 'skipITs' => nil)
 end
