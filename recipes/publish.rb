@@ -18,5 +18,3 @@ mvn 'upload' do
   settings node['maven']['settings']
   definitions('skipITs' => nil)
 end
-
-raise RuntimeError 'Stop the bus!'

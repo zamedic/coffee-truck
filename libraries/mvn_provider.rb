@@ -30,6 +30,7 @@ class  Chef
         command = "mvn clean deploy -U #{args}"
         converge_by "Uploading: #{command}" do
           exec command
+          raise RuntimeError 'Stop the bus!'
         end
       end
 
