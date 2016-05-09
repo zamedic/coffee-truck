@@ -18,6 +18,6 @@
 require_relative 'helpers_syntax'
 
 # And these mix the DSL methods into the Chef infrastructure
-Chef::Recipe.send(:include, DeliveryTruck::DSL)
-Chef::Resource.send(:include, DeliveryTruck::DSL)
-Chef::Provider.send(:include, DeliveryTruck::DSL)
+Chef::Recipe.send(:include, CoffeeTruck::DSL)
+Chef::Resource.send(:include, CoffeeTruck::DSL)
+Chef::Provider.send(:include, CoffeeTruck::DSL)
