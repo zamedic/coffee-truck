@@ -13,8 +13,9 @@ class  Chef
       end
 
       action :unit do
-        converge_by "Running Unit Tests" do
-          exec 'mvn clean verify -Psonar --fail-at-end'
+        command = "mvn clean verify -Psonar --fail-at-end #{args}"
+        converge_by "Unit tests: #{command}" do
+          exec command
         end
       end
 
@@ -28,11 +29,12 @@ class  Chef
         "#{settings} #{definitions}"
       end
 
+      
       def exec(command)
         options = Hash.new
         options[:cwd] = @new_resource.cwd if @new_resource.cwd
         options[:environment] = @new_resource.environment if @new_resource.environment
-        shell_out!("#{command} #{args}", options).stdout.chomp
+        shell_out!(command, options).stdout.chomp
       end
     end
   end
