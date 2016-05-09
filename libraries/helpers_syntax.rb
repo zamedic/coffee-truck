@@ -1,3 +1,6 @@
+require 'chef/mixin/shell_out'
+
+
 module CoffeeTruck
   module Helpers
     module Syntax
