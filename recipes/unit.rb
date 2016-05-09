@@ -18,6 +18,6 @@ http_request 'sonar-results' do
   headers('Content-Type' => 'application/json')
   message({
     application: node['delivery']['config']['truck']['application'],
-    results: sonarmetrics
+    results: sonarmetrics(node)
   }.to_json)
 end

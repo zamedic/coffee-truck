@@ -7,6 +7,6 @@ http_request 'files-changed' do
   headers('Content-Type' => 'application/json')
   message({
     application: node['delivery']['config']['truck']['application'],
-    changes: gitlog
+    changes: gitlog(node)
   }.to_json)
 end

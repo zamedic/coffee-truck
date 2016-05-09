@@ -3,7 +3,7 @@ module CoffeeTruck
     module Unit
       extend self
 
-      def sonarmetrics
+      def sonarmetrics(node)
         cwd = node['delivery']['workspace']['repo']
         command = "curl -X GET '#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=ncloc,coverage,tests,test_errors,test_failures'"
         raw = JSON.parse `cd #{cwd} && #{command}`
@@ -30,7 +30,7 @@ module CoffeeTruck
   module DSL
 
     def sonarmetrics
-      CoffeeTruck::Helpers::Unit.sonarmetrics
+      CoffeeTruck::Helpers::Unit.sonarmetrics(node)
     end
   end
 end
