@@ -13,7 +13,9 @@ class  Chef
       end
 
       action :unit do
-        exec 'mvn clean verify -Psonar --fail-at-end'
+        converge_by "Running Unit Tests" do
+          exec 'mvn clean verify -Psonar --fail-at-end'
+        end
       end
 
       private
