@@ -14,7 +14,7 @@ module CoffeeTruck
       def file_changes()
         ref1 = "origin/#{@pipeline}"
         ref2 = "origin/#{@patchset_branch}"
-        results = shell_out!("git diff --name-only #{ref1} #{ref2}", cwd: workspace).stdout.chomp.split("\n")
+        results = shell_out!("git diff --name-only #{ref1} #{ref2}", cwd: @workspace_repo).stdout.chomp.split("\n")
         Chef::Log.error("++++++++++++++++\n#{results}\n++++++++++++++++++")
       end
     end
