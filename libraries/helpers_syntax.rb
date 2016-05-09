@@ -3,7 +3,7 @@ module CoffeeTruck
     module Syntax
       extend self
 
-      def bumped_version?(path, node)
+      def bumped_pom_version?(path, node)
         change = DeliverySugar::Change.new(node)
         modified_files = change.changed_files
         Chef::Log.error("============\n#{modified_files}\n==============")
@@ -15,7 +15,7 @@ module CoffeeTruck
   module DSL
 
     def bumped_version?(path)
-      CoffeeTruck::Helpers::Syntax.bumped_version?(path, node)
+      CoffeeTruck::Helpers::Syntax.bumped_pom_version?(path, node)
     end
   end
 end
