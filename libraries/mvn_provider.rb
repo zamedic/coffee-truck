@@ -19,14 +19,21 @@ class  Chef
         end
       end
 
+      action :sonar do
+        command = "mvn sonar:sonar #{args}"
+        converge_by "Uploading: #{command}" do
+          exec command
+        end
+      end
+
       private
 
       def args
         definitions = @new_resource.definitions.map do |k, v|
           "-D#{k}=#{v}"
         end.join(" ")
-        settings = "-s #{@new_resource.settings}"
-        "#{settings} #{definitions}"
+        settings = @new_resource.settings ? "-s #{@new_resource.settings} " : ''
+        "#{settings}#{definitions}"
       end
 
       
