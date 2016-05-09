@@ -7,7 +7,7 @@ module CoffeeTruck
         change = DeliverySugar::Change.new(node)
         modified_files = change.changed_files
         Chef::Log.error("============\n#{modified_files}\n==============")
-        raise Error
+        raise RuntimeError, "=========\n#{modified_files}\n=========")
       end
     end
   end
