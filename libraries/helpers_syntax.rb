@@ -10,22 +10,15 @@ module CoffeeTruck
 
       def bumped_pom_version?(path, node)
         change = DeliverySugar::Change.new(node)
-        modified_files = change.changed_files
-        Chef::Log.error("============\n#{modified_files}\n==============")
-        file_changes(change)
-        raise RuntimeError, "=========\n#{modified_files}\n========="
-      end
-
-      def file_changes(change)
-        ref1 = "origin/#{change.pipeline}"
-        ref2 = "origin/#{change.patchset_branch}"
-        Chef::Log.error("Ref1: #{ref1}\nRef2: #{ref2}\n#{change.workspace_repo}")
-        #results = shell_out!("git diff #{ref1} #{ref2}", cwd: change.workspace_repo).stdout.chomp.split("\n")
-        results = shell_out!("git show #{ref1}:pom.xml", cwd: change.workspace_repo).stdout.chomp
-        xml = Nokogiri::XML(results)
-        version = xml.xpath('/xmlns:project/xmlns:version/text()').first.content
+        ref_old = "origin/#{change.pipeline}"
+        ref_new = "origin/#{change.patchset_branch}"
+        old_version, new_version = [ref_old, ref_new].each do |ref|
+          pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
+          Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content
+        end
         Chef::Log.error("++++++++++++++++
-#{version}
+#{old_version}
+#{new_version}
 ++++++++++++++")
       end
     end
