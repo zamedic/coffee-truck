@@ -1,4 +1,5 @@
 require 'chef/mixin/shell_out'
+require 'nokogiri'
 
 
 module CoffeeTruck
@@ -21,7 +22,8 @@ module CoffeeTruck
         Chef::Log.error("Ref1: #{ref1}\nRef2: #{ref2}\n#{change.workspace_repo}")
         #results = shell_out!("git diff #{ref1} #{ref2}", cwd: change.workspace_repo).stdout.chomp.split("\n")
         results = shell_out!("git show #{ref1}:pom.xml", cwd: change.workspace_repo).stdout.chomp.split("\n")
-        Chef::Log.error("++++++++++++++++\n#{results}\n++++++++++++++++++")
+        xml = Nokogiri::XML(results)
+        Chef::Log.error("++++++++++++++++\n#{xml.xpath('/project/version/text()')}\n++++++++++++++++++")
       end
     end
   end
