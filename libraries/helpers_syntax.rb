@@ -14,7 +14,7 @@ module CoffeeTruck
 
   module DSL
 
-    def bumped_version?(path)
+    def bumped_pom_version?(path)
       CoffeeTruck::Helpers::Syntax.bumped_pom_version?(path, node)
     end
   end
