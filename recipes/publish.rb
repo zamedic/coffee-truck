@@ -1,7 +1,3 @@
-require 'json'
-
-Chef::Resource::HttpRequest.send(:include, CoffeeTruck::Helper)
-
 include_recipe 'delivery-truck::publish'
 
 http_request 'files-changed' do

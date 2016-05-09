@@ -1,7 +1,3 @@
-require 'json'
-
-Chef::Resource::HttpRequest.send(:include, CoffeeTruck::Helper)
-
 execute 'unit tests' do
   cwd node['delivery']['workspace']['repo']
   environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
