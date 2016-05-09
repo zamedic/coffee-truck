@@ -11,4 +11,12 @@ http_request 'files-changed' do
   }.to_json)
 end
 
+mvn 'upload' do
+  action :upload
+  cwd node['delivery']['workspace']['repo']
+  environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
+  settings node['maven']['settings']
+  definitions('skipITs' => nil)
+end
+
 raise RuntimeError 'Stop the bus!'

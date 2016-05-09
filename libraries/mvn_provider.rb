@@ -21,6 +21,13 @@ class  Chef
 
       action :sonar do
         command = "mvn sonar:sonar #{args}"
+        converge_by "Sonar: #{command}" do
+          exec command
+        end
+      end
+
+      action :upload do
+        command = "mvn clean deploy -U #{args}"
         converge_by "Uploading: #{command}" do
           exec command
         end
@@ -30,7 +37,7 @@ class  Chef
 
       def args
         definitions = @new_resource.definitions.map do |k, v|
-          "-D#{k}=#{v}"
+          v ? "-D#{k}=#{v}" : "-D#{k}"
         end.join(" ")
         settings = @new_resource.settings ? "-s #{@new_resource.settings} " : ''
         "#{settings}#{definitions}"
