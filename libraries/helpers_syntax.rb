@@ -23,9 +23,9 @@ module CoffeeTruck
         #results = shell_out!("git diff #{ref1} #{ref2}", cwd: change.workspace_repo).stdout.chomp.split("\n")
         results = shell_out!("git show #{ref1}:pom.xml", cwd: change.workspace_repo).stdout.chomp
         xml = Nokogiri::XML(results)
-        content = xml.xpath('/project').first.content
+        version = xml.xpath('/xmlns:project/xmlns:version/text()').first.content
         Chef::Log.error("++++++++++++++++
-#{content}
+#{version}
 ++++++++++++++")
       end
     end
