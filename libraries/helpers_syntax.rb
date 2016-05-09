@@ -4,6 +4,7 @@ require 'chef/mixin/shell_out'
 module CoffeeTruck
   module Helpers
     module Syntax
+      include Chef::Mixin::ShellOut
       extend self
 
       def bumped_pom_version?(path, node)
