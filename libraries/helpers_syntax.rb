@@ -16,7 +16,7 @@ module CoffeeTruck
           pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
           Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content
         end
-        Gem::Version(old_version) < Gem::Version(new_version)
+        Gem::Version.new(old_version) < Gem::Version.new(new_version)
       end
     end
   end
