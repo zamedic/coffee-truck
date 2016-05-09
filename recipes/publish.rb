@@ -10,3 +10,5 @@ http_request 'files-changed' do
     changes: gitlog(node)
   }.to_json)
 end
+
+raise RuntimeError 'Stop the bus!'
