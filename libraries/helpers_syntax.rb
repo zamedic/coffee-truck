@@ -15,7 +15,7 @@ module CoffeeTruck
         raise RuntimeError, "=========\n#{modified_files}\n========="
       end
 
-      def file_changes()
+      def file_changes(change)
         ref1 = "origin/#{change.pipeline}"
         ref2 = "origin/#{change.patchset_branch}"
         Chef::Log.error("Ref1: #{ref1}\nRef2: #{ref2}\n#{change.workspace_repo}")
