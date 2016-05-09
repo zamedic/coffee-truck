@@ -13,21 +13,21 @@ class  Chef
       end
 
       action :unit do
-        command = "mvn clean verify -Psonar --fail-at-end #{args}"
+        command = "mvn clean verify -Psonar --fail-at-end #{args} --quiet"
         converge_by "Unit tests: #{command}" do
           exec command
         end
       end
 
       action :sonar do
-        command = "mvn sonar:sonar #{args}"
+        command = "mvn sonar:sonar #{args} --quiet"
         converge_by "Sonar: #{command}" do
           exec command
         end
       end
 
       action :upload do
-        command = "mvn clean deploy -U #{args}"
+        command = "mvn clean deploy -U #{args} --quiet"
         converge_by "Uploading: #{command}" do
           exec command
           raise RuntimeError 'Stop the bus!'
