@@ -13,6 +13,8 @@ module CoffeeTruck
         ref_old = "origin/#{change.pipeline}"
         ref_new = "origin/#{change.patchset_branch}"
         Chef::Log.error(change.merge_sha)
+        Chef::Log.error(change.change_id)
+        Chef::Log.error(node['delivery']['change']['patchset_branch'])
         Chef::Log.error(ref_old + " : " + ref_new)
         old_version, new_version = [ref_old, ref_new].map do |ref|
           pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
