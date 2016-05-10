@@ -37,6 +37,7 @@ class  Chef
         command = "mvn deploy -Pno-tests #{args} --quiet"
         converge_by "Uploading: #{command}" do
           exec command
+          define_project_application(node['delivery']['truck']['application'], version_number)
         end
       end
 
@@ -58,6 +59,13 @@ class  Chef
           'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
         }.merge @new_resource.environment
         shell_out!(command, options).stdout.chomp
+      end
+
+      def version_number
+        options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
+        path = "#{options[:cwd]}/pom.xml"
+        doc = File.open(path) { |f| Nokogiri::XML(f) }
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.split('-').first
       end
     end
   end
