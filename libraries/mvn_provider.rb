@@ -48,7 +48,7 @@ class  Chef
           v ? "-D#{k}=#{v}" : "-D#{k}"
         end.join(" ")
         settings = "-s #{@new_resource.settings || node['maven']['settings']}"
-        "#{settings}#{definitions}"
+        "#{settings} #{definitions}"
       end
 
       
