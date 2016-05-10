@@ -14,11 +14,7 @@ module CoffeeTruck
         ref_new = "origin/#{change.patchset_branch}"
         old_version, new_version = [ref_old, ref_new].each do |ref|
           pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
-          blarg = Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content
-          Chef::Log.error(blarg)
-          blarg = blarg.split('-').first
-          Chef::Log.error(blarg + "\n======")
-          blarg
+          Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content
         end
         Chef::Log.error(old_version + " : " + new_version)
         Gem::Version.new(old_version) < Gem::Version.new(new_version)
