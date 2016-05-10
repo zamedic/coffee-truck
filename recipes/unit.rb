@@ -1,25 +1,13 @@
-#execute 'unit tests' do
-#  cwd node['delivery']['workspace']['repo']
-#  environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
-#  command "mvn clean verify -s #{node['maven']['settings']} -Dsonar.host.url=#{node['delivery']['config']['sonar']['host']} -Psonar --fail-at-end"
-#end
-
 mvn 'unit' do
   action :unit
 end
 
 
-#mvn 'sonar' do
-#  action :sonar
-#  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
-#end
+mvn 'sonar' do
+  action :sonar
+  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
+end
 
-
-#execute 'unit tests' do
-#  cwd node['delivery']['workspace']['repo']
-#  environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
-#  command "mvn -s #{node['maven']['settings']} -Dsonar.host.url=#{node['delivery']['config']['sonar']['host']} sonar:sonar"
-#end
 
 http_request 'sonar-results' do
   action :post
