@@ -40,15 +40,17 @@ class  Chef
         definitions = @new_resource.definitions.map do |k, v|
           v ? "-D#{k}=#{v}" : "-D#{k}"
         end.join(" ")
-        settings = @new_resource.settings ? "-s #{@new_resource.settings} " : ''
+        settings = "-s #{@new_resource.settings || node['maven']['settings']}"
         "#{settings}#{definitions}"
       end
 
       
       def exec(command)
         options = Hash.new
-        options[:cwd] = @new_resource.cwd if @new_resource.cwd
-        options[:environment] = @new_resource.environment if @new_resource.environment
+        options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
+        options[:environment] = @new_resource.environment || {
+          'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
+        }
         shell_out!(command, options).stdout.chomp
       end
     end

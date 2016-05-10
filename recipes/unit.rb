@@ -6,18 +6,12 @@
 
 mvn 'unit' do
   action :unit
-  cwd node['delivery']['workspace']['repo']
-  environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
-  settings node['maven']['settings']
   definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
 end
 
 
 mvn 'sonar' do
   action :sonar
-  cwd node['delivery']['workspace']['repo']
-  environment('PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}")
-  settings node['maven']['settings']
   definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
 end
 
