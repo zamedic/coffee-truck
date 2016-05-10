@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
+    <server>
+        <server>
+            <id>releases</id>
+            <username>chef</username>
+            <password>chefpassword</password>
+        </server>
+        <server>
+            <id>snapshots</id>
+            <username>chef</username>
+            <password>chefpassword</password>
+        </server>
+    </servers>
 	<profiles>
 		<profile>
 			<id>development</id>
