@@ -14,7 +14,7 @@ module CoffeeTruck
         ref_new = "origin/#{change.patchset_branch}"
         old_version, new_version = [ref_old, ref_new].each do |ref|
           pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
-          Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content
+          Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content.split('-').first
         end
         Gem::Version.new(old_version) < Gem::Version.new(new_version)
       end
