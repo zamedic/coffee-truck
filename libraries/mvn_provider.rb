@@ -36,7 +36,7 @@ class  Chef
       action :upload do
         command = "mvn deploy -Pno-tests #{args} --quiet"
         converge_by "Uploading: #{command}" do
-          exec command
+          #exec command
           define_project_application(node['delivery']['truck']['application'], version_number)
         end
       end
