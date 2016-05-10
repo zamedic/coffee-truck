@@ -11,6 +11,6 @@ http_request 'files-changed' do
   }.to_json)
 end
 
-#mvn 'upload' do
-#  action :upload
-#end
+mvn 'upload' do
+  action :upload
+end
