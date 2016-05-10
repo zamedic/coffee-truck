@@ -38,7 +38,7 @@ class  Chef
         command = "mvn deploy -Pno-tests #{args} --quiet"
         converge_by "Uploading: #{command}" do
           #exec command
-          define_project_application(node['delivery']['config']['truck']['application'], version_number)
+          define_project_application(node['delivery']['config']['truck']['application'], version_number, Hash.new)
         end
       end
 
