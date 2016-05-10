@@ -11,9 +11,8 @@ module CoffeeTruck
       def bumped_pom_version?(path, node)
         change = DeliverySugar::Change.new(node)
         ref_old = "origin/#{change.pipeline}"
-        ref_new = "origin/#{change.patchset_branch}"
+        ref_new = ''
         Chef::Log.error(ref_old + " : " + ref_new)
-        Chef::Log.error("#{change}")
         old_version, new_version = [ref_old, ref_new].map do |ref|
           pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
           Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content.split('-').first
