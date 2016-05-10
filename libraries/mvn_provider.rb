@@ -13,7 +13,14 @@ class  Chef
       end
 
       action :unit do
-        command = "mvn clean verify -Psonar --fail-at-end #{args} --quiet"
+        command = "mvn clean verify -Punit-tests #{args} --fail-at-end --quiet"
+        converge_by "Unit tests: #{command}" do
+          exec command
+        end
+      end
+
+      action :acceptance do
+        command = "mvn verify -Pacceptance-tests #{args} --fail-at-end --quiet"
         converge_by "Unit tests: #{command}" do
           exec command
         end
@@ -27,7 +34,7 @@ class  Chef
       end
 
       action :upload do
-        command = "mvn clean deploy -U #{args} --quiet"
+        command = "mvn deploy -Pno-tests #{args} --quiet"
         converge_by "Uploading: #{command}" do
           exec command
           raise RuntimeError, 'Stop the bus!'

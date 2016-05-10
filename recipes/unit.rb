@@ -6,7 +6,6 @@
 
 mvn 'unit' do
   action :unit
-  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
 end
 
 

@@ -13,5 +13,4 @@ end
 
 mvn 'upload' do
   action :upload
-  definitions('skipITs' => nil)
 end
