@@ -1,3 +1,4 @@
+require 'nokogiri'
 require 'chef/mixin/shell_out'
 
 
@@ -64,7 +65,7 @@ class  Chef
       def version_number
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
-        doc = File.open(path) { |f| Nokogiri::XML(f) }
+        doc = ::File.open(path) { |f| Nokogiri::XML(f) }
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content.split('-').first
       end
     end
