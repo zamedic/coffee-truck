@@ -12,11 +12,10 @@ module CoffeeTruck
         change = DeliverySugar::Change.new(node)
         ref_old = "origin/#{change.pipeline}"
         ref_new = "origin/#{change.patchset_branch}"
-        old_version, new_version = [ref_old, ref_new].each do |ref|
+        old_version, new_version = [ref_old, ref_new].map do |ref|
           pom = shell_out!("git show #{ref}:pom.xml", cwd: change.workspace_repo).stdout.chomp
-          Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content
+          Nokogiri::XML(pom).xpath('/xmlns:project/xmlns:version/text()').first.content.split('-').first
         end
-        Chef::Log.error(old_version + " : " + new_version)
         Gem::Version.new(old_version) < Gem::Version.new(new_version)
       end
     end
