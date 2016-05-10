@@ -37,7 +37,6 @@ class  Chef
         command = "mvn deploy -Pno-tests #{args} --quiet"
         converge_by "Uploading: #{command}" do
           exec command
-          raise RuntimeError, 'Stop the bus!'
         end
       end
 
