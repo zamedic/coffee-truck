@@ -20,6 +20,7 @@ module CoffeeTruck
           Chef::Log.error(blarg + "\n======")
           blarg
         end
+        Chef::Log.error(old_version + " : " + new_version)
         Gem::Version.new(old_version) < Gem::Version.new(new_version)
       end
     end
