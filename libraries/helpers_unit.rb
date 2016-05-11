@@ -6,10 +6,14 @@ module CoffeeTruck
       def sonarmetrics(node)
         cwd = node['delivery']['workspace']['repo']
         command = "curl -X GET '#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=ncloc,coverage,tests,test_errors,test_failures'"
-        raw = JSON.parse `cd #{cwd} && #{command}`
-        metrics = raw[0]['msr'].map do |msr|
-          [msr['key'], msr['val']]
-        end.to_h
+        begin
+          raw = JSON.parse `cd #{cwd} && #{command}`
+          metrics = raw[0]['msr'].map do |msr|
+            [msr['key'], msr['val']]
+          end.to_h
+        rescue
+          metrics = {}
+        end
         {
           lines: metrics['ncloc'],
           coverage: metrics['coverage'],
