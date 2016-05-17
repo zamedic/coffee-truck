@@ -1,4 +1,4 @@
-include_recipe 'delivery-truck::default'
+include_recipe 'delivery-test::default'
 include_recipe 'maven-wrapper::default'
 
 directory '/tmp/maven' do
