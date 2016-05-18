@@ -1,4 +1,4 @@
-include_recipe 'delivery-truck::syntax'
+include_recipe 'delivery-test::syntax'
 
 
 unless bumped_pom_version?(node['delivery']['workspace']['repo'])

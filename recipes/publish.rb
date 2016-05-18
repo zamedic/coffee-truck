@@ -1,4 +1,4 @@
-include_recipe 'delivery-truck::publish'
+include_recipe 'delivery-test::publish'
 
 http_request 'files-changed' do
   action :post

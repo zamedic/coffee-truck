@@ -1,4 +1,4 @@
-include_recipe 'delivery-truck::quality'
+include_recipe 'delivery-test::quality'
 
 execute 'quality checks' do
   cwd node['delivery']['workspace']['repo']
