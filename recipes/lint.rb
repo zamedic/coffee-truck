@@ -1,1 +1,1 @@
-include_recipe 'delivery-test::lint'
+include_recipe 'delivery-truck::lint'

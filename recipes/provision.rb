@@ -1,1 +1,1 @@
-include_recipe 'delivery-test::provision'
+include_recipe 'delivery-truck::provision'
