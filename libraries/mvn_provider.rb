@@ -56,10 +56,11 @@ class  Chef
       def exec(command)
         options = Hash.new
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
+        options[:timeout] = 1200
         options[:environment] =  {
           'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
         }.merge @new_resource.environment
-        shell_out!(command, options, timeout: 1200).stdout.chomp
+        shell_out!(command, options).stdout.chomp
       end
 
       def version_number
