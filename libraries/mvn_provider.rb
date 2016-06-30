@@ -20,9 +20,9 @@ class  Chef
         end
       end
 
-      action :acceptance do
-        command = "mvn verify -Pacceptance-tests #{args} --fail-at-end --quiet"
-        converge_by "Unit tests: #{command}" do
+      action :functional do
+        command = "mvn verify -Pintegration-tests #{args} --fail-at-end --quiet"
+        converge_by "Functional tests: #{command}" do
           exec command
         end
       end
