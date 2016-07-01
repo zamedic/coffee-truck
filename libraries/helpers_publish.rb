@@ -39,7 +39,6 @@ module CoffeeTruck
         change = node['delivery']['change']
         parts = %w(enterprise organization project pipeline)
         env_parts = parts.map{|part| change[part]}.join('-')
-        Chef::Log.error("PARTS: #{env_parts}")
         acceptance_environment = "acceptance-#{env_parts}"
         current_env = load_chef_environment(acceptance_environment)
         app_version = current_env.override_attributes['applications'][app_name]
