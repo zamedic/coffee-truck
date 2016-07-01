@@ -39,7 +39,7 @@ class  Chef
         converge_by "Uploading: #{command}" do
           #exec command
           define_project_application("#{node['delivery']['change']['project']}", version_number, Hash.new)
-          sync_envs(load_chef_environment, node, version_number)
+          sync_envs(node, version_number)
         end
       end
 
