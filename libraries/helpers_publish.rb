@@ -24,8 +24,16 @@ module CoffeeTruck
       end
 
       def chef_server
-        @chef_server ||= DeliverySugar::ChefServer.new
+        DeliverySugar::ChefServer.new
       end
+
+      def delivery_chef_server_search(type, query)
+        results = []
+        chef_server.with_server_config do
+          ::Chef::Search::Query.new.search(type, query) { |o| results << o } 
+        end 
+        results
+      end 
 
       def sync_envs(node, app_name)
         change = node['delivery']['change']
