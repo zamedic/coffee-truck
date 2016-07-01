@@ -14,3 +14,5 @@ end
 mvn 'upload' do
   action :upload
 end
+
+raise
