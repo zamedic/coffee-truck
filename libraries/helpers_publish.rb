@@ -11,6 +11,7 @@ module CoffeeTruck
       end
 
       def load_env(env_name)
+        Chef::Log.error("Env name: #{env_name}")
         Chef::Environment.load(env_name)
       end
 
