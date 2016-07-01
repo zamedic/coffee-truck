@@ -46,6 +46,7 @@ module CoffeeTruck
                  "AND chef_environment:acceptance-*"
         my_nodes = delivery_chef_server_search(:node, search_query)
         my_nodes.each do |node|
+          Chef::Log.error("NODE: #{node}")
           Chef::Log.error("ENVIRONMENT: #{node[:chef_environment]}")
           cookbook_env = load_chef_environment(node[:chef_environment])
           Chef::Log.error("COOKBOOK ENV: #{cookbook_env}")
