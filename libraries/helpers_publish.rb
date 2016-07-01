@@ -46,15 +46,11 @@ module CoffeeTruck
                  "AND chef_environment:acceptance-*"
         my_nodes = delivery_chef_server_search(:node, search_query)
         my_nodes.each do |node|
-          Chef::Log.error("NODE: #{node}")
-          Chef::Log.error("NODE: #{node.chef_environment}")
-          Chef::Log.error("ENVIRONMENT: #{node[:chef_environment]}")
-          cookbook_env = load_chef_environment(node[:chef_environment])
+          Chef::Log.error("ENVIRONMENT: #{node.chef_environment}")
+          cookbook_env = load_chef_environment(node.chef_environment)
           Chef::Log.error("COOKBOOK ENV: #{cookbook_env}")
-          cookbook_env['override_attributes'] ||= {}
-          cookbook_env['override_attributes']['applications'] ||= {}
-          #cookbook_env.override_attributes['applications'] ||= {}
-          cookbook_env['override_attributes']['applications'][app_name] = app_version
+          cookbook_env.override_attributes['applications'] ||= {}
+          cookbook_env.override_attributes['applications'][app_name] = app_version
           save_chef_environment(cookbook_env)
         end
       end
