@@ -62,7 +62,7 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Publish.gitlog(node)
     end
 
-    def sync_envs(node, app_name)
+    def sync_envs(node)
       CoffeeTruck::Helpers::Publish.sync_envs(node)
     end
   end
