@@ -11,6 +11,7 @@ module CoffeeTruck
       end
 
       def sync_envs(app_name)
+        acceptance_environment = "acceptance-#{project_slug}-#{change['pipeline']}"
         current_env = load_chef_environment(acceptance_environment)
         app_version = current_env.override_attributes['applications'][app_name]
         search_query = "recipes:#{node['delivery']['config']['truck']['recipe']} " \
