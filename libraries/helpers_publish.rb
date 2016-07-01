@@ -11,6 +11,7 @@ module CoffeeTruck
       end
 
       def sync_envs(app_name)
+        change = node['delivery']['change']
         parts = %w(enterprise organization project pipeline)
         env_parts = parts.map{|part| change[part]}.join('-')
         Chef::Log.error("PARTS: #{env_parts}")
