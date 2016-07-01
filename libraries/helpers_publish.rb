@@ -10,9 +10,21 @@ module CoffeeTruck
         log.split("\n").map { |line| line.strip.split("\t").reverse }.to_h
       end
 
-      def load_env(env_name)
-        Chef::Log.error("Env name: #{env_name}")
-        Chef::Environment.load(env_name)
+
+      def load_chef_environment(env_name)
+        chef_server.with_server_config do
+          Chef::Environment.load(env_name)
+        end
+      end
+
+      def save_chef_environment(env)
+        chef_server.with_server_config do
+          env.save
+        end
+      end
+
+      def chef_server
+        @chef_server ||= DeliverySugar::ChefServer.new
       end
 
       def sync_envs(node, app_name)
@@ -21,13 +33,13 @@ module CoffeeTruck
         env_parts = parts.map{|part| change[part]}.join('-')
         Chef::Log.error("PARTS: #{env_parts}")
         acceptance_environment = "acceptance-#{env_parts}"
-        current_env = load_env(acceptance_environment)
+        current_env = load_chef_environment(acceptance_environment)
         app_version = current_env.override_attributes['applications'][app_name]
         search_query = "recipes:#{node['delivery']['config']['truck']['recipe']} " \
                  "AND chef_environment:acceptance-*"
         my_nodes = delivery_chef_server_search(:node, search_query)
         my_nodes.each do |node|
-          cookbook_env = load_env(node[:chef_environment])
+          cookbook_env = load_chef_environment(node[:chef_environment])
           cookbook_env.override_attributes['applications'][app_name] = app_version
           save_chef_environment(env)
         end
