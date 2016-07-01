@@ -36,7 +36,7 @@ module CoffeeTruck
       end 
 
       def sync_envs(node)
-        app_name = node['delivery']['change']['project'])
+        app_name = node['delivery']['change']['project']
         change = node['delivery']['change']
         parts = %w(enterprise organization project pipeline)
         env_parts = parts.map{|part| change[part]}.join('-')
