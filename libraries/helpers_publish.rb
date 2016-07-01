@@ -10,7 +10,7 @@ module CoffeeTruck
         log.split("\n").map { |line| line.strip.split("\t").reverse }.to_h
       end
 
-      def sync_envs(node, app_name)
+      def sync_envs(load_chef_environment, node, app_name)
         change = node['delivery']['change']
         parts = %w(enterprise organization project pipeline)
         env_parts = parts.map{|part| change[part]}.join('-')
@@ -36,7 +36,7 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Publish.gitlog(node)
     end
 
-    def sync_envs(node, app_name)
+    def sync_envs(load_chef_environment, node, app_name)
       CoffeeTruck::Helpers::Publish.sync_envs(node, app_name)
     end
   end
