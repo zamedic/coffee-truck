@@ -9,6 +9,19 @@ module CoffeeTruck
         log = `cd #{cwd} && #{command}`
         log.split("\n").map { |line| line.strip.split("\t").reverse }.to_h
       end
+
+      def sync_envs(app_name)
+        current_env = load_chef_environment(acceptance_environment)
+        app_version = current_env.override_attributes['applications'][app_name]
+        search_query = "recipes:#{node['delivery']['config']['truck']['recipe']} " \
+                 "AND chef_environment:acceptance-*"
+        my_nodes = delivery_chef_server_search(:node, search_query)
+        my_nodes.each do |node|
+          cookbook_env = load_chef_environment(node[:chef_environment])
+          cookbook_env.override_attributes['applications'][app_name] = app_version
+          save_chef_environment(env)
+        end
+      end
     end
   end
 
@@ -16,6 +29,10 @@ module CoffeeTruck
 
     def gitlog(node)
       CoffeeTruck::Helpers::Publish.gitlog(node)
+    end
+
+    def sync_envs(app_name)
+      CoffeeTruck::Helpers::Publish.sync_envs(app_name)
     end
   end
 end
