@@ -50,7 +50,7 @@ class  Chef
         end
       end
 
-      ction :release_perform do
+      action :release_perform do
         command = "mvn -B release:perform #{args} --quiet"
         converge_by "Preparing Release: #{command}" do
           exec command
