@@ -1,9 +1,9 @@
-mvn 'release' do
-  action :release
+mvn 'release_prepare' do
+  action :release_prepare
 end
 
-mvn 'perform' do
-  action :perform
+mvn 'release_perform  ' do
+  action :release_perform
 end
 
 

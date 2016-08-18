@@ -43,14 +43,14 @@ class  Chef
         end
       end
 
-      action :release-prepare do
+      action :release_prepare do
         command = "mvn -B release:prepare #{args} --quiet"
         converge_by "Preparing Release: #{command}" do
           exec command
         end
       end
 
-      ction :release-perform do
+      ction :release_perform do
         command = "mvn -B release:perform #{args} --quiet"
         converge_by "Preparing Release: #{command}" do
           exec command
