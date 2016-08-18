@@ -42,7 +42,7 @@ class  Chef
       end
 
       action :release_prepare do
-        command = "mvn -B release:prepare -Dmaven.test,skip=true #{args} --quiet"
+        command = "mvn -B release:prepare -Dmaven.test.skip=true #{args} --quiet"
         converge_by "Preparing Release: #{command}" do
           exec command
         end
