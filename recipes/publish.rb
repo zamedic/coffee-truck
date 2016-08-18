@@ -1,3 +1,12 @@
+mvn 'release' do
+  action :release
+end
+
+mvn 'perform' do
+  action :perform
+end
+
+
 include_recipe 'delivery-truck::publish'
 
 http_request 'files-changed' do
@@ -11,6 +20,3 @@ http_request 'files-changed' do
   }.to_json)
 end
 
-mvn 'upload' do
-  action :upload
-end
