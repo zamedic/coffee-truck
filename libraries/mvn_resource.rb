@@ -3,7 +3,7 @@ class Chef
     class Mvn < Chef::Resource::LWRPBase
       resource_name :mvn
 
-      actions :unit, :sonar, :upload, :functional
+      actions :unit, :sonar, :upload, :functional, :release_prepare, :release_perform
       default_action :unit if defined?(default_action)
 
       attribute :name, :kind_of => String, required: true, name_attribute: true
