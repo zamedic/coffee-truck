@@ -49,7 +49,7 @@ class  Chef
       end
 
       action :release_perform do
-        command = "mvn -B release:perform #{args} --quiet"
+        command = "mvn -B release:perform #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
@@ -82,7 +82,7 @@ class  Chef
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-        doc.xpath('/xmlns:project/xmlns:version/text()').first.content
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.tr('-SNAPSHOT','')
       end
     end
   end
