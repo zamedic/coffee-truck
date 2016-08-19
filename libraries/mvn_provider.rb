@@ -41,20 +41,24 @@ class  Chef
         end
       end
 
+
       action :release_prepare do
+        command_pull = "git pull"
+        command_email = "git config user.email 'delivery@standardbank.co.za'"
+        command_user = "git config user.name 'Delivery Server'"
         command = "mvn -B release:prepare -Dmaven.test.skip=true #{args} --quiet"
         converge_by "Preparing Release: #{command}" do
+          exec command_email
+          exec command_user
+          exec command_pull
           exec command
         end
       end
 
       action :release_perform do
-        command_email = "git config user.email 'delivery@standardbank.co.za'"
-        command_user = "git config user.name 'Delivery Server'"
+
         command = "mvn -B release:perform #{args}"
         converge_by "Preparing Release: #{command}" do
-          exec command_email
-          exec command_user
           exec command
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
           sync_envs(node)
