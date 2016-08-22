@@ -48,7 +48,7 @@ class  Chef
         command_pull = "git pull"
         command_email = "git config user.email 'delivery@standardbank.co.za'"
         command_user = "git config user.name 'Delivery Server'"
-        command = "mvn -B release:prepare -Dmaven.test.skip=true -DupdateWorkingCopyVersions=false #{args} --quiet"
+        command = "mvn -B release:prepare -Dmaven.test.skip=true -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command_email
           exec command_user
@@ -59,7 +59,7 @@ class  Chef
 
       action :release_perform do
 
-        command = "mvn -B release:perform #{args}"
+        command = "mvn -B release:perform -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command
           define_project_application(node['delivery']['change']['project'], final_version, Hash.new)
