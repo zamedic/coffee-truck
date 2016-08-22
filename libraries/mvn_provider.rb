@@ -13,7 +13,9 @@ class  Chef
         true
       end
 
-      final_version = version_number
+      def final_version
+        version_number
+      end
 
       action :unit do
         command = "mvn clean verify -Punit-tests #{args} --fail-at-end --quiet"
