@@ -13,6 +13,8 @@ class  Chef
         true
       end
 
+      final_version = version_number
+
       action :unit do
         command = "mvn clean verify -Punit-tests #{args} --fail-at-end --quiet"
         converge_by "Unit tests: #{command}" do
@@ -46,7 +48,7 @@ class  Chef
         command_pull = "git pull"
         command_email = "git config user.email 'delivery@standardbank.co.za'"
         command_user = "git config user.name 'Delivery Server'"
-        command = "mvn -B release:prepare -Dmaven.test.skip=true #{args} --quiet"
+        command = "mvn -B release:prepare -Dmaven.test.skip=true -DupdateWorkingCopyVersions=false #{args} --quiet"
         converge_by "Preparing Release: #{command}" do
           exec command_email
           exec command_user
@@ -60,7 +62,7 @@ class  Chef
         command = "mvn -B release:perform #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command
-          define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
+          define_project_application(node['delivery']['change']['project'], final_version, Hash.new)
           sync_envs(node)
         end
       end
@@ -90,7 +92,7 @@ class  Chef
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.tr('-SNAPSHOT','')
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT','')
       end
     end
   end
