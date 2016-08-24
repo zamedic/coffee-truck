@@ -61,7 +61,7 @@ class  Chef
 
       action :release_perform do
 
-        command = "mvn -B release:perform -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
+        command = "mvn -X -B release:perform -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} > /tmp/marc.log"
         converge_by "Preparing Release: #{command}" do
           exec command
           define_project_application(node['delivery']['change']['project'], final_version, Hash.new)
