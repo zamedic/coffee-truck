@@ -13,10 +13,6 @@ class  Chef
         true
       end
 
-      def final_version
-        version_number
-      end
-
       action :unit do
         command = "mvn clean verify -Punit-tests #{args} --fail-at-end --quiet"
         converge_by "Unit tests: #{command}" do
@@ -64,7 +60,8 @@ class  Chef
         command = "mvn -X -B release:perform -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} > /tmp/marc.log"
         converge_by "Preparing Release: #{command}" do
           exec command
-          define_project_application(node['delivery']['change']['project'], final_version, Hash.new)
+          put "bumping #{node['delivery']['change']['project']} to version #{version_number}"
+          define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
           sync_envs(node)
         end
       end
