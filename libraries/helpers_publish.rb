@@ -46,12 +46,9 @@ module CoffeeTruck
         search_query = "recipes:#{node['delivery']['config']['truck']['recipe']} " \
                  "AND chef_environment:acceptance-*"
         my_nodes = delivery_chef_server_search(:node, search_query)
-        Chef::Log.error("Found Nodes: #{my _nodes}")
         my_nodes.each do |node|
           cookbook_env = load_chef_environment(node.chef_environment)
-          Chef::Log.error("setting env: #{cookbook_env}")
           cookbook_env.override_attributes['applications'] ||= {}
-          Chef::Log.error("setting version: #{app_version}")
           cookbook_env.override_attributes['applications'][app_name] = app_version
           save_chef_environment(cookbook_env)
         end
