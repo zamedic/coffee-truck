@@ -60,7 +60,7 @@ class  Chef
         command = "mvn -X -B release:perform -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} > /tmp/marc.log"
         converge_by "Preparing Release: #{command}" do
           exec command
-          put "bumping #{node['delivery']['change']['project']} to version #{version_number}"
+          Chef::Log.error("defining: #{node['delivery']['change']['project']}, #{version_number}, #{Hash.new}")
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
           sync_envs(node)
         end
