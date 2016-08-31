@@ -57,7 +57,7 @@ class  Chef
 
       action :release_perform do
 
-        command = "mvn -X -B release:perform -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} > /tmp/marc.log"
+        command = "mvn -B release:perform -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command
           Chef::Log.error("defining: #{node['delivery']['change']['project']}, #{version_number}, #{Hash.new}")
