@@ -60,9 +60,9 @@ class  Chef
         command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command
-          Chef::Log.error("defining: #{node['delivery']['change']['project']}, #{version_number}, #{Hash.new}")
+          Chef::Log.info("defining: #{node['delivery']['change']['project']}, #{version_number}, #{Hash.new}")
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
-          Chef::Log.error("Synching envs: #{node}")
+          Chef::Log.info("Synching envs: #{node}")
           sync_envs(node)
         end
       end
