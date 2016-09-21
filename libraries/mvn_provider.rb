@@ -38,7 +38,31 @@ class  Chef
         command = "mvn deploy -Pno-tests #{args} --quiet"
         converge_by "Uploading: #{command}" do
           exec command
+        end
+      end
+
+
+      action :release_prepare do
+        command_pull = "git pull"
+        command_email = "git config user.email 'delivery@standardbank.co.za'"
+        command_user = "git config user.name 'Delivery Server'"
+        command = "mvn -B release:prepare -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
+        converge_by "Preparing Release: #{command}" do
+          exec command_email
+          exec command_user
+          exec command_pull
+          exec command
+        end
+      end
+
+      action :release_perform do
+
+        command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
+        converge_by "Preparing Release: #{command}" do
+          exec command
+          Chef::Log.info("defining: #{node['delivery']['change']['project']}, #{version_number}, #{Hash.new}")
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
+          Chef::Log.info("Synching envs: #{node}")
           sync_envs(node)
         end
       end
@@ -68,7 +92,7 @@ class  Chef
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.split('-').first
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT','')
       end
     end
   end
