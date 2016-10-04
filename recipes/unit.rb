@@ -1,12 +1,12 @@
-#mvn 'unit' do
-#  action :unit
-#end
+mvn 'unit' do
+  action :unit
+end
 
 
-#mvn 'sonar' do
-#  action :sonar
-#  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
-#end
+mvn 'sonar' do
+  action :sonar
+  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
+end
 
 http_request 'sonar-results' do
   action :post
