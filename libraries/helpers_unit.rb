@@ -4,16 +4,15 @@ module CoffeeTruck
       extend self
 
       def sonarmetrics(node)
-        cwd = node['delivery']['workspace']['repo']
-        command = "curl -X GET '#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=coverage,tests,test_errors,test_failures'"
-          raw = JSON.parse `cd #{cwd} && #{command}`
-          Chef::Log.error "RAW"
-          Chef::Log.error raw
-          metrics = raw[0]['msr'].map do |msr|
-            [msr['key'], msr['val']]
-          end.to_h
-          Chef::Log.error "METRICS"
-          Chef::Log.error metrics
+        uri = URI("#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=coverage,tests,test_errors,test_failures")
+        raw = JSON.parse(Net::HTTP.get(uri))
+        Chef::Log.error "RAW"
+        Chef::Log.error raw
+        metrics = raw[0]['msr'].map do |msr|
+          [msr['key'], msr['val']]
+        end.to_h
+        Chef::Log.error "METRICS"
+        Chef::Log.error metrics
         {
           coverage: metrics['coverage'],
           unit: {
