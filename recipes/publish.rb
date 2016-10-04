@@ -14,9 +14,11 @@ http_request 'files-changed' do
   url 'http://spambot.standardbank.co.za/events/gitlog'
   # ignore_failure true
   headers('Content-Type' => 'application/json')
-  message({
-    application: node['delivery']['config']['truck']['application'],
-    changes: gitlog(node)
-  }.to_json)
+  message lazy {
+    {
+      application: node['delivery']['config']['truck']['application'],
+      changes: gitlog(node)
+    }.to_json
+  }
 end
 
