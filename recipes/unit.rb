@@ -14,7 +14,7 @@ http_request 'sonar-results' do
   # ignore_failure true
   headers('Content-Type' => 'application/json')
   message({
-    application: node['delivery']['change']['project'],
+    application: node['delivery']['config']['truck']['application'],
     results: sonarmetrics(node)
   }.to_json)
 end

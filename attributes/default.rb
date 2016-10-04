@@ -8,4 +8,4 @@ default['maven']['settings'] = '/tmp/maven/settings.xml'
 default['delivery']['config']['sonar']['host'] = nil
 default['delivery']['config']['sonar']['resource'] = nil
 default['delivery']['config']['truck']['recipe'] = nil
-default['delivery']['config']['truck']['application'] = nil
+default['delivery']['config']['truck']['application'] = node['delivery']['change']['project']

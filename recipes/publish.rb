@@ -15,7 +15,7 @@ http_request 'files-changed' do
   # ignore_failure true
   headers('Content-Type' => 'application/json')
   message({
-    application: node['delivery']['change']['project'],
+    application: node['delivery']['config']['truck']['application'],
     changes: gitlog(node)
   }.to_json)
 end
