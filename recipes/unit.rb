@@ -13,7 +13,7 @@ http_request 'sonar-results' do
   url 'http://spambot.standardbank.co.za/events/test-results'
   # ignore_failure true
   headers('Content-Type' => 'application/json')
-  message({
+  message lazy({
     application: node['delivery']['config']['truck']['application'],
     results: sonarmetrics(node)
   }.to_json)
