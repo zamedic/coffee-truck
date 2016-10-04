@@ -4,6 +4,9 @@ module CoffeeTruck
       extend self
 
       def sonarmetrics(node)
+        Chef::Log.error node['delivery']['config']['sonar']['host']
+        Chef::Log.error node['delivery']['config']['sonar']['resource']
+        Chef::Log.error "#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=coverage,tests,test_errors,test_failures"
         uri = URI("#{node['delivery']['config']['sonar']['host']}/api/resources?resource=#{node['delivery']['config']['sonar']['resource']}&metrics=coverage,tests,test_errors,test_failures")
         raw = JSON.parse(Net::HTTP.get(uri))
         Chef::Log.error "RAW"
