@@ -11,7 +11,6 @@ end
 http_request 'sonar-results' do
   action :post
   url 'http://spambot.standardbank.co.za/events/test-results'
-  # ignore_failure true
   headers('Content-Type' => 'application/json')
   message lazy {
     {

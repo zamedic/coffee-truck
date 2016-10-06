@@ -9,3 +9,5 @@ default['delivery']['config']['sonar']['host'] = nil
 default['delivery']['config']['sonar']['resource'] = nil
 default['delivery']['config']['truck']['recipe'] = nil
 default['delivery']['config']['truck']['application'] = node['delivery']['change']['project']
+normal['maven']['3']['version'] = '3.3.9'
+normal['maven']['3']['checksum'] = '6e3e9c949ab4695a204f74038717aa7b2689b1be94875899ac1b3fe42800ff82'
