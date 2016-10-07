@@ -9,6 +9,8 @@ mvn 'sonar' do
 end
 
 http_request 'sonar-results' do
+  only_if node['delivery']['spambot']['publish_unit_results_from_branch']
+  ignore_failure true
   action :post
   url 'http://spambot.standardbank.co.za/events/test-results'
   headers('Content-Type' => 'application/json')
