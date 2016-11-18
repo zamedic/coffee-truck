@@ -58,11 +58,9 @@ class  Chef
       action :release_perform do
 
         command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
-        converge_by "Preparing Release: #{command}" do
+        converge_by "Performing Release: #{command} to version #{version_number}" do
           exec command
-          Chef::Log.info("defining: #{node['delivery']['change']['project']}, #{version_number}, #{Hash.new}")
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
-          Chef::Log.info("Synching envs: #{node}")
           sync_envs(node)
         end
       end

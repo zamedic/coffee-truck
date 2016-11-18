@@ -48,7 +48,7 @@ module CoffeeTruck
         my_nodes = delivery_chef_server_search(:node, search_query)
         my_nodes.each do |node|
           cookbook_env = load_chef_environment(node.chef_environment)
-          Chef::Log.info("Updating Node #{node} with environment #{node.chef_environment} for application #{app_name} to version #{app_version}")
+          Chef::Log.warn("Updating Node #{node} with environment #{node.chef_environment} for application #{app_name} to version #{app_version}")
           cookbook_env.override_attributes['applications'] ||= {}
           cookbook_env.override_attributes['applications'][app_name] = app_version
           save_chef_environment(cookbook_env)
