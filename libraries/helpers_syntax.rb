@@ -19,6 +19,14 @@ module CoffeeTruck
         end
         Gem::Version.new(old_version) < Gem::Version.new(new_version)
       end
+
+      def ensure_snapshot?(path,node)
+        return true if node['delivery']['change']['stage'] == 'build'
+        cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
+        path = "#{cwd}/pom.xml"
+        doc = ::File.open(path) { |f| Nokogiri::XML(f) }
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.end_with("-SNAPSHOT")
+      end
     end
   end
 
@@ -26,6 +34,10 @@ module CoffeeTruck
 
     def bumped_pom_version?(path)
       CoffeeTruck::Helpers::Syntax.bumped_pom_version?(path, node)
+    end
+
+    def ensure_snapshot?(path)
+      CoffeeTruck::Helpers::Syntax.ensure_snapshot?(path,node)
     end
   end
 end
