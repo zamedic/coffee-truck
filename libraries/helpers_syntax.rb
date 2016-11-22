@@ -22,7 +22,7 @@ module CoffeeTruck
 
       def ensure_snapshot?(path,node)
         return true if node['delivery']['change']['stage'] == 'build'
-        cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
+        cwd = node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content.end_with("-SNAPSHOT")
