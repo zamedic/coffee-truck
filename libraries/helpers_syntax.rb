@@ -25,7 +25,7 @@ module CoffeeTruck
         cwd = node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.end_with("-SNAPSHOT")
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.end_with?("-SNAPSHOT")
       end
     end
   end
