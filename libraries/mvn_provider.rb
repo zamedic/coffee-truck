@@ -14,7 +14,7 @@ class  Chef
       end
 
       action :unit do
-        command = "mvn clean verify -Punit-tests #{args} --fail-at-end --quiet"
+        command = "mvn clean verify -Punit-tests #{args} --fail-at-end > maven-unit.log"
         converge_by "Unit tests: #{command}" do
           exec command
         end
@@ -57,7 +57,7 @@ class  Chef
 
       action :release_perform do
 
-        command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
+        command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} > mvn-release-perform.log"
         converge_by "Performing Release: #{command} to version #{version_number}" do
           exec command
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
