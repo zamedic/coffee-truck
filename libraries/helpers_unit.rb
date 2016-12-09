@@ -12,14 +12,14 @@ module CoffeeTruck
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
         }.collect{|directory|
           Chef::Log.error("Checking diorectory #{directory}")
-          puts getCoverage(directory)
-        }.each{|missed,covered|
-          Chef::Log.error("#{missed}:#{covered}")
+          puts getCoverage(directory,node)
+        }.each{|result|
+          Chef::Log.error(result)
         }
       end
 
-      def getCoverage(path)
-        path = "#{path}/target/site/jacoco/jacoco.xml"
+      def getCoverage(path,node)
+        path = "#{node['delivery']['workspace']['repo']}#{path}/target/site/jacoco/jacoco.xml"
         pn = Pathname.new(path)
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
