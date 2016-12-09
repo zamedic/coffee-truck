@@ -10,11 +10,11 @@ module CoffeeTruck
         Chef::Log.error("Checking Directory for jacoco reports  #{node['delivery']['workspace']['repo']}")
         Dir.entries(node['delivery']['workspace']['repo']).select{
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
-        }.each{|directory|
+        }.collect{|directory|
           Chef::Log.error("Checking diorectory #{directory}")
-          getCoverage(directory)
-        }.each{|result|
-          Chef::Log.error(result)
+          puts getCoverage(directory)
+        }.each{|missed,covered|
+          Chef::Log.error("#{missed}:#{covered}")
         }
       end
 
@@ -28,6 +28,7 @@ module CoffeeTruck
           covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')
           return  {"missed"=> missed, "covered"=> covered}
         else
+          Chef::Log.error("#{path} does not exist")
           return  {"missed"=> 0, "covered"=> 0}
         end
       end
