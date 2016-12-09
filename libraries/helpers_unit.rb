@@ -6,7 +6,8 @@ module CoffeeTruck
       extend self
 
       def currentCoverage(node)
-        current_coverage = 0;
+        missed = 0;
+        covered = 0;
         Chef::Log.error("Checking Directory for jacoco reports  #{node['delivery']['workspace']['repo']}")
         Dir.entries(node['delivery']['workspace']['repo']).select{
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
@@ -15,7 +16,12 @@ module CoffeeTruck
           getCoverage(directory,node)
         }.each{|result|
           Chef::Log.error(result)
+          missed = missed + result["missed"]
+          covered = covered + result["covered"]
         }
+
+        Chef::Log.error("total missed: #{missed} total covered: #{covered}")
+
       end
 
       def getCoverage(path,node)
@@ -24,8 +30,8 @@ module CoffeeTruck
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
           doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-          missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed')
-          covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')
+          missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed')["value"]
+          covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')["value"]
           {"missed"=> missed, "covered"=> covered}
         else
           Chef::Log.error("#{path} does not exist")
