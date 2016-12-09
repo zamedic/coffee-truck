@@ -21,6 +21,8 @@ module CoffeeTruck
         }
 
         Chef::Log.error("total missed: #{missed} total covered: #{covered}")
+        coverage = covered / (covered + missed)
+        Chef::Log.error("coverage percentage: #{coverage}")
 
       end
 
@@ -30,9 +32,9 @@ module CoffeeTruck
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
           doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-          missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed')["value"]
-          covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')["value"]
-          {"missed"=> missed, "covered"=> covered}
+          this_missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed')["value"].to_i
+          this_covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')["value"].to_i
+          {"missed"=> this_missed, "covered"=> this_covered}
         else
           Chef::Log.error("#{path} does not exist")
           {"missed"=> 0, "covered"=> 0}
