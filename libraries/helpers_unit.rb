@@ -55,8 +55,8 @@ module CoffeeTruck
     def sonarmetrics(node)
       CoffeeTruck::Helpers::Unit.sonarmetrics(node)
     end
-    def getCoverage(node)
-      CoffeeTruck::Helpers::Unit.getCoverage(node)
+    def currentCoverage(node)
+      CoffeeTruck::Helpers::Unit.currentCoverage(node)
     end
   end
 end

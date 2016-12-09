@@ -24,7 +24,7 @@ class  Chef
         command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
         converge_by "JACOCO Report: #{command}" do
           exec command
-          getCoverage(node)
+          currentCoverage(node)
         end
       end
 
