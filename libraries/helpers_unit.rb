@@ -16,15 +16,15 @@ module CoffeeTruck
           getCoverage(directory,node)
         }.each{|result|
           Chef::Log.error(result)
-          missed = missed + result["missed"]
-          covered = covered + result["covered"]
+          missed = missed + result[:missed]
+          covered = covered + result[:covered]
         }
 
         Chef::Log.error("total missed: #{missed} total covered: #{covered}")
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
         coverage = (coverage*10).round / 10.0
         Chef::Log.error("coverage percentage: #{coverage}")
-        Chef::Log.error("previous coverage percentage: #{sonarmetrics(node)}")
+        Chef::Log.error("previous coverage percentage: #{sonarmetrics(node)[:coverage]}")
       end
 
       def getCoverage(path,node)
@@ -33,12 +33,12 @@ module CoffeeTruck
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
           doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-          this_missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed').first.value.to_i
-          this_covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered').first.value.to_i
-          {"missed"=> this_missed, "covered"=> this_covered}
+          this_missed = doc.xpath('/report/counter[@type="LINE"]/@missed').first.value.to_i
+          this_covered = doc.xpath('/report/counter[@type="LINE"]/@covered').first.value.to_i
+          {missed: this_missed, covered: this_covered}
         else
           Chef::Log.error("#{path} does not exist")
-          {"missed"=> 0, "covered"=> 0}
+          {missed: 0, covered: 0}
         end
       end
 
