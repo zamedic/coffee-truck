@@ -20,6 +20,13 @@ class  Chef
         end
       end
 
+      action :jacoco_report  do
+        command = "mvn org.jacoco:jacoco-maven-plugin:report"
+        converge_by "JACOCO Report: #{command}" do
+          exec command
+        end
+      end
+
       action :functional do
         command = "mvn verify -Pintegration-tests #{args} --fail-at-end --quiet"
         converge_by "Functional tests: #{command}" do
