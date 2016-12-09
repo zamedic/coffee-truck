@@ -32,8 +32,8 @@ module CoffeeTruck
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
           doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-          this_missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed')["value"]
-          this_covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')["value"]
+          this_missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed').value.to_i
+          this_covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered').value.to_i
           {"missed"=> this_missed, "covered"=> this_covered}
         else
           Chef::Log.error("#{path} does not exist")
