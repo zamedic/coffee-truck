@@ -12,24 +12,24 @@ module CoffeeTruck
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
         }.collect{|directory|
           Chef::Log.error("Checking diorectory #{directory}")
-          puts getCoverage(directory,node)
+          getCoverage(directory,node)
         }.each{|result|
           Chef::Log.error(result)
         }
       end
 
       def getCoverage(path,node)
-        path = "#{node['delivery']['workspace']['repo']}#{path}/target/site/jacoco/jacoco.xml"
+        path = "#{node['delivery']['workspace']['repo']}"/"#{path}/target/site/jacoco/jacoco.xml"
         pn = Pathname.new(path)
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
           doc = ::File.open(path) { |f| Nokogiri::XML(f) }
           missed = doc.xpath('/report/counter[@type="INSTRUCTION"]/@missed')
           covered = doc.xpath('/report/counter[@type="INSTRUCTION"]/@covered')
-          return  {"missed"=> missed, "covered"=> covered}
+          {"missed"=> missed, "covered"=> covered}
         else
           Chef::Log.error("#{path} does not exist")
-          return  {"missed"=> 0, "covered"=> 0}
+          {"missed"=> 0, "covered"=> 0}
         end
       end
 
