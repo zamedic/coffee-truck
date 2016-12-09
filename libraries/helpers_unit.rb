@@ -21,7 +21,8 @@ module CoffeeTruck
         }
 
         Chef::Log.error("total missed: #{missed} total covered: #{covered}")
-        coverage = covered / (covered + missed)
+        coverage = covered.to_f / (covered.to_f + missed.to_f)
+        coverage = (coverage*10).round / 10.0
         Chef::Log.error("coverage percentage: #{coverage}")
 
       end
