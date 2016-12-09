@@ -15,3 +15,8 @@ cookbook_file node['maven']['settings'] do
   mode 00644
   action :create
 end
+
+hostsfile_entry '10.145.31.31' do
+  hostname  'sonar.k8s.standardbank.co.za'
+  unique    true
+end
