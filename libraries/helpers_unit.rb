@@ -19,7 +19,7 @@ module CoffeeTruck
       end
 
       def getCoverage(path,node)
-        path = "#{node['delivery']['workspace']['repo']}"/"#{path}/target/site/jacoco/jacoco.xml"
+        path = "#{node['delivery']['workspace']['repo']}/#{path}/target/site/jacoco/jacoco.xml"
         pn = Pathname.new(path)
         if(pn.exist?)
           Chef::Log.error("#{path} exists")
