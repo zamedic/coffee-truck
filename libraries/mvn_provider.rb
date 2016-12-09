@@ -21,7 +21,7 @@ class  Chef
       end
 
       action :jacoco_report  do
-        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
+        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args} q"
         converge_by "JACOCO Report: #{command}" do
           exec command
         end
