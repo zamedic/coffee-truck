@@ -7,6 +7,7 @@ module CoffeeTruck
 
       def currentCoverage(node)
         current_coverage = 0;
+        Chef::Log.error("Checking Directory for jacoco reports  #{node['delivery']['workspace']['repo']}")
         Dir.entries(node['delivery']['workspace']['repo']).select{
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
         }.each{|directory|

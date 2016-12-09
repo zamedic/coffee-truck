@@ -11,7 +11,7 @@ mvn 'sonar' do
   definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
 end
 
-getCoverage(node)
+
 
 http_request 'sonar-results' do
   only_if node['delivery']['spambot']['publish_unit_results_from_branch']
