@@ -21,10 +21,10 @@ module CoffeeTruck
         }
 
         Chef::Log.error("total missed: #{missed} total covered: #{covered}")
-        coverage = covered.to_f / (covered.to_f + missed.to_f)
+        coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
         coverage = (coverage*10).round / 10.0
         Chef::Log.error("coverage percentage: #{coverage}")
-
+        Chef::Log.error("previous coverage percentage: #{sonarmetrics(node)['coverage']}")
       end
 
       def getCoverage(path,node)
