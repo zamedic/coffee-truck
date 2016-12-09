@@ -2,15 +2,16 @@ mvn 'unit' do
   action :unit
 end
 
+mvn 'jacoco' do
+  action :jacoco_report
+end
 
 mvn 'sonar' do
   action :sonar
   definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
 end
 
-mvn 'jacoco' do
-  action :jacoco_report
-end
+
 
 http_request 'sonar-results' do
   only_if node['delivery']['spambot']['publish_unit_results_from_branch']
