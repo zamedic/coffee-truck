@@ -39,9 +39,9 @@ module CoffeeTruck
         rescue
           max = 999
         end
-        {
-            :average => average ? average.to_f : 999.0,
-            :max => max ? max.to_i : 999
+        return {
+            average: average ? average.to_f : 999.0,
+            max: max ? max.to_i : 999
         }
       end
 
@@ -67,25 +67,25 @@ module CoffeeTruck
           raise RuntimeError, "No cyclic complexity records found. Failing Build. Blame Marc"
         end
         average = (((sum.to_f/count.to_f)*100).round / 100.0).to_f
-        {
-            :average => average,
-            :max => {
-                :complexity => max,
+        return {
+            average: average,
+            max: {
+                complexity:  max,
             }
         }
-        Chef::Log.error("average #{average}, max #{max}")
       end
 
       def check_complexity?(node)
         previous = previous_complexity(node)
         current = current_complexity(node)
+        Chef::Log.error(previous)
 
-        if(current[:average] > previous[:average].to_f)
-          raise RuntimeError, "Average Cyclic Complexity increased from #{previous[:average]} to #{current[:average]}. Failing Build"
+        if(current[average] > previous["average"].to_f)
+          raise RuntimeError, "Average Cyclic Complexity increased from #{previous["average"]} to #{current["average"]}. Failing Build"
         end
 
-        if(current[:max][:complexity].to_i > previous[:max].to_i)
-          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous[:max][:complexity]} to #{current[:max]}. Failing Build"
+        if(current["max"]["complexity"].to_i > previous["max"].to_i)
+          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous["max"]["complexity"]} to #{current["max"]}. Failing Build"
         end
 
         return true
