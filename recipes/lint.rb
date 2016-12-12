@@ -12,7 +12,7 @@ http_request 'complexity-results' do
   message lazy {
     {
         application: node['delivery']['config']['truck']['application'],
-        complexity: current_complexity(node)
+        results: current_complexity(node)
     }.to_json
   }
 end
