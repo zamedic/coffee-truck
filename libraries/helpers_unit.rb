@@ -23,6 +23,8 @@ module CoffeeTruck
         Chef::Log.error("total missed: #{missed} total covered: #{covered}")
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
         coverage = (coverage*10).round / 10.0
+
+
         Chef::Log.error("coverage percentage: #{coverage}")
         Chef::Log.error("previous coverage percentage: #{sonarmetrics(node)[:coverage]}")
       end
@@ -40,6 +42,24 @@ module CoffeeTruck
           Chef::Log.error("#{path} does not exist")
           {missed: 0, covered: 0}
         end
+      end
+
+      def getPreviousCoverage(node)
+        uri = URI("http://demoncat.standardbank.co.za/testing/#{node['delivery']['config']['truck']['application']}")
+        raw = JSON.parse(Net::HTTP.get(uri))
+        return raw["coverage"].to_f
+      end
+
+      def check_failed?(node)
+        coverage = currentCoverage(node)
+        if (coverage == 0)
+          raise RuntimeError,"Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
+        end
+        previous = getPreviousCoverage(node)
+        if (previous > coverage)
+          raise RuntimeError,"Project coverage is dropped from #{previous} to #{coverage}. Failing Build"
+        end
+        return true
       end
 
       def sonarmetrics(node)

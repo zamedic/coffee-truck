@@ -6,10 +6,11 @@ mvn 'jacoco' do
   action :jacoco_report
 end
 
-mvn 'sonar' do
-  action :sonar
-  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
-end
+
+#mvn 'sonar' do
+#  action :sonar
+#  definitions('sonar.host.url' => node['delivery']['config']['sonar']['host'])
+#end
 
 
 
