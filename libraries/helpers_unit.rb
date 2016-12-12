@@ -56,10 +56,19 @@ module CoffeeTruck
           raise RuntimeError,"Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
         end
         previous = getPreviousCoverage(node)
+        Chef::Log.error("previous coverage percentage: #{previous}")
         if (previous > coverage)
           raise RuntimeError,"Project coverage is dropped from #{previous} to #{coverage}. Failing Build"
         end
         return true
+      end
+
+      def get_unit_test_count(node)
+        Dir.entries(node['delivery']['workspace']['repo']).select{
+            |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
+        }.collect{|directory|
+
+        }
       end
 
       def sonarmetrics(node)
