@@ -22,11 +22,7 @@ module CoffeeTruck
 
         Chef::Log.error("total missed: #{missed} total covered: #{covered}")
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
-        coverage = (coverage*10).round / 10.0
-
-
-        Chef::Log.error("coverage percentage: #{coverage}")
-        Chef::Log.error("previous coverage percentage: #{sonarmetrics(node)[:coverage]}")
+        return ((coverage*10).round / 10.0).to_f
       end
 
       def getCoverage(path,node)
@@ -47,7 +43,7 @@ module CoffeeTruck
       def getPreviousCoverage(node)
         uri = URI("http://demoncat.standardbank.co.za/testing/#{node['delivery']['config']['truck']['application']}")
         raw = JSON.parse(Net::HTTP.get(uri))
-        return raw["coverage"].to_f
+        return raw["coverage"][0].to_f
       end
 
       def check_failed?(node)
@@ -67,6 +63,9 @@ module CoffeeTruck
         Dir.entries(node['delivery']['workspace']['repo']).select{
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
         }.collect{|directory|
+          "/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()"
+
+
 
         }
       end
