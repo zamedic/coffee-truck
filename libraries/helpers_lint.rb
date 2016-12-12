@@ -38,8 +38,8 @@ module CoffeeTruck
         doc.xpath("//error[@source='com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck']/@message").each { |row|
           value = row.to_s[25..-1]
           Chef::Log.error("value #{value}")
-          value = value[0..value.index(' ')]
-          Chef::Log.error("value #{value}")
+          value = value[0..value.index(' ')].to_i
+          Chef::Log.error("value #{value}.")
           if (value > max)
             max = value
           end
