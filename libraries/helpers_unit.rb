@@ -57,9 +57,9 @@ module CoffeeTruck
 
         file = "#{node['delivery']['workspace']['repo']}/target/site/surefire-report.html"
         doc = ::File.open(file) { |f| Nokogiri::XML(f) }
-        total_tests = doc.xpath("/html/body/div[@id='bodyColumn']/div/div[2]/table/tr[2]/td[1]/text()")
+        total_tests = doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()",'x' => 'http://www.w3.org/1999/xhtml').first.value.to_i
         Chef::Log.error("total tests: #{total_tests}")
-        skipped_tests=doc.xpath("/html/body/div[@id='bodyColumn']/div/div[2]/table/tr[2]/td[4]/text()").first.value.to_i
+        skipped_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()",'x' => 'http://www.w3.org/1999/xhtml').first.value.to_i
         Chef::Log.error("skipped tests: #{skipped_tests}")
         error_test=0
         failed_tests=0
