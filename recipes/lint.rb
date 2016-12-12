@@ -13,6 +13,6 @@ cookbook_file "/tmp/checkstyle.xml" do
 end
 
 mvn 'complexity' do
-  action :complexity
+  action :checkstyle
 end
 
