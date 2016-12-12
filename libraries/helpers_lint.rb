@@ -40,8 +40,8 @@ module CoffeeTruck
           max = 999
         end
         {
-            average: average ? average.to_f : 999.0,
-            max: max ? max.to_i : 999
+            :average => average ? average.to_f : 999.0,
+            :max => max ? max.to_i : 999
         }
       end
 
@@ -68,9 +68,9 @@ module CoffeeTruck
         end
         average = (((sum.to_f/count.to_f)*100).round / 100.0).to_f
         {
-            average: average,
-            max: {
-                complexity: max,
+            :average => average,
+            :max => {
+                :complexity => max,
             }
         }
         Chef::Log.error("average #{average}, max #{max}")
