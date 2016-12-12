@@ -34,7 +34,11 @@ module CoffeeTruck
         uri = URI("http://demoncat.standardbank.co.za/quality/#{node['delivery']['config']['truck']['application']}")
         raw = JSON.parse(Net::HTTP.get(uri))
         average = raw["complexity"]["average"]
-        max=raw["complexity"]["max"]["complexity"]
+        begin
+          max=raw["complexity"]["max"]["complexity"]
+        rescue
+          max = 999
+        end
         {
             average: average ? average.to_f : 999.0,
             max: max ? max.to_i : 999
