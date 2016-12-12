@@ -43,7 +43,7 @@ module CoffeeTruck
       def getPreviousCoverage(node)
         uri = URI("http://demoncat.standardbank.co.za/testing/#{node['delivery']['config']['truck']['application']}")
         raw = JSON.parse(Net::HTTP.get(uri))
-        return raw["coverage"][0].to_f
+        return raw["coverage"].to_f
       end
 
       def check_failed?(node)
@@ -60,10 +60,10 @@ module CoffeeTruck
       end
 
       def get_unit_test_count(node)
-        Dir.entries(node['delivery']['workspace']['repo']).select{
-            |entry| File.directory? File.join(node['delivery']['workspace']['repo'],entry) and !(entry =='.' || entry == '..')
-        }.collect{|directory|
+        file = "#{node['delivery']['workspace']['repo']}/target/site/surefire-report.html"
+        .collect{|directory|
           "/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()"
+          "/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()"
 
 
 
