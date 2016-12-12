@@ -35,7 +35,7 @@ module CoffeeTruck
         max = 0;
         file = "#{node['delivery']['workspace']['repo']}/target/checkstyle-result.xml"
         doc = ::File.open(file) { |f| Nokogiri::XML(f) }
-        doc.xpath("//error[@source='com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck']/@message").each { |row|
+        doc.xpath('//error[@source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"]/@message').each { |row|
           Chef::Log.error("value #{row}")
           value = row.first.value
           value = value[25..-1]
@@ -48,6 +48,9 @@ module CoffeeTruck
           count = count + 1
           sum = sum + value
         }
+        if(count == 0)
+          raise RuntimeError, "No cyclic complexity records found. Failing Build. Blame Marc"
+        end
         average = ((sum.to_f/count.to_f)*100.round / 100.0).to_f
         {
             max: max,
