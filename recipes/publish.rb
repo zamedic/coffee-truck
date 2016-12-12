@@ -22,7 +22,7 @@ http_request 'files-changed' do
   }
 end
 
-http_request 'sonar-results' do
+http_request 'test-results' do
   action :post
   url 'http://spambot.standardbank.co.za/events/test-results'
   ignore_failure true
@@ -35,7 +35,7 @@ http_request 'sonar-results' do
   }
 end
 
-http_request 'sonar-results' do
+http_request 'lint-results' do
   action :post
   url 'http://spambot.standardbank.co.za/events/lint-results'
   ignore_failure true
@@ -49,4 +49,6 @@ http_request 'sonar-results' do
     }.to_json
   }
 end
+
+
 
