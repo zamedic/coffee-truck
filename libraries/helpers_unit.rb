@@ -54,20 +54,18 @@ module CoffeeTruck
         previous = getPreviousCoverage(node)
         Chef::Log.error("previous coverage percentage: #{previous}")
         if (previous > coverage)
-          raise RuntimeError,"Project coverage is dropped from #{previous} to #{coverage}. Failing Build"
+          raise RuntimeError,"Project coverage has dropped from #{previous} to #{coverage}. Failing Build"
         end
         return true
       end
 
       def get_unit_test_count(node)
         file = "#{node['delivery']['workspace']['repo']}/target/site/surefire-report.html"
-        .collect{|directory|
-          "/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()"
-          "/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()"
+        doc = ::File.open(file) { |f| Nokogiri::XML(f) }
+        total_tests = doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()").first.value.to_i
+        skipped_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()").first.value.to_i
 
 
-
-        }
       end
 
       def sonarmetrics(node)
