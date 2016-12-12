@@ -39,6 +39,7 @@ module CoffeeTruck
           value = row.first.value
           value = value[25..-1]
           value = value[0..value.index(' ')]
+          Chef::Log.error("value #{value}")
           if (value > max)
             max = value
           end
