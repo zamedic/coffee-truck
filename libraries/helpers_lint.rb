@@ -36,7 +36,8 @@ module CoffeeTruck
         file = "#{node['delivery']['workspace']['repo']}/target/checkstyle-result.xml"
         doc = ::File.open(file) { |f| Nokogiri::XML(f) }
         doc.xpath("//error[@source='com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck']/@message").each { |row|
-          value = row[25..-1]
+          value = row.to_s[25..-1]
+          Chef::Log.error("value #{value}")
           value = value[0..value.index(' ')]
           Chef::Log.error("value #{value}")
           if (value > max)
