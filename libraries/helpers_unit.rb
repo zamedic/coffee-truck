@@ -88,5 +88,8 @@ module CoffeeTruck
     def currentCoverage(node)
       CoffeeTruck::Helpers::Unit.currentCoverage(node)
     end
+    def check_failed(node)
+      CoffeeTruck::Helpers::Unit.check_failed?(node)
+    end
   end
 end
