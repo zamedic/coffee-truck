@@ -77,6 +77,15 @@ class  Chef
         end
       end
 
+      action :pmd do
+        command = "mvn pmd:pmd -Daggregate=true -Dformat=xml"
+        converge by "running PMD reports against code: #{command}" do
+          exec command
+          check_pmd?(node)
+        end
+
+      end
+
       private
 
       def args

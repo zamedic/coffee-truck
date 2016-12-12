@@ -56,8 +56,8 @@ module CoffeeTruck
 
         file = "#{node['delivery']['workspace']['repo']}/target/site/surefire-report.html"
         doc = ::File.open(file) { |f| Nokogiri::XML(f) }
-        total_tests = doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
-        skipped_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
+        total_tests = doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()",'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
+        skipped_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()",'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
         error_test=0
         failed_tests=0
         return {
