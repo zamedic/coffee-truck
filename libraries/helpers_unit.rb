@@ -52,7 +52,7 @@ module CoffeeTruck
 
       def check_failed?(node)
         coverage = currentCoverage(node)
-        if (coverage == 0)
+        if (coverage == 0.0)
           raise RuntimeError,"Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
         end
         previous = getPreviousCoverage(node)
@@ -88,7 +88,7 @@ module CoffeeTruck
     def currentCoverage(node)
       CoffeeTruck::Helpers::Unit.currentCoverage(node)
     end
-    def check_failed(node)
+    def check_failed?(node)
       CoffeeTruck::Helpers::Unit.check_failed?(node)
     end
   end
