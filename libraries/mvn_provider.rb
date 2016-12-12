@@ -77,6 +77,15 @@ class  Chef
         end
       end
 
+      action :pmd do
+        command = "mvn pmd:pmd -Daggregate=true -Dformat=xml #{args}"
+        converge_by "running PMD reports against code: #{command}" do
+          exec command
+          check_pmd?(node) unless node['delivery']['config']['truck']['skip_pmb_enforcement']
+        end
+
+      end
+
       private
 
       def args
