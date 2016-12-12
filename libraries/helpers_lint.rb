@@ -15,7 +15,7 @@ module CoffeeTruck
       end
 
       def check_pmd?(node)
-        Chef::Log.error(count_violations(node))
+        Chef::Log.error(count_pmd_violations(node))
       end
 
     end

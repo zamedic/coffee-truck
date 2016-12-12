@@ -14,7 +14,7 @@ http_request 'sonar-results' do
         application: node['delivery']['config']['truck']['application'],
         results: {
             issues: count_pmd_violations(node)
-        } 
+        }
     }.to_json
   }
 end
