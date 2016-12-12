@@ -15,7 +15,18 @@ module CoffeeTruck
       end
 
       def check_pmd?(node)
-        Chef::Log.error(count_pmd_violations(node))
+        current = count_pmd_violations(node)
+        previous = current_pmd_violations(node)
+
+        if(current > previous)
+          raise RuntimeError, "PMD violations increased from #{previous} to #{current}. Failing Build"
+        end
+      end
+
+      def current_pmd_violations(node)
+        uri = URI("http://demoncat.standardbank.co.za/quality/#{node['delivery']['config']['truck']['application']}")
+        raw = JSON.parse(Net::HTTP.get(uri))
+        return raw["lint"]["issues"].to_f
       end
 
     end
