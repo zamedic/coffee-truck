@@ -15,8 +15,18 @@ class  Chef
 
       action :unit do
         command = "mvn clean verify -Punit-tests #{args} --fail-at-end | tee maven-unit.log"
+        report = "mvn surefire-report:report-only -Daggregate=true #{args}"
         converge_by "Unit tests: #{command}" do
           exec command
+          exec report
+        end
+      end
+
+      action :jacoco_report  do
+        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
+        converge_by "JACOCO Report: #{command}" do
+          exec command
+          check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
         end
       end
 
@@ -47,11 +57,13 @@ class  Chef
         command_email = "git config user.email 'delivery@standardbank.co.za'"
         command_user = "git config user.name 'Delivery Server'"
         command = "mvn -B release:prepare -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
+        report = "mvn surefire-report:report-only -Daggregate=true #{args}"
         converge_by "Preparing Release: #{command}" do
           exec command_email
           exec command_user
           exec command_pull
           exec command
+          exec report
         end
       end
 
