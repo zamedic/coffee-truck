@@ -25,5 +25,9 @@ module CoffeeTruck
     def check_pmd?(node)
       CoffeeTruck::Helpers::Lint.check_pmd?(node)
     end
+
+    def count_pmd_violations(node)
+      CoffeeTruck::Helpers::Lint.count_pmd_violations(node)
+    end
   end
 end
