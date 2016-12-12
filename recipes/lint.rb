@@ -4,8 +4,6 @@ mvn 'complexity' do
   action :checkstyle
 end
 
-Chef::Log.error(current_complexity(node))
-
 http_request 'complexity-results' do
   action :post
   url 'http://spambot.standardbank.co.za/events/lint-results'
