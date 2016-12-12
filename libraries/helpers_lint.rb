@@ -80,12 +80,12 @@ module CoffeeTruck
         current = current_complexity(node)
         Chef::Log.error(previous)
 
-        if(current[average] > previous["average"].to_f)
-          raise RuntimeError, "Average Cyclic Complexity increased from #{previous["average"]} to #{current["average"]}. Failing Build"
+        if(current[:average] > previous[:average])
+          raise RuntimeError, "Average Cyclic Complexity increased from #{previous[:average]} to #{current[:average]}. Failing Build"
         end
 
-        if(current["max"]["complexity"].to_i > previous["max"].to_i)
-          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous["max"]["complexity"]} to #{current["max"]}. Failing Build"
+        if(current[:max][:complexity] > previous[:max])
+          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous[:max][complexity]} to #{current[:max]}. Failing Build"
         end
 
         return true
