@@ -6,7 +6,7 @@ end
 
 http_request 'complexity-results' do
   action :post
-  url 'http://spambot.standardbank.co.za/events/lint-results'
+  url 'http://spambot.standardbank.co.za/events/quality-results'
   ignore_failure true
   headers('Content-Type' => 'application/json')
   message lazy {
