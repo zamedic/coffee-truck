@@ -146,7 +146,7 @@ class Chef
 
 
       action :compile do
-        command = "mvn compile #{args}"
+        command = "mvn compile package install #{args}"
         converge_by "running compile #{command}" do
           exec command
         end
