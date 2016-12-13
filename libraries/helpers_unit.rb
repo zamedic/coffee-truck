@@ -9,13 +9,16 @@ module CoffeeTruck
         missed = 0;
         covered = 0;
         Dir.entries(node['delivery']['workspace']['repo']).select {
-            |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry =='.' || entry == '..')
+            |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
         }.collect { |directory|
           getCoverage(directory, node)
         }.each { |result|
           missed = missed + result[:missed]
           covered = covered + result[:covered]
         }
+        if((covered.to_f + missed.to_f) == 0.0)
+          raise RuntimeError, "Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
+        end
 
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
         return ((coverage*10).round / 10.0).to_f
