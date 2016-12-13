@@ -187,8 +187,8 @@ class Chef
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT', '')
       end
 
-      def exclusion_list()
-        path = "#{cwd}/pom.xml"
+      def exclusion_list(node)
+        path = "#{node['delivery']['workspace']['repo']}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
         row = doc.xpath("/pom:project/pom:properties/pom:sonar.exclusions/text()","pom" => "http://maven.apache.org/POM/4.0.0")
         if(row)
