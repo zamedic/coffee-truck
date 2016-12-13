@@ -23,8 +23,9 @@ class Chef
       end
 
       action :jacoco_report do
-        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
         converge_by "JACOCO Report: #{command}" do
+          command = "mvn org.jacoco:jacoco-maven-plugin:report -Dexclused=\"#{exclusion_list(node)}\" #{args}"
+
           exec command
           check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
           if node['delivery']['change']['stage'] == "build"
@@ -185,6 +186,17 @@ class Chef
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT', '')
+      end
+
+      def exclusion_list()
+        path = "#{cwd}/pom.xml"
+        doc = ::File.open(path) { |f| Nokogiri::XML(f) }
+        row = doc.xpath("/pom:project/pom:properties/pom:sonar.exclusions/text()","pom" => "http://maven.apache.org/POM/4.0.0")
+        if(row)
+          return row.first.text
+        else
+          return ""
+        end
       end
     end
   end
