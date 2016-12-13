@@ -23,9 +23,8 @@ class Chef
       end
 
       action :jacoco_report do
+        command = "mvn org.jacoco:jacoco-maven-plugin:report -Dexcludes=\"#{exclusion_list(node)}\" #{args}"
         converge_by "JACOCO Report: #{command}" do
-          command = "mvn org.jacoco:jacoco-maven-plugin:report -Dexclused=\"#{exclusion_list(node)}\" #{args}"
-
           exec command
           check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
           if node['delivery']['change']['stage'] == "build"
