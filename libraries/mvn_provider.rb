@@ -89,8 +89,14 @@ class  Chef
         command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle-aggregate #{args}"
         converge_by "running checkstyle for complexity #{command}" do
           exec command
-          Chef::Log.error(current_complexity(node))
           check_complexity?(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
+        end
+      end
+
+      action :compile do
+        command = "mvn compile #{args}"
+        converge_by "running compile #{command}" do
+          exec command
         end
       end
 
