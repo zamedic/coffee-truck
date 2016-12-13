@@ -94,7 +94,12 @@ class Chef
       end
 
       action :pmd do
-        command = "mvn pmd:pmd -Daggregate=true -Dformat=xml #{args}"
+        if(node['delivery']['config']['truck']['multi_level_project'])
+          command = "mvn pmd:pmd -Daggregate=true -Dformat=xml #{args}"
+        else
+          command = "mvn pmd:pmd -Daggregate=false -Dformat=xml #{args}"
+        end
+
         converge_by "running PMD reports against code: #{command}" do
           exec command
           check_pmd?(node) unless node['delivery']['config']['truck']['skip_pmb_enforcement']
@@ -119,7 +124,12 @@ class Chef
       end
 
       action :checkstyle do
-        command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle-aggregate #{args}"
+        if(node['delivery']['config']['truck']['multi_level_project'])
+          command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle-aggregate #{args}"
+        else
+          command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle #{args}"
+        end
+
         converge_by "running checkstyle for complexity #{command}" do
           exec command
           check_complexity?(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
