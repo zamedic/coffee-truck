@@ -153,7 +153,7 @@ class Chef
 
 
       action :compile do
-        command = "mvn compile package install #{args}"
+        command = "mvn compile package install -Dmaven.test.skip=true #{args}"
         converge_by "running compile #{command}" do
           exec command
         end
