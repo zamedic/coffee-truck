@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'chef/mixin/shell_out'
 
 
-class  Chef
+class Chef
   class Provider
     class Mvn < Chef::Provider::LWRPBase
       include Chef::Mixin::ShellOut
@@ -19,14 +19,33 @@ class  Chef
         converge_by "Unit tests: #{command}" do
           exec command
           exec report
-        end
-      end
 
-      action :jacoco_report  do
-        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
-        converge_by "JACOCO Report: #{command}" do
-          exec command
-          check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
+
+        end
+
+      end
+    end
+
+    action :jacoco_report do
+      command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
+      converge_by "JACOCO Report: #{command}" do
+        exec command
+        check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
+        if node['delivery']['change']['stage'] == "build"
+          http_request 'test-results' do
+            action :post
+            url 'http://spambot.standardbank.co.za/events/test-results'
+            ignore_failure true
+            headers('Content-Type' => 'application/json')
+            message lazy {
+              {
+                  application: node['delivery']['config']['truck']['application'],
+                  results: sonarmetrics(node)
+              }.to_json
+            }
+          end
+
+
         end
       end
 
@@ -82,6 +101,23 @@ class  Chef
         converge_by "running PMD reports against code: #{command}" do
           exec command
           check_pmd?(node) unless node['delivery']['config']['truck']['skip_pmb_enforcement']
+          if node['delivery']['change']['stage'] == "build"
+            http_request 'lint-results' do
+              action :post
+              url 'http://spambot.standardbank.co.za/events/lint-results'
+              ignore_failure true
+              headers('Content-Type' => 'application/json')
+              message lazy {
+                {
+                    application: node['delivery']['config']['truck']['application'],
+                    results: {
+                        issues: count_pmd_violations(node)
+                    }
+                }.to_json
+              }
+            end
+          end
+
         end
       end
 
@@ -90,8 +126,24 @@ class  Chef
         converge_by "running checkstyle for complexity #{command}" do
           exec command
           check_complexity?(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
+          if node['delivery']['change']['stage'] == "build"
+            http_request 'complexity-results' do
+              action :post
+              url 'http://spambot.standardbank.co.za/events/quality-results'
+              ignore_failure true
+              headers('Content-Type' => 'application/json')
+              message lazy {
+                {
+                    application: node['delivery']['config']['truck']['application'],
+                    results: current_complexity(node)
+                }.to_json
+              }
+            end
+          end
+
         end
       end
+
 
       action :compile do
         command = "mvn compile #{args}"
@@ -110,13 +162,13 @@ class  Chef
         "#{settings} #{definitions}"
       end
 
-      
+
       def exec(command)
         options = Hash.new
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
         options[:timeout] = 1200
-        options[:environment] =  {
-          'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
+        options[:environment] = {
+            'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
         }.merge @new_resource.environment
         shell_out!(command, options).stdout.chomp
       end
@@ -125,7 +177,7 @@ class  Chef
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT','')
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT', '')
       end
     end
   end
