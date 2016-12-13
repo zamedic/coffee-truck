@@ -19,30 +19,27 @@ class Chef
         converge_by "Unit tests: #{command}" do
           exec command
           exec report
-
-
         end
-
       end
-    end
 
-    action :jacoco_report do
-      command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
-      converge_by "JACOCO Report: #{command}" do
-        exec command
-        check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
-        if node['delivery']['change']['stage'] == "build"
-          http_request 'test-results' do
-            action :post
-            url 'http://spambot.standardbank.co.za/events/test-results'
-            ignore_failure true
-            headers('Content-Type' => 'application/json')
-            message lazy {
-              {
-                  application: node['delivery']['config']['truck']['application'],
-                  results: sonarmetrics(node)
-              }.to_json
-            }
+      action :jacoco_report do
+        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
+        converge_by "JACOCO Report: #{command}" do
+          exec command
+          check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
+          if node['delivery']['change']['stage'] == "build"
+            http_request 'test-results' do
+              action :post
+              url 'http://spambot.standardbank.co.za/events/test-results'
+              ignore_failure true
+              headers('Content-Type' => 'application/json')
+              message lazy {
+                {
+                    application: node['delivery']['config']['truck']['application'],
+                    results: sonarmetrics(node)
+                }.to_json
+              }
+            end
           end
 
 
