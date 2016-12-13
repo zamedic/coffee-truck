@@ -1,27 +1,3 @@
-mvn 'release_prepare' do
-  action :release_prepare
-end
-
-mvn 'release_perform  ' do
-  action :release_perform
-end
-
-
-include_recipe 'delivery-truck::publish'
-
-http_request 'files-changed' do
-  action :post
-  url 'http://spambot.standardbank.co.za/events/gitlog'
-  ignore_failure true
-  headers('Content-Type' => 'application/json')
-  message lazy {
-    {
-      application: node['delivery']['config']['truck']['application'],
-      changes: gitlog(node)
-    }.to_json
-  }
-end
-
 http_request 'test-results' do
   action :post
   url 'http://spambot.standardbank.co.za/events/test-results'
@@ -29,8 +5,8 @@ http_request 'test-results' do
   headers('Content-Type' => 'application/json')
   message lazy {
     {
-      application: node['delivery']['config']['truck']['application'],
-      results: sonarmetrics(node)
+        application: node['delivery']['config']['truck']['application'],
+        results: sonarmetrics(node)
     }.to_json
   }
 end
@@ -62,6 +38,34 @@ http_request 'complexity-results' do
     }.to_json
   }
 end
+
+http_request 'files-changed' do
+  action :post
+  url 'http://spambot.standardbank.co.za/events/gitlog'
+  ignore_failure true
+  headers('Content-Type' => 'application/json')
+  message lazy {
+    {
+        application: node['delivery']['config']['truck']['application'],
+        changes: gitlog(node)
+    }.to_json
+  }
+end
+
+mvn 'release_prepare' do
+  action :release_prepare
+end
+
+mvn 'release_perform  ' do
+  action :release_perform
+end
+
+
+include_recipe 'delivery-truck::publish'
+
+
+
+
 
 
 
