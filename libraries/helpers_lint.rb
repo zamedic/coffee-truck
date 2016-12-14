@@ -21,6 +21,9 @@ module CoffeeTruck
         if (current > previous)
           raise RuntimeError, "PMD violations increased from #{previous} to #{current}. Failing Build"
         end
+        Chef::Log.warn("Projects previous PMD violations #{previous}, new PMD violations  #{current}.")
+
+
       end
 
       def previous_pmd_violations(node)
@@ -86,6 +89,8 @@ module CoffeeTruck
         if(current[:max][:complexity] > previous[:max])
           raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous[:max][complexity]} to #{current[:max]}. Failing Build"
         end
+        Chef::Log.warn("Projects previous average cyclic complexity #{previous[:average]}, new average cyclic complexity #{current[:average]}.")
+        Chef::Log.warn("Projects previous maximum cyclic complexity #{previous[:max][complexity]}, new maximum cyclic complexity #{current[:max]}.")
 
         return true
       end

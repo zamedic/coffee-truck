@@ -52,6 +52,7 @@ module CoffeeTruck
         if (previous > coverage)
           raise RuntimeError, "Project coverage has dropped from #{previous} to #{coverage}. Failing Build"
         end
+        Chef::Log.warn("Project previous coverage #{previous}%, new coverage #{coverage}%.")
         return true
       end
 
