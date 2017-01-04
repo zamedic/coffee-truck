@@ -87,10 +87,10 @@ module CoffeeTruck
         end
 
         if(current[:max][:complexity] > previous[:max])
-          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous[:max][:complexity]} to #{current[:max]}. Failing Build"
+          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous[:max]} to #{current[:max][:complexity]}. Failing Build"
         end
         Chef::Log.warn("Projects previous average cyclic complexity #{previous[:average]}, new average cyclic complexity #{current[:average]}.")
-        Chef::Log.warn("Projects previous maximum cyclic complexity #{previous[:max][:complexity]}, new maximum cyclic complexity #{current[:max]}.")
+        Chef::Log.warn("Projects previous maximum cyclic complexity #{previous[:max]}, new maximum cyclic complexity #{current[:max][:complexity]}.")
 
         return true
       end
