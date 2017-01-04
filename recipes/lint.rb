@@ -4,7 +4,7 @@ mvn 'compile' do
   action :compile
 end
 
-mvn 'complexity' do
+mvn 'checkstyle' do
   action :checkstyle
 end
 
