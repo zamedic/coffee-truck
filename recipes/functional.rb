@@ -17,6 +17,7 @@ unless node['delivery']['change']['stage'] == 'delivered'
   execute 'untar gecko' do
     action :run
     command 'tar -xvzf geckodriver.tar.gz'
+    cwd '/tmp/geckodriver'
   end
 
   execute 'start_xvfb' do
