@@ -28,3 +28,6 @@ hostsfile_entry '10.145.31.31' do
   hostname  'sonar.k8s.standardbank.co.za'
   unique    true
 end
+
+package 'firefox'
+package 'Xvfb'

@@ -2,8 +2,7 @@ include_recipe 'delivery-truck::functional'
 
 
 unless node['delivery']['change']['stage'] == 'delivered'
-  package 'firefox'
-  package 'Xvfb'
+
 
   directory '/opt/geckodriver' do
     action :create
