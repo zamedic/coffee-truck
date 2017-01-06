@@ -47,7 +47,7 @@ class Chef
       end
 
       action :functional do
-        command = "mvn verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end --quiet"
+        command = "mvn verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-release-perform.log"
         converge_by "Functional tests: #{command}" do
           system({"DISPLAY" => ":10"},"#{command}")
         end
