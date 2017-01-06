@@ -49,7 +49,7 @@ class Chef
       action :functional do
         command = "mvn verify -Pintegration-tests #{args} --fail-at-end --quiet"
         converge_by "Functional tests: #{command}" do
-          system ({"DISPLAY" => ":10"},command)
+          system({"DISPLAY" => ":10"},"#{command}")
         end
       end
 
