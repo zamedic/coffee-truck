@@ -47,9 +47,12 @@ class Chef
       end
 
       action :functional do
-        command = "mvn verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-release-perform.log"
+        command = "mvn failsafe:integration-test -Pintegration-tests #{args}  #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command_verify = "mvn failsafe:verify -Pintegration-tests #{args}  #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-verify.log"
         converge_by "Functional tests: #{command}" do
           system({"DISPLAY" => ":10"},"#{command}")
+          system({"DISPLAY" => ":10"},"#{command_verify}")
+          upload_functional_results(node)
         end
       end
 

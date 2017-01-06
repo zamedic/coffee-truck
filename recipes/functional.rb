@@ -27,4 +27,6 @@ unless node['delivery']['change']['stage'] == 'delivered'
   mvn 'functional' do
     action :functional
   end
+
+  upload_results(node)
 end

@@ -29,5 +29,13 @@ hostsfile_entry '10.145.31.31' do
   unique    true
 end
 
+hostfile_entry '127.0.0.1' do
+  hostname 'accstandardbank.d1.sc.omtrdc.net'
+  aliases ['lar.standardbank.co.za','rwp.standardbank.co.za','cdn.standardbank.co.za','dfib.standardbank.co.za','dspk.standardbank.co.za','trk.standardbank.co.za']
+  action :create
+end
+
+
+
 package 'firefox'
 package 'Xvfb'
