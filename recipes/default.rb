@@ -55,7 +55,7 @@ file "/usr/bin/geckodriver" do
   owner 'root'
   group 'root'
   mode 0755
-  content ::File.open("/tmp/geckodriver/geckodriver").read
+  content lazy {::File.open("/tmp/geckodriver/geckodriver").read }
   action :create
 end
 
