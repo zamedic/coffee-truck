@@ -47,13 +47,9 @@ class Chef
       end
 
       action :functional do
-        command = "mvn failsafe:integration-test -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
-        command_verify = "mvn failsafe:verify -Pintegration-tests #{args}  -f #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-verify.log"
-        command_compile = "mvn clean install -Dmaven.test.skip=true #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-compile.log"
+        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/tmp/geckodriver//geckodriver --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
-          exec command_compile
           system({"DISPLAY" => ":10"},"#{command}")
-          system({"DISPLAY" => ":10"},"#{command_verify}")
           http_request 'test-results' do
             action :post
             url 'http://spambot.standardbank.co.za/events/test-results'
