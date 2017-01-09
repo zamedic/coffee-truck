@@ -47,7 +47,7 @@ class Chef
       end
 
       action :functional do
-        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
           if (system({"DISPLAY" => ":10"}, "#{command}"))
             http_request 'test-results' do

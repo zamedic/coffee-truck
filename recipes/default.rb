@@ -61,3 +61,7 @@ end
 
 package 'firefox'
 package 'Xvfb'
+
+execute 'start_xvfb' do
+  command 'Xvfb :10 -ac &'
+end
