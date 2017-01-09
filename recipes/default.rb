@@ -29,9 +29,9 @@ hostsfile_entry '10.145.31.31' do
   unique    true
 end
 
-hostsfile_entry '127.0.0.2' do
-  hostname 'accstandardbank.d1.sc.omtrdc.net'
-  aliases ['lar.standardbank.co.za','rwp.standardbank.co.za','cdn.standardbank.co.za','dfib.standardbank.co.za','dspk.standardbank.co.za','trk.standardbank.co.za']
+hostsfile_entry '127.0.0.1' do
+  hostname 'localhost'
+  aliases ['localhost.localdomain','lar.standardbank.co.za','rwp.standardbank.co.za','cdn.standardbank.co.za','dfib.standardbank.co.za','dspk.standardbank.co.za','trk.standardbank.co.za','accstandardbank.d1.sc.omtrdc.net']
   action :create
 end
 
