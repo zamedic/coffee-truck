@@ -30,9 +30,11 @@ module CoffeeTruck
       end
 
       def functional_metrics(node)
+        total = current_coverage(node)
         {
             functional: {
-                total: current_coverage(node)
+                total: total,
+                success: total
             }
         }
       end
