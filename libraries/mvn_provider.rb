@@ -47,21 +47,25 @@ class Chef
       end
 
       action :functional do
-        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/tmp/geckodriver//geckodriver --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver --fail-at-end | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
-          system({"DISPLAY" => ":10"},"#{command}")
-          http_request 'test-results' do
-            action :post
-            url 'http://spambot.standardbank.co.za/events/test-results'
-            ignore_failure true
-            headers('Content-Type' => 'application/json')
-            message lazy {
-              {
-                  application: node['delivery']['config']['truck']['application'],
-                  results: functional_metrics(node)
-              }.to_json
-            }
+          if (system({"DISPLAY" => ":10"}, "#{command}"))
+            http_request 'test-results' do
+              action :post
+              url 'http://spambot.standardbank.co.za/events/test-results'
+              ignore_failure true
+              headers('Content-Type' => 'application/json')
+              message lazy {
+                {
+                    application: node['delivery']['config']['truck']['application'],
+                    results: functional_metrics(node)
+                }.to_json
+              }
+            end
+          else
+            raise RuntimeError, "Integration Tests Failed. "
           end
+
         end
       end
 
@@ -106,7 +110,7 @@ class Chef
       end
 
       action :pmd do
-        if(node['delivery']['config']['truck']['single_level_project'])
+        if (node['delivery']['config']['truck']['single_level_project'])
           command = "mvn pmd:pmd -Daggregate=false -Dformat=xml #{args}"
         else
           command = "mvn pmd:pmd -Daggregate=true -Dformat=xml #{args}"
@@ -136,7 +140,7 @@ class Chef
       end
 
       action :checkstyle do
-        if(node['delivery']['config']['truck']['single_level_project'])
+        if (node['delivery']['config']['truck']['single_level_project'])
           command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle #{args}"
         else
           command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle-aggregate #{args}"
