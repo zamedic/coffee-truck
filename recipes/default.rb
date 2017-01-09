@@ -35,7 +35,5 @@ hostsfile_entry '127.0.0.1' do
   action :create
 end
 
-
-
 package 'firefox'
 package 'Xvfb'
