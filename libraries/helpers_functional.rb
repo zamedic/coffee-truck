@@ -51,4 +51,10 @@ module CoffeeTruck
       end
     end
   end
+
+  module DSL
+    def upload_functional_results(node)
+      CoffeeTruck::Helpers::Functional.upload_functional_results(node)
+    end
+  end
 end
