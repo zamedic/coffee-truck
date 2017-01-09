@@ -47,9 +47,27 @@ class Chef
       end
 
       action :functional do
-        command = "mvn verify -Pintegration-tests #{args} --fail-at-end --quiet"
+        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command_verify = "mvn failsafe:verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
-          exec command
+          system({"DISPLAY" => ":10"}, "#{command}")
+            if(system({"DISPLAY" => ":10"}, "#{command_verify}"))
+            http_request 'test-results' do
+              action :post
+              url 'http://spambot.standardbank.co.za/events/test-results'
+              ignore_failure true
+              headers('Content-Type' => 'application/json')
+              message lazy {
+                {
+                    application: node['delivery']['config']['truck']['application'],
+                    results: functional_metrics(node)
+                }.to_json
+              }
+            end
+          else
+            raise RuntimeError, "Integration Tests Failed. "
+          end
+
         end
       end
 
@@ -94,7 +112,7 @@ class Chef
       end
 
       action :pmd do
-        if(node['delivery']['config']['truck']['single_level_project'])
+        if (node['delivery']['config']['truck']['single_level_project'])
           command = "mvn pmd:pmd -Daggregate=false -Dformat=xml #{args}"
         else
           command = "mvn pmd:pmd -Daggregate=true -Dformat=xml #{args}"
@@ -124,7 +142,7 @@ class Chef
       end
 
       action :checkstyle do
-        if(node['delivery']['config']['truck']['single_level_project'])
+        if (node['delivery']['config']['truck']['single_level_project'])
           command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle #{args}"
         else
           command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle-aggregate #{args}"
