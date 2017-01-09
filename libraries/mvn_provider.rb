@@ -52,7 +52,18 @@ class Chef
         converge_by "Functional tests: #{command}" do
           system({"DISPLAY" => ":10"},"#{command}")
           system({"DISPLAY" => ":10"},"#{command_verify}")
-          upload_functional_results(node)
+          http_request 'test-results' do
+            action :post
+            url 'http://spambot.standardbank.co.za/events/test-results'
+            ignore_failure true
+            headers('Content-Type' => 'application/json')
+            message lazy {
+              {
+                  application: node['delivery']['config']['truck']['application'],
+                  results: functional_metrics(node)
+              }.to_json
+            }
+          end
         end
       end
 

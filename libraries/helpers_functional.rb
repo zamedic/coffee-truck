@@ -36,25 +36,14 @@ module CoffeeTruck
       end
 
       def upload_functional_results(node)
-        http_request 'test-results' do
-          action :post
-          url 'http://spambot.standardbank.co.za/events/test-results'
-          ignore_failure true
-          headers('Content-Type' => 'application/json')
-          message lazy {
-            {
-                application: node['delivery']['config']['truck']['application'],
-                results: functional_metrics(node)
-            }.to_json
-          }
-        end
+
       end
     end
   end
 
   module DSL
-    def upload_functional_results(node)
-      CoffeeTruck::Helpers::Functional.upload_functional_results(node)
+    def functional_metrics(node)
+      CoffeeTruck::Helpers::Functional.functional_metrics(node)
     end
   end
 end
