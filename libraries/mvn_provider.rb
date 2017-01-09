@@ -23,7 +23,7 @@ class Chef
       end
 
       action :jacoco_report do
-        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}"
+        command = "mvn org.jacoco:jacoco-maven-plugin:report #{args}  | tee maven-jacoco.log"
         converge_by "JACOCO Report: #{command}" do
           exec command
           check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
