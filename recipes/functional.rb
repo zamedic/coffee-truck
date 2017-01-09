@@ -1,8 +1,6 @@
 include_recipe 'delivery-truck::functional'
 
-
 unless node['delivery']['change']['stage'] == 'delivered'
-
 
   directory '/tmp/geckodriver' do
     action :create
