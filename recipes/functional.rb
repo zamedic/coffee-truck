@@ -26,5 +26,5 @@ unless node['delivery']['change']['stage'] == 'delivered'
     action :functional
   end
 
-  upload_results(node)
+
 end
