@@ -14,6 +14,8 @@ module CoffeeTruck
         }.each { |result|
           total = total + result
         }
+        Chef::Log.warn("Integration Tests: #{total}")
+        return total
       end
 
       def getCoverage(path,node)

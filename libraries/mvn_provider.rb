@@ -48,8 +48,10 @@ class Chef
 
       action :functional do
         command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command_verify = "mvn failsafe:verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
-          if (system({"DISPLAY" => ":10"}, "#{command}"))
+          system({"DISPLAY" => ":10"}, "#{command}")
+            if(system({"DISPLAY" => ":10"}, "#{command_verify}"))
             http_request 'test-results' do
               action :post
               url 'http://spambot.standardbank.co.za/events/test-results'
