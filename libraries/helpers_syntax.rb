@@ -8,7 +8,7 @@ module CoffeeTruck
       include Chef::Mixin::ShellOut
       extend self
 
-      def bumped_pom_version?(path, node)
+      def bumped_pom_version?(node)
         return true if node['delivery']['change']['stage'] == 'build'
         change = DeliverySugar::Change.new(node)
         ref_old = "origin/#{change.pipeline}"
@@ -20,12 +20,16 @@ module CoffeeTruck
         Gem::Version.new(old_version) < Gem::Version.new(new_version)
       end
 
-      def ensure_snapshot?(path,node)
+      def ensure_snapshot?(node)
         return true if node['delivery']['change']['stage'] == 'build'
+        get_current_version(node).end_with?("-SNAPSHOT")
+      end
+
+      def get_current_version(node)
         cwd = node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
-        doc.xpath('/xmlns:project/xmlns:version/text()').first.content.end_with?("-SNAPSHOT")
+        doc.xpath('/xmlns:project/xmlns:version/text()').first.content
       end
     end
   end
@@ -33,11 +37,15 @@ module CoffeeTruck
   module DSL
 
     def bumped_pom_version?(path)
-      CoffeeTruck::Helpers::Syntax.bumped_pom_version?(path, node)
+      CoffeeTruck::Helpers::Syntax.bumped_pom_version?(node)
     end
 
     def ensure_snapshot?(path)
-      CoffeeTruck::Helpers::Syntax.ensure_snapshot?(path,node)
+      CoffeeTruck::Helpers::Syntax.ensure_snapshot?(node)
+    end
+
+    def pom_version()
+      CoffeeTruck::Helpers::Syntax.get_current_version(node)
     end
   end
 end
