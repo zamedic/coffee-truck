@@ -36,11 +36,11 @@ module CoffeeTruck
 
   module DSL
 
-    def bumped_pom_version?(path)
+    def bumped_pom_version?()
       CoffeeTruck::Helpers::Syntax.bumped_pom_version?(node)
     end
 
-    def ensure_snapshot?(path)
+    def ensure_snapshot?()
       CoffeeTruck::Helpers::Syntax.ensure_snapshot?(node)
     end
 
