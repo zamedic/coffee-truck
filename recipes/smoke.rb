@@ -1,2 +1,1 @@
-# include_recipe 'delivery-truck::smoke'
-# include_recipe 'jboss-eap::audit_recipe'
+include_recipe 'delivery-truck::smoke'

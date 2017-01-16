@@ -1,3 +1,5 @@
+include_recipe 'delivery-truck::deploy'
+
 current_env = delivery_environment
 current_env = 'acceptance-*' if current_env.start_with? 'acceptance-'
 
