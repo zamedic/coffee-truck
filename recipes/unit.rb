@@ -1,16 +1,18 @@
 include_recipe 'delivery-truck::unit'
 
-
-mvn 'unit' do
-  action :unit
-end
+if (java_changes(changed_files))
+  mvn 'unit' do
+    action :unit
+  end
 
 #Check Unit Tests
-mvn 'jacoco' do
-  action :jacoco_report
-end
+  mvn 'jacoco' do
+    action :jacoco_report
+  end
 
 #Upload Snapshot
-mvn 'upload' do
-  action :upload
+  mvn 'upload' do
+    action :upload
+  end
+
 end

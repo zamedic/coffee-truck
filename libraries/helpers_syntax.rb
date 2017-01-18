@@ -35,9 +35,11 @@ module CoffeeTruck
       def java_changes?(node,changes)
         Chef::Log.warn(changes)
         changes.each do |file|
-
+          if (!file.start_with?('cookbooks/'))
+            return true
+          end
         end
-
+        return false
       end
     end
   end

@@ -1,15 +1,15 @@
 include_recipe 'delivery-truck::lint'
 
-mvn 'compile' do
-  action :compile
+if (java_changes(changed_files))
+  mvn 'compile' do
+    action :compile
+  end
+
+  mvn 'checkstyle' do
+    action :checkstyle
+  end
+
+  mvn 'pmd' do
+    action :pmd
+  end
 end
-
-mvn 'checkstyle' do
-  action :checkstyle
-end
-
-mvn 'pmd' do
-  action :pmd
-end
-
-
