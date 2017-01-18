@@ -32,9 +32,9 @@ module CoffeeTruck
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content
       end
 
-      def java_changes?(node)
-        Chef::Log.warn(changed_files())
-        changed_files().each do |file|
+      def java_changes?(node,changes)
+        Chef::Log.warn(changes)
+        changes.each do |file|
 
         end
 
@@ -56,8 +56,8 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Syntax.get_current_version(node)
     end
 
-    def java_changes?()
-      CoffeeTruck::Helpers::Syntax.java_changes?(node)
+    def java_changes?(changes)
+      CoffeeTruck::Helpers::Syntax.java_changes?(node,changes)
     end
   end
 end

@@ -1,6 +1,6 @@
 include_recipe 'delivery-truck::syntax'
 
-java_changes?()
+java_changes?(changed_files)
 
 unless bumped_pom_version?()
   raise RuntimeError, "Artifact version unchanged - you have to increase the version in the pom file"
