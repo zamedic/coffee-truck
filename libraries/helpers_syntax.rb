@@ -31,6 +31,10 @@ module CoffeeTruck
         doc = ::File.open(path) { |f| Nokogiri::XML(f) }
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content
       end
+
+      def java_changes?(node)
+        Chef::Log.warn(changed_files)
+      end
     end
   end
 
@@ -46,6 +50,10 @@ module CoffeeTruck
 
     def pom_version()
       CoffeeTruck::Helpers::Syntax.get_current_version(node)
+    end
+
+    def java_changes?()
+      CoffeeTruck::Helpers::Syntax.java_changes?(node)
     end
   end
 end
