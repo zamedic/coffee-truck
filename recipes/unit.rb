@@ -1,6 +1,6 @@
 include_recipe 'delivery-truck::unit'
 
-if (java_changes(changed_files))
+if (java_changes?(changed_files))
   mvn 'unit' do
     action :unit
   end

@@ -1,6 +1,6 @@
 include_recipe 'delivery-truck::default'
 
-if (java_changes(changed_files))
+if (java_changes?(changed_files))
   include_recipe 'maven-wrapper::default'
   directory '/tmp/maven' do
     owner 'dbuild'

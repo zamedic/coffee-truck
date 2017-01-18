@@ -1,6 +1,6 @@
 include_recipe 'delivery-truck::publish'
 
-if (java_changes(changed_files))
+if (java_changes?(changed_files))
   mvn 'release_prepare' do
     action :release_prepare
   end
