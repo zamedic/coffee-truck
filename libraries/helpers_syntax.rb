@@ -33,7 +33,11 @@ module CoffeeTruck
       end
 
       def java_changes?(node)
-        Chef::Log.warn(changed_files)
+        Chef::Log.warn(changed_files())
+        changed_files().each do |file|
+
+        end
+
       end
     end
   end
