@@ -6,6 +6,8 @@ module CoffeeTruck
 
 
       def getSecurityStats()
+        require 'ntlm'
+        require 'net/http'
         http = Net::HTTP.new('https://psdc-pa001gth1v.za.sbicdirectory.com')
         request = Net::HTTP::Get.new('/Cxwebinterface/odata/v1/Projects?$expand=LastScan&$orderby=LastScan/RiskScore%20desc&$top=2')
         request.ntlm_auth('c1592023', '', 'trendweb')
