@@ -14,7 +14,10 @@ class Chef
       end
 
       action :update_demoncat do
-        getSecurityStats()
+        converge_by "Retreiving Security stats from checkmarx" do
+          getSecurityStats()
+        end
+
       end
 
 
