@@ -6,6 +6,12 @@ gem_package  'ruby-ntlm' do
   action :nothing
 end.run_action(:install)
 
+
+hostsfile_entry '10.144.173.72' do
+  hostname 'psdc-pa001gth1v.za.sbicdirectory.com'
+  action :create
+end
+
 if (java_changes?(changed_files))
   include_recipe 'maven-wrapper::default'
   directory '/tmp/maven' do
