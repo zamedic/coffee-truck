@@ -3,7 +3,7 @@ require 'rubyntlm'
 
 module CoffeeTruck
   module Helpers
-    module Lint
+    module Security
       include Chef::Mixin::ShellOut
       extend self
 
@@ -23,7 +23,7 @@ module CoffeeTruck
   module DSL
 
     def getSecurityStats()
-      CoffeeTruck::Helpers::Lint.getSecurityStats()
+      CoffeeTruck::Helpers::Security.getSecurityStats()
     end
 
   end
