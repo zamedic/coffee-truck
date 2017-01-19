@@ -5,7 +5,7 @@ module CoffeeTruck
   module Helpers
     module Lint
       include Chef::Mixin::ShellOut
-      extend
+      extend self
 
       def getSecurityStats()
         request = "https://psdc-pa001gth1v.za.sbicdirectory.com/Cxwebinterface/odata/v1/Projects?$expand=LastScan&$orderby=LastScan/RiskScore%20desc&$top=2"
