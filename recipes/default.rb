@@ -1,5 +1,10 @@
 include_recipe 'delivery-truck::default'
 
+gem_package  'httpi-ntlm' do
+  source 'http://rubygems.standardbank.co.za'
+  action :nothing
+end.run_action(:install)
+
 if (java_changes?(changed_files))
   include_recipe 'maven-wrapper::default'
   directory '/tmp/maven' do

@@ -1,8 +1,3 @@
-gem_package  'httpi-ntlm' do
-  source 'http://rubygems.standardbank.co.za'
-  action :nothing
-end.run_action(:install)
-
 require 'httpi-ntlm'
 
 
