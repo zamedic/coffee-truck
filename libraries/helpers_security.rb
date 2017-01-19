@@ -8,7 +8,7 @@ module CoffeeTruck
       extend self
 
       def getSecurityStats()
-        request = "https://psdc-pa001gth1v.za.sbicdirectory.com/Cxwebinterface/odata/v1/Projects?$expand=LastScan&$orderby=LastScan/RiskScore%20desc&$top=2"
+        request = URI("https://psdc-pa001gth1v.za.sbicdirectory.com/Cxwebinterface/odata/v1/Projects?$expand=LastScan&$orderby=LastScan/RiskScore%20desc&$top=2")
         message_from_server = Net::HTTP.get(request)
         Chef::Log.warn("Message from server #{message_from_server}")
         t2 = Net::NTLM::Message.parse(message_from_server)
