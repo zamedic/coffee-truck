@@ -1,16 +1,10 @@
-gem_package  'httpi-ntlm' do
-  source 'http://rubygems.standardbank.co.za'
-  action :nothing
-end.run_action(:install)
-
-require 'httpi-ntlm'
-
-
 module CoffeeTruck
   module Helpers
     module Security
       include Chef::Mixin::ShellOut
       extend self
+      require 'httpi-ntlm'
+
 
       def getSecurityStats()
 
@@ -18,6 +12,9 @@ module CoffeeTruck
         request.auth.ntlm("c1592023", "trendweb")
         response = HTTPI.get request
         Chef::Log.warn(response.body)
+
+        t1 = NTLM::Message::Type1.new()
+
 
       end
 
