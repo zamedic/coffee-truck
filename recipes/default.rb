@@ -1,5 +1,9 @@
 include_recipe 'delivery-truck::default'
 
+gem_package  'httpi-ntlm' do
+  action :install
+end
+
 if (java_changes?(changed_files))
   include_recipe 'maven-wrapper::default'
   directory '/tmp/maven' do
