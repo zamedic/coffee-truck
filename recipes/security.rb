@@ -1,2 +1,5 @@
 include_recipe 'delivery-truck::security'
-getSecurityStats()
+
+checkmarx 'update demoncat' do
+  action :update_demoncat
+end
