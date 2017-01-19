@@ -1,6 +1,6 @@
 include_recipe 'delivery-truck::default'
 
-gem_package  'httpi-ntlm' do
+gem_package  'ruby-ntlm' do
   source 'http://rubygems.standardbank.co.za'
   action :nothing
 end.run_action(:install)
