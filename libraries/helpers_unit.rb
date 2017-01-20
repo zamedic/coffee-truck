@@ -21,7 +21,7 @@ module CoffeeTruck
         end
 
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
-        return ((coverage*10).round / 10.0).to_f
+        return ((coverage*1000).round / 1000.0).to_f
       end
 
       def getCoverage(path, node)
