@@ -36,6 +36,7 @@ module CoffeeTruck
       end 
 
       def sync_envs(node)
+        Chef::Log.warn("setting version of #{node['delivery']['change']['project']} to #{pom_version_no_snapshot()}")
         define_project_application(node['delivery']['change']['project'],pom_version_no_snapshot())
       end
     end
