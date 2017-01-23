@@ -36,23 +36,7 @@ module CoffeeTruck
       end 
 
       def sync_envs(node)
-        app_name = node['delivery']['change']['project']
-        change = node['delivery']['change']
-        parts = %w(enterprise organization project pipeline)
-        env_parts = parts.map{|part| change[part]}.join('-')
-        acceptance_environment = "acceptance-#{env_parts}"
-        current_env = load_chef_environment(acceptance_environment)
-        app_version = current_env.override_attributes['applications'][app_name]
-        search_query = "recipes:#{node['delivery']['config']['truck']['recipe']} " \
-                 "AND chef_environment:acceptance-*"
-        my_nodes = delivery_chef_server_search(:node, search_query)
-        my_nodes.each do |node|
-          cookbook_env = load_chef_environment(node.chef_environment)
-          Chef::Log.warn("Updating Node #{node} with environment #{node.chef_environment} for application #{app_name} to version #{app_version}")
-          cookbook_env.override_attributes['applications'] ||= {}
-          cookbook_env.override_attributes['applications'][app_name] = app_version
-          save_chef_environment(cookbook_env)
-        end
+        define_project_application(node['delivery']['change']['project'],pom_version_no_snapshot())
       end
     end
   end

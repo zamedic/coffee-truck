@@ -59,6 +59,10 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Syntax.get_current_version(node)
     end
 
+    def pom_version_no_snapshot()
+      CoffeeTruck::Helpers::Syntax.get_current_version(node).split('-').first
+    end
+
     def java_changes?(changes)
       CoffeeTruck::Helpers::Syntax.java_changes?(node,changes)
     end
