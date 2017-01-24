@@ -106,7 +106,7 @@ class Chef
         command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} | tee mvn-release-perform.log"
         converge_by "Performing Release: #{command} to version #{version_number}" do
           exec command
-          define_project_application(node['delivery']['change']['project'], version_number)
+          define_project_application(node['delivery']['change']['project'], version_number,Hash.new)
         end
       end
 
