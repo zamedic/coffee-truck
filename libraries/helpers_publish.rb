@@ -2,7 +2,6 @@ module CoffeeTruck
   module Helpers
     module Publish
       extend self
-      require helpers_syntax
 
       def gitlog(node)
         cwd = node['delivery']['workspace']['repo']
