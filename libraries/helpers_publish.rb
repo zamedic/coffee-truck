@@ -2,6 +2,7 @@ module CoffeeTruck
   module Helpers
     module Publish
       extend self
+      require helpers_syntax
 
       def gitlog(node)
         cwd = node['delivery']['workspace']['repo']
@@ -35,9 +36,9 @@ module CoffeeTruck
         results
       end 
 
-      def sync_envs(node)
-        Chef::Log.warn("setting version of #{node['delivery']['change']['project']} to #{pom_version_no_snapshot()}")
-        define_project_application(node['delivery']['change']['project'],pom_version_no_snapshot())
+      def sync_envs(node,version)
+        Chef::Log.warn("setting version of #{node['delivery']['change']['project']} to #{version}")
+        define_project_application(node['delivery']['change']['project'],version)
       end
     end
   end
@@ -48,8 +49,8 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Publish.gitlog(node)
     end
 
-    def sync_envs(node)
-      CoffeeTruck::Helpers::Publish.sync_envs(node)
+    def sync_envs(node,version)
+      CoffeeTruck::Helpers::Publish.sync_envs(node,version)
     end
   end
 end
