@@ -194,7 +194,9 @@ class Chef
         options[:environment] = {
             'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
         }.merge @new_resource.environment
-        shell_out!(command, options).stdout.chomp
+        out = shell_out!(command, options)
+        out.error!
+        out.stdout.chomp
       end
 
       def version_number
