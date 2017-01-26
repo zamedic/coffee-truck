@@ -100,7 +100,7 @@ module CoffeeTruck
             check_file("#{path}/#{surefire}")
           }
         end
-      endfile
+      end
 
       def check_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
