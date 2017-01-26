@@ -30,18 +30,16 @@ class Chef
           exec command
           check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
           if node['delivery']['change']['stage'] == "build"
-            msg = {
-                application: node['delivery']['config']['truck']['application'],
-                results: sonarmetrics(node)
-            }.to_json
-            Chef::Log.warn("sending results #{msg}")
             http_request 'test-results' do
               action :post
               url 'http://spambot.standardbank.co.za/events/test-results'
               ignore_failure true
               headers('Content-Type' => 'application/json')
               message lazy {
-                msg
+                {
+                    application: node['delivery']['config']['truck']['application'],
+                    results: sonarmetrics(node)
+                }.to_json
               }
             end
           end
