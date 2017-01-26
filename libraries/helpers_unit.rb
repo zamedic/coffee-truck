@@ -88,7 +88,7 @@ module CoffeeTruck
       end
 
       def check_folder_for_surefire_errors(node, directory)
-        path = "#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports"
+        path = "#{node['delivery']['workspace']['repo']}/#{directory}/target/surefire-reports"
         Chef::Log.warn("checking for surefire reports #{path}")
         pn = Pathname.new(path)
         if (pn.exist?)
@@ -97,13 +97,13 @@ module CoffeeTruck
               |entry| entry.end_with?('.xml')
           }.collect { |surefire|
             Chef::Log.warn("checking file #{surefire}")
-            check_file("#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports/#{surefire}")
+            check_file("#{path}/#{surefire}")
           }
         end
-      end
+      endfile
 
       def check_file(surefire)
-        doc = ::File.open(file) { |f| Nokogiri::XML(f) }
+        doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
         runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
         error = doc.xpath("/testsuite/testcase/error/")
         Chef::Log.warn("Runtime #{runtime} error #{error}")
