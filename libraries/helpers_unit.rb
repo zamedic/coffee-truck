@@ -81,32 +81,42 @@ module CoffeeTruck
         Dir.entries(node['delivery']['workspace']['repo']).select {
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
         }.collect { |directory|
-          Chef::Log.warn("checkind #{directory}")
           check_folder_for_surefire_errors(node, directory)
-
         }
       end
 
       def check_folder_for_surefire_errors(node, directory)
         path = "#{node['delivery']['workspace']['repo']}/#{directory}/target/surefire-reports"
-        Chef::Log.warn("checking for surefire reports #{path}")
         pn = Pathname.new(path)
         if (pn.exist?)
-          Chef::Log.warn("found surefire #{path}")
-          Dir.entries(path).select {
+          errors = Dir.entries(path).select {
               |entry| entry.end_with?('.xml')
           }.collect { |surefire|
-            Chef::Log.warn("checking file #{surefire}")
             check_file("#{path}/#{surefire}")
-          }
+          }.select { |item| item == true }.length
+          if (errors > 0)
+            raise RuntimeError, "Failing build due to previous warning related to either unit test speed or errors."
+          end
         end
       end
 
       def check_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
         runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
+        name = doc.xpath("/testsuite/testcase/@name").first.text
+        class_name = doc.xpath("/testsuite/testcase/@classname").first.text
         error = doc.xpath("/testsuite/testcase/error")
-        Chef::Log.warn("Runtime #{runtime} error #{error}")
+        failed = false
+        if (runtime > 1)
+          Chef::Log.warn("Runtime for test #{name} in class #{class_name} exceeded 1 second. This is probably not a valid unit test")
+          failed = true
+        end
+        if (error)
+          Chef::Log.warn("the following error was encountered with unit test #{name} in class #{class_name}. #{error}")
+          failed = true
+        end
+        return failed
+
       end
 
       def sonarmetrics(node)
