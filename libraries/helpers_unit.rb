@@ -89,6 +89,7 @@ module CoffeeTruck
 
       def check_folder_for_surefire_errors(node, directory)
         path = "#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports"
+        Chef::Log.warn("checking for surefire reports #{path}")
         pn = Pathname.new(path)
         if (pn.exist?)
           Chef::Log.warn("found surefire #{path}")
