@@ -19,6 +19,7 @@ class Chef
         converge_by "Unit tests: #{command}" do
           exec command
           exec report
+          check_surefire_errors(node)
           get_unit_test_count(node)
         end
       end
@@ -196,7 +197,6 @@ class Chef
             'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
-        Chef::Log.warn(out.exitstatus)
         out.stdout.chomp
       end
 

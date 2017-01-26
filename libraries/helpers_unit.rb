@@ -57,13 +57,12 @@ module CoffeeTruck
       end
 
       def get_unit_test_count(node)
-
         file = "#{node['delivery']['workspace']['repo']}/target/site/surefire-report.html"
         doc = ::File.open(file) { |f| Nokogiri::XML(f) }
         total_tests = doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[1]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
-        skipped_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
         error_test=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[2]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
         failed_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[3]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
+        skipped_tests=doc.xpath("/x:html/x:body/x:div[@id='bodyColumn']/x:div/x:div[2]/x:table/x:tr[2]/x:td[4]/text()", 'x' => 'http://www.w3.org/1999/xhtml').first.text.to_i
         Chef::Log.warn("Tests - Total: #{total_tests} Skipped: #{skipped_tests} Error: #{error_test} Failed: #{failed_tests} ")
         if (error_test > 0)
           raise RuntimeError, "#{error_test} tests failed with an error. Failing Build"
@@ -76,6 +75,36 @@ module CoffeeTruck
             errors: error_test,
             failures: failed_tests
         }
+      end
+
+      def check_surefire_errors(node)
+        Dir.entries(node['delivery']['workspace']['repo']).select {
+            |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
+        }.collect { |directory|
+          Chef::Log.warn("checkind #{directory}")
+          check_folder_for_surefire_errors(node, directory)
+
+        }
+      end
+
+      def check_folder_for_surefire_errors(node, directory)
+        path = "#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports"
+        pn = Pathname.new(path)
+        if (pn.exist?)
+          Dir.entries(path).select {
+              |entry| !File.directory? and (entry.end_with?('.xml'))
+          }.collect { |surefire|
+            Chef::Log.warn("checking file #{surefire}")
+            check_file("#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports/#{surefire}")
+          }
+        end
+      end
+
+      def check_file(surefire)
+        doc = ::File.open(file) { |f| Nokogiri::XML(f) }
+        runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
+        error = doc.xpath("/testsuite/testcase/error/")
+        Chef::Log.warn("Runtime #{runtime} error #{error}")
       end
 
       def sonarmetrics(node)
@@ -103,6 +132,10 @@ module CoffeeTruck
 
     def get_unit_test_count(node)
       CoffeeTruck::Helpers::Unit.get_unit_test_count(node)
+    end
+
+    def check_surefire_errors(node)
+      CoffeeTruck::Helpers::Unit.check_surefire_errors(node)
     end
   end
 end
