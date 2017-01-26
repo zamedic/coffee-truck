@@ -91,8 +91,9 @@ module CoffeeTruck
         path = "#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports"
         pn = Pathname.new(path)
         if (pn.exist?)
+          Chef::Log.warn("found surefire #{path}")
           Dir.entries(path).select {
-              |entry| !File.directory? and (entry.end_with?('.xml'))
+              |entry| entry.end_with?('.xml')
           }.collect { |surefire|
             Chef::Log.warn("checking file #{surefire}")
             check_file("#{node['delivery']['workspace']['repo']}/#{path}/target/surefire-reports/#{surefire}")
