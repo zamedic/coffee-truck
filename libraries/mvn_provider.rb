@@ -19,6 +19,7 @@ class Chef
         converge_by "Unit tests: #{command}" do
           exec command
           exec report
+          get_unit_test_count()
         end
       end
 
