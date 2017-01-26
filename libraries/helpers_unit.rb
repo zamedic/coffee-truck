@@ -100,5 +100,9 @@ module CoffeeTruck
     def check_failed?(node)
       CoffeeTruck::Helpers::Unit.check_failed?(node)
     end
+
+    def get_unit_test_count(node)
+      CoffeeTruck::Helpers::Unit.get_unit_test_count(node)
+    end
   end
 end
