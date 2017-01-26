@@ -105,7 +105,7 @@ module CoffeeTruck
       def check_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
         runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
-        error = doc.xpath("/testsuite/testcase/error/")
+        error = doc.xpath("/testsuite/testcase/error")
         Chef::Log.warn("Runtime #{runtime} error #{error}")
       end
 
