@@ -107,9 +107,8 @@ module CoffeeTruck
         class_name = doc.xpath("/testsuite/testcase/@classname").first.text
         error = doc.xpath("/testsuite/testcase/error")
         failed = false
-        if (runtime > 5)
+        if (runtime > 3)
           Chef::Log.warn("Runtime for test #{name} in class #{class_name} has a runtime of #{runtime}, this exceeded the 5 second threshold. This is probably not a valid unit test")
-          failed = true
         end
         if (error.first)
           Chef::Log.warn("the following error was encountered with unit test #{name} in class #{class_name}. #{error}")
