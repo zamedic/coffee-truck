@@ -14,7 +14,7 @@ module CoffeeTruck
         Dir.entries(node['delivery']['workspace']['repo']).select {
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
         }.collect { |directory|
-          current_path_coverage(directory, node)
+          current_path_unit_coverage(directory, node)
         }.each { |result|
           missed = missed + result[:missed]
           covered = covered + result[:covered]
