@@ -27,7 +27,7 @@ module CoffeeTruck
       end
 
       def previous_pmd_violations(node)
-        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
         if(attrs)
           if(attrs['pmd_violations'])
             return attrs['pmd_violations']
@@ -37,7 +37,7 @@ module CoffeeTruck
       end
 
       def previous_complexity(node)
-        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
         if(attrs)
           if(attrs['complexity'])
             return attrs['complexity']

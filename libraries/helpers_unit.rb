@@ -1,10 +1,11 @@
 require 'nokogiri'
 require 'net/http'
-
+require 'delivery-sugar'
 module CoffeeTruck
   module Helpers
     module Unit
       extend self
+      include ''
 
       UNIT_COVERAGE = 'unit_coverage'
 
@@ -41,7 +42,7 @@ module CoffeeTruck
       end
 
       def previous_unit_coverage(node)
-        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
 
         if (attrs)
           if (attrs[UNIT_COVERAGE])
@@ -57,7 +58,7 @@ module CoffeeTruck
         if (coverage == 0.0)
           raise RuntimeError, "Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
         end
-        previous = getPreviousCoverage(node)
+        previous = previous_unit_coverage(node)
         if (previous > coverage)
           raise RuntimeError, "Project coverage has dropped from #{previous} to #{coverage}. Failing Build"
         end
@@ -148,9 +149,9 @@ module CoffeeTruck
           http.request(req)
         end
 
-        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
         attrs[UNIT_COVERAGE] = sonarmetrics(node)
-        define_project_application(
+        DeliverySugar::Change.define_project_application(
             node['delivery']['config']['truck']['application'],
             attrs['version'],
             attrs
