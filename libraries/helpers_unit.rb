@@ -1,6 +1,6 @@
 require 'nokogiri'
 require 'net/http'
-require 'delivery-sugar'
+
 module CoffeeTruck
   module Helpers
     module Unit
