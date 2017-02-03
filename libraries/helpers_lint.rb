@@ -27,20 +27,20 @@ module CoffeeTruck
       end
 
       def previous_pmd_violations(node)
-        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
+        attrs = Chef::DataBag.load('delivery')
         if(attrs)
-          if(attrs['pmd_violations'])
-            return attrs['pmd_violations']
+          if(attrs[node['delivery']['config']['truck']['application']]['pmd_violations'])
+            return attrs[node['delivery']['config']['truck']['application']]['pmd_violations']
           end
         end
         return 999999
       end
 
       def previous_complexity(node)
-        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
+        attrs = Chef::DataBag.load('delivery')
         if(attrs)
-          if(attrs['complexity'])
-            return attrs['complexity']
+          if(attrs[node['delivery']['config']['truck']['application']]['complexity'])
+            return attrs[node['delivery']['config']['truck']['application']]['complexity']
           end
         end
         return {

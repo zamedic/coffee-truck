@@ -41,10 +41,9 @@ module CoffeeTruck
       end
 
       def previous_unit_coverage(node)
-        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
-
+        attrs = Chef::DataBag.load('delivery')
         if (attrs)
-          if (attrs[UNIT_COVERAGE])
+          if (attrs[node['delivery']['config']['truck']['application']][UNIT_COVERAGE])
             return attrs[UNIT_COVERAGE]['coverage']
           end
         end
@@ -148,14 +147,9 @@ module CoffeeTruck
           http.request(req)
         end
 
-        attrs = DeliverySugar::Change.get_project_application(node['delivery']['config']['truck']['application'])
-        attrs[UNIT_COVERAGE] = sonarmetrics(node)
-        DeliverySugar::Change.define_project_application(
-            node['delivery']['config']['truck']['application'],
-            attrs['version'],
-            attrs
-        )
-
+        attrs = Chef::DataBag.load('delivery')
+        attrs[node['delivery']['config']['truck']['application']][UNIT_COVERAGE] = sonarmetrics(node)
+        attrs.save()
       end
     end
   end
