@@ -5,7 +5,6 @@ module CoffeeTruck
   module Helpers
     module Unit
       extend self
-      include ''
 
       UNIT_COVERAGE = 'unit_coverage'
 
