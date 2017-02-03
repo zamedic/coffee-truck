@@ -27,20 +27,21 @@ module CoffeeTruck
       end
 
       def previous_pmd_violations(node)
-        uri = URI("http://demoncat.standardbank.co.za/quality/#{node['delivery']['config']['truck']['application']}")
-        raw = JSON.parse(Net::HTTP.get(uri))
-        issues = raw["lint"]["issues"]
-        issues ? issues.to_i : 999999
+        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        if(attrs)
+          if(attrs['pmd_violations'])
+            return attrs['pmd_violations']
+          end
+        end
+        return 999999
       end
 
       def previous_complexity(node)
-        uri = URI("http://demoncat.standardbank.co.za/quality/#{node['delivery']['config']['truck']['application']}")
-        raw = JSON.parse(Net::HTTP.get(uri))
-        average = raw["complexity"]["average"]
-        begin
-          max=raw["complexity"]["max"]["complexity"]
-        rescue
-          max = 999
+        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        if(attrs)
+          if(attrs['complexity'])
+            return attrs['complexity']
+          end
         end
         return {
             average: average ? average.to_f : 999.0,

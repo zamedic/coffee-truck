@@ -1,17 +1,21 @@
 require 'nokogiri'
+require 'net/http'
 
 module CoffeeTruck
   module Helpers
     module Unit
       extend self
 
-      def currentCoverage(node)
+      UNIT_COVERAGE = 'unit_coverage'
+
+
+      def current_unit_coverage(node)
         missed = 0;
         covered = 0;
         Dir.entries(node['delivery']['workspace']['repo']).select {
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
         }.collect { |directory|
-          getCoverage(directory, node)
+          current_path_coverage(directory, node)
         }.each { |result|
           missed = missed + result[:missed]
           covered = covered + result[:covered]
@@ -24,7 +28,7 @@ module CoffeeTruck
         return ((coverage*1000).round / 1000.0).to_f
       end
 
-      def getCoverage(path, node)
+      def current_path_unit_coverage(path, node)
         path = "#{node['delivery']['workspace']['repo']}/#{path}/target/site/jacoco/jacoco.xml"
         pn = Pathname.new(path)
         if (pn.exist?)
@@ -37,11 +41,17 @@ module CoffeeTruck
         end
       end
 
-      def getPreviousCoverage(node)
-        uri = URI("http://demoncat.standardbank.co.za/testing/#{node['delivery']['config']['truck']['application']}")
-        raw = JSON.parse(Net::HTTP.get(uri))
-        return raw["coverage"].to_f
+      def previous_unit_coverage(node)
+        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+
+        if (attrs)
+          if (attrs[UNIT_COVERAGE])
+            return attrs[UNIT_COVERAGE]
+          end
+        end
+        return 0
       end
+
 
       def check_failed?(node)
         coverage = currentCoverage(node)
@@ -123,6 +133,29 @@ module CoffeeTruck
             unit: get_unit_test_count(node),
             coverage: currentCoverage(node),
         }
+      end
+
+      def save_test_results(node)
+        uri = URI('http://spambot.standardbank.co.za/events/test-results')
+        req = Net::HTTP::Post.new(uri)
+        req.body = {
+            application: node['delivery']['config']['truck']['application'],
+            results: sonarmetrics(node)
+        }.to_json
+        req.content_type = 'application/json'
+
+        res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request(req)
+        end
+
+        attrs = get_project_application(node['delivery']['config']['truck']['application'])
+        attrs[UNIT_COVERAGE] = sonarmetrics(node)
+        define_project_application(
+            node['delivery']['config']['truck']['application'],
+            attrs['version'],
+            attrs
+        )
+
       end
     end
   end
