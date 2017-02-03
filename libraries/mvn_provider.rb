@@ -20,7 +20,6 @@ class Chef
           exec command
           exec report
           check_surefire_errors(node)
-          get_unit_test_count(node)
         end
       end
 

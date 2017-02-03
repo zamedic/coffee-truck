@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'net/http'
+require 'DeliverySugar/dsl'
 
 module CoffeeTruck
   module Helpers
@@ -53,7 +54,7 @@ module CoffeeTruck
 
 
       def check_failed?(node)
-        coverage = currentCoverage(node)
+        coverage = current_unit_coverage(node)
         if (coverage == 0.0)
           raise RuntimeError, "Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
         end
@@ -92,6 +93,7 @@ module CoffeeTruck
         }.collect { |directory|
           check_folder_for_surefire_errors(node, directory)
         }
+        get_unit_test_count(node)
       end
 
       def check_folder_for_surefire_errors(node, directory)

@@ -49,8 +49,6 @@ module CoffeeTruck
         }
       end
 
-
-
       def current_complexity(node)
         count = 0;
         sum = 0;
