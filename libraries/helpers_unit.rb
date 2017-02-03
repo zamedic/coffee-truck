@@ -8,7 +8,6 @@ module CoffeeTruck
 
       UNIT_COVERAGE = 'unit_coverage'
 
-
       def current_unit_coverage(node)
         missed = 0;
         covered = 0;
@@ -46,7 +45,7 @@ module CoffeeTruck
 
         if (attrs)
           if (attrs[UNIT_COVERAGE])
-            return attrs[UNIT_COVERAGE]
+            return attrs[UNIT_COVERAGE]['coverage']
           end
         end
         return 0
@@ -162,24 +161,16 @@ module CoffeeTruck
 
   module DSL
 
-    def sonarmetrics(node)
-      CoffeeTruck::Helpers::Unit.sonarmetrics(node)
-    end
-
-    def currentCoverage(node)
-      CoffeeTruck::Helpers::Unit.currentCoverage(node)
-    end
-
     def check_failed?(node)
       CoffeeTruck::Helpers::Unit.check_failed?(node)
     end
 
-    def get_unit_test_count(node)
-      CoffeeTruck::Helpers::Unit.get_unit_test_count(node)
-    end
-
     def check_surefire_errors(node)
       CoffeeTruck::Helpers::Unit.check_surefire_errors(node)
+    end
+
+    def save_test_results(node)
+      CoffeeTruck::Helpers::Unit.save_test_results(node)
     end
   end
 end

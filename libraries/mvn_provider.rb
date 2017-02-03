@@ -31,7 +31,6 @@ class Chef
           check_failed?(node) unless node['delivery']['config']['truck']['skip_coverage_enforcement']
           if node['delivery']['change']['stage'] == "build"
             save_test_results(node)
-
           end
 
 
