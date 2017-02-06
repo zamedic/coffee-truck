@@ -111,22 +111,8 @@ class Chef
           exec command
           check_pmd?(node) unless node['delivery']['config']['truck']['skip_pmb_enforcement']
           if node['delivery']['change']['stage'] == "build"
-            http_request 'lint-results' do
-              action :post
-              url 'http://spambot.standardbank.co.za/events/lint-results'
-              ignore_failure true
-              headers('Content-Type' => 'application/json')
-              message lazy {
-                {
-                    application: node['delivery']['config']['truck']['application'],
-                    results: {
-                        issues: count_pmd_violations(node)
-                    }
-                }.to_json
-              }
-            end
+            save_pmd_violations(node)
           end
-
         end
       end
 
@@ -141,23 +127,10 @@ class Chef
           exec command
           check_complexity?(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
           if node['delivery']['change']['stage'] == "build"
-            http_request 'complexity-results' do
-              action :post
-              url 'http://spambot.standardbank.co.za/events/quality-results'
-              ignore_failure true
-              headers('Content-Type' => 'application/json')
-              message lazy {
-                {
-                    application: node['delivery']['config']['truck']['application'],
-                    results: current_complexity(node)
-                }.to_json
-              }
-            end
+           save_complexity(node)
           end
-
         end
       end
-
 
       action :compile do
         command = "mvn compile package install -Dmaven.test.skip=true #{args}"
