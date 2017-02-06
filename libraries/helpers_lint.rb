@@ -80,8 +80,8 @@ module CoffeeTruck
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with complexity stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
             return {
-                average: average ? average.to_f : 999.0,
-                max: max ? max.to_i : 999
+                average:  999.0,
+                max:  999
             }
           end
         end
