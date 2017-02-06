@@ -58,6 +58,7 @@ module CoffeeTruck
       def check_complexity?(node)
         previous = previous_complexity(node)
         current = current_complexity(node)
+        Chef::Log.warn("Previous Data #{previous}.")
 
         if (current[:average] > previous[:average])
           raise RuntimeError, "Average Cyclic Complexity increased from #{previous[:average]} to #{current[:average]}. Failing Build"
