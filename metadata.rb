@@ -9,3 +9,4 @@ version          '1.1.0'
 depends 'delivery-truck'
 depends 'maven-wrapper'
 depends 'hostsfile'
+

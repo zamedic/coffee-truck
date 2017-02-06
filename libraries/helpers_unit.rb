@@ -1,17 +1,20 @@
 require 'nokogiri'
+require 'net/http'
 
 module CoffeeTruck
   module Helpers
     module Unit
       extend self
 
-      def currentCoverage(node)
+      UNIT_COVERAGE = 'unit_coverage'
+
+      def current_unit_coverage(node)
         missed = 0;
         covered = 0;
         Dir.entries(node['delivery']['workspace']['repo']).select {
             |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
         }.collect { |directory|
-          getCoverage(directory, node)
+          current_path_unit_coverage(directory, node)
         }.each { |result|
           missed = missed + result[:missed]
           covered = covered + result[:covered]
@@ -24,7 +27,7 @@ module CoffeeTruck
         return ((coverage*1000).round / 1000.0).to_f
       end
 
-      def getCoverage(path, node)
+      def current_path_unit_coverage(path, node)
         path = "#{node['delivery']['workspace']['repo']}/#{path}/target/site/jacoco/jacoco.xml"
         pn = Pathname.new(path)
         if (pn.exist?)
@@ -37,18 +40,13 @@ module CoffeeTruck
         end
       end
 
-      def getPreviousCoverage(node)
-        uri = URI("http://demoncat.standardbank.co.za/testing/#{node['delivery']['config']['truck']['application']}")
-        raw = JSON.parse(Net::HTTP.get(uri))
-        return raw["coverage"].to_f
-      end
 
       def check_failed?(node)
-        coverage = currentCoverage(node)
+        coverage = current_unit_coverage(node)
         if (coverage == 0.0)
           raise RuntimeError, "Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
         end
-        previous = getPreviousCoverage(node)
+        previous = previous_unit_coverage(node)
         if (previous > coverage)
           raise RuntimeError, "Project coverage has dropped from #{previous} to #{coverage}. Failing Build"
         end
@@ -83,6 +81,7 @@ module CoffeeTruck
         }.collect { |directory|
           check_folder_for_surefire_errors(node, directory)
         }
+        get_unit_test_count(node)
       end
 
       def check_folder_for_surefire_errors(node, directory)
@@ -92,7 +91,7 @@ module CoffeeTruck
           errors = Dir.entries(path).select {
               |entry| entry.end_with?('.xml')
           }.collect { |surefire|
-            check_file("#{path}/#{surefire}")
+            check_surefire_file("#{path}/#{surefire}")
           }.select { |item| item == true }.length
           if (errors > 0)
             raise RuntimeError, "Failing build due to previous warning related to either unit test speed or errors."
@@ -100,7 +99,7 @@ module CoffeeTruck
         end
       end
 
-      def check_file(surefire)
+      def check_surefire_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
         runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
         name = doc.xpath("/testsuite/testcase/@name").first.text
@@ -121,32 +120,74 @@ module CoffeeTruck
       def sonarmetrics(node)
         {
             unit: get_unit_test_count(node),
-            coverage: currentCoverage(node),
+            coverage: current_unit_coverage(node),
         }
+      end
+
+      def previous_unit_coverage(node)
+        chef_server.with_server_config do
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            return databag_item.raw_data[UNIT_COVERAGE] && databag_item.raw_data[UNIT_COVERAGE]['coverage'] ? databag_item.raw_data[UNIT_COVERAGE]['coverage']  : 0
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - returning 0")
+            return 0
+          end
+
+        end
+      end
+
+
+      def save_test_results(node)
+        uri = URI('http://spambot.standardbank.co.za/events/test-results')
+        req = Net::HTTP::Post.new(uri)
+        req.body = {
+            application: node['delivery']['config']['truck']['application'],
+            results: sonarmetrics(node)
+        }.to_json
+        req.content_type = 'application/json'
+
+        res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request(req)
+        end
+        chef_server.with_server_config do
+
+
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.save()
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
+            databag_item = Chef::DataBagItem.new
+            databag_itemdata_bag('delivery')
+            databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
+            databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.create()
+          end
+        end
+      end
+
+      private
+
+      def chef_server
+        DeliverySugar::ChefServer.new
       end
     end
   end
 
   module DSL
 
-    def sonarmetrics(node)
-      CoffeeTruck::Helpers::Unit.sonarmetrics(node)
-    end
-
-    def currentCoverage(node)
-      CoffeeTruck::Helpers::Unit.currentCoverage(node)
-    end
-
     def check_failed?(node)
       CoffeeTruck::Helpers::Unit.check_failed?(node)
     end
 
-    def get_unit_test_count(node)
-      CoffeeTruck::Helpers::Unit.get_unit_test_count(node)
-    end
-
     def check_surefire_errors(node)
       CoffeeTruck::Helpers::Unit.check_surefire_errors(node)
+    end
+
+    def save_test_results(node)
+      CoffeeTruck::Helpers::Unit.save_test_results(node)
     end
   end
 end
