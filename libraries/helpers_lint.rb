@@ -60,15 +60,15 @@ module CoffeeTruck
         current = current_complexity(node)
         Chef::Log.warn("Previous Data #{previous}.")
 
-        if (current[:average] > previous[:average])
-          raise RuntimeError, "Average Cyclic Complexity increased from #{previous[:average]} to #{current[:average]}. Failing Build"
+        if (current[:average] > previous['average'])
+          raise RuntimeError, "Average Cyclic Complexity increased from #{previous['average']} to #{current[:average]}. Failing Build"
         end
 
-        if (current[:max][:complexity] > previous[:max])
-          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous[:max]} to #{current[:max][:complexity]}. Failing Build"
+        if (current[:max][:complexity] > previous['max'])
+          raise RuntimeError, "Maximum Cyclic Complexity increased from #{previous['max']} to #{current[:max][:complexity]}. Failing Build"
         end
-        Chef::Log.warn("Projects previous average cyclic complexity #{previous[:average]}, new average cyclic complexity #{current[:average]}.")
-        Chef::Log.warn("Projects previous maximum cyclic complexity #{previous[:max]}, new maximum cyclic complexity #{current[:max][:complexity]}.")
+        Chef::Log.warn("Projects previous average cyclic complexity #{previous['average']}, new average cyclic complexity #{current[:average]}.")
+        Chef::Log.warn("Projects previous maximum cyclic complexity #{previous['max']}, new maximum cyclic complexity #{current[:max][:complexity]}.")
 
         return true
       end
@@ -77,12 +77,12 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item.raw_data[COMPLEXITY] ?databag_item.raw_data[COMPLEXITY] :   {average:  999.0,  max:  999}
+            return databag_item.raw_data[COMPLEXITY] ?databag_item.raw_data[COMPLEXITY] :   {"average"=>  999.0,  "max"=>  999}
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with complexity stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
             return {
-                average:  999.0,
-                max:  999
+                "average" =>  999.0,
+                "max" =>  999
             }
           end
         end
