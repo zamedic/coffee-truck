@@ -161,8 +161,9 @@ module CoffeeTruck
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
             databag_item = Chef::DataBagItem.new
             databag_itemdata_bag('delivery')
-            databag_item[UNIT_COVERAGE] = sonarmetrics(node)
-            databag_item.save(node['delivery']['config']['truck']['application'])
+            databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
+            databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.create()
           end
         end
       end

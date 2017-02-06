@@ -109,8 +109,9 @@ module CoffeeTruck
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
             databag_item = Chef::DataBagItem.new
             databag_item.data_bag('delivery')
-            databag_item[COMPLEXITY] = current_complexity(node)
-            databag_item.save(node['delivery']['config']['truck']['application'])
+            databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
+            databag_item.raw_data[COMPLEXITY] = current_complexity(node)
+            databag_item.create()
           end
         end
 
@@ -155,8 +156,9 @@ module CoffeeTruck
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
             databag_item = Chef::DataBagItem.new
             databag_item.data_bag('delivery')
-            databag_item[PMD_VIOLATIONS] = count_pmd_violations(node)
-            databag_item.save(node['delivery']['config']['truck']['application'])
+            databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
+            databag_item.raw_data[PMD_VIOLATIONS] = count_pmd_violations(node)
+            databag_item.create()
           end
         end
       end
