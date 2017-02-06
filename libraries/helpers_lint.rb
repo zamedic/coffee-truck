@@ -161,12 +161,12 @@ module CoffeeTruck
             databag_item.create()
           end
         end
+      end
 
-        private
+      private
 
-        def chef_server
-          DeliverySugar::ChefServer.new
-        end
+      def chef_server
+        DeliverySugar::ChefServer.new
       end
     end
   end
