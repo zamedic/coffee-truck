@@ -128,7 +128,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item[UNIT_COVERAGE]['coverage'] ? databag_item[UNIT_COVERAGE]['coverage']  : 0
+            return databag_item.raw_data[UNIT_COVERAGE]['coverage'] ? databag_item.raw_data[UNIT_COVERAGE]['coverage']  : 0
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - returning 0")
             return 0
@@ -155,7 +155,7 @@ module CoffeeTruck
 
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            databag_item[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)
             databag_item.save()
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")

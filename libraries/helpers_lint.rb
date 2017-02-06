@@ -76,7 +76,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item[COMPLEXITY]
+            return databag_item.raw_data[COMPLEXITY] ?databag_item.raw_data[COMPLEXITY] :   {average:  999.0,  max:  999}
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with complexity stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
             return {
@@ -103,7 +103,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            databag_item[COMPLEXITY] = current_complexity(node)
+            databag_item.raw_data[COMPLEXITY] = current_complexity(node)
             databag_item.save()
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
@@ -123,7 +123,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item[PMD_VIOLATIONS]
+            return databag_item.raw_data[PMD_VIOLATIONS] ? databag_item.raw_data[PMD_VIOLATIONS] : 99999
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with complexity stats found for #{node['delivery']['config']['truck']['application']} - returning 99999")
             return 99999
@@ -150,7 +150,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            databag_item[PMD_VIOLATIONS] = count_pmd_violations(node)
+            databag_item.raw_data[PMD_VIOLATIONS] = count_pmd_violations(node)
             databag_item.save()
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
