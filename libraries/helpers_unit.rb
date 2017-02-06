@@ -120,7 +120,7 @@ module CoffeeTruck
       def sonarmetrics(node)
         {
             unit: get_unit_test_count(node),
-            coverage: currentCoverage(node),
+            coverage: current_unit_coverage(node),
         }
       end
 
