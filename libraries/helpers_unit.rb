@@ -91,7 +91,7 @@ module CoffeeTruck
           errors = Dir.entries(path).select {
               |entry| entry.end_with?('.xml')
           }.collect { |surefire|
-            check_file("#{path}/#{surefire}")
+            check_surefire_file("#{path}/#{surefire}")
           }.select { |item| item == true }.length
           if (errors > 0)
             raise RuntimeError, "Failing build due to previous warning related to either unit test speed or errors."
@@ -99,7 +99,7 @@ module CoffeeTruck
         end
       end
 
-      def check_file(surefire)
+      def check_surefire_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
         runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
         name = doc.xpath("/testsuite/testcase/@name").first.text
@@ -166,6 +166,12 @@ module CoffeeTruck
             databag_item.create()
           end
         end
+      end
+
+      private
+
+      def chef_server
+        DeliverySugar::ChefServer.new
       end
     end
   end
