@@ -108,7 +108,7 @@ module CoffeeTruck
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
             databag_item = Chef::DataBagItem.new
-            databag_item.data_bag = 'delivery'
+            databag_item.data_bag('delivery')
             databag_item.id = node['delivery']['config']['truck']['application']
             databag_item[COMPLEXITY] = current_complexity(node)
             databag_item.create()
