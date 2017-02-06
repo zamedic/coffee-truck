@@ -21,7 +21,7 @@ module CoffeeTruck
         current = count_pmd_violations(node)
         previous = previous_pmd_violations(node)
 
-        if (current > previous)
+        if (current > previous.to_i)
           raise RuntimeError, "PMD violations increased from #{previous} to #{current}. Failing Build"
         end
         Chef::Log.warn("Projects previous PMD violations #{previous}, new PMD violations  #{current}.")

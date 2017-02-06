@@ -128,7 +128,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item[UNIT_COVERAGE]['coverage']
+            return databag_item[UNIT_COVERAGE]['coverage'] ? databag_item[UNIT_COVERAGE]['coverage']  : 0
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - returning 0")
             return 0
