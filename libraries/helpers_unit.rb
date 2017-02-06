@@ -135,51 +135,53 @@ module CoffeeTruck
           end
 
         end
-
-        def save_test_results(node)
-          uri = URI('http://spambot.standardbank.co.za/events/test-results')
-          req = Net::HTTP::Post.new(uri)
-          req.body = {
-              application: node['delivery']['config']['truck']['application'],
-              results: sonarmetrics(node)
-          }.to_json
-          req.content_type = 'application/json'
-
-          res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-            http.request(req)
-          end
-          chef_server.with_server_config do
+      end
 
 
-            begin
-              databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-              databag_item[UNIT_COVERAGE] = sonarmetrics(node)
-              databag_item.save()
-            rescue Net::HTTPServerException
-              Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
-              databag_item = Chef::DataBagItem.new
-              databag_item.data_bag = 'delivery'
-              databag_item.id = node['delivery']['config']['truck']['application']
-              databag_item[UNIT_COVERAGE] = sonarmetrics(node)
-              databag_item.create()
-            end
+      def save_test_results(node)
+        uri = URI('http://spambot.standardbank.co.za/events/test-results')
+        req = Net::HTTP::Post.new(uri)
+        req.body = {
+            application: node['delivery']['config']['truck']['application'],
+            results: sonarmetrics(node)
+        }.to_json
+        req.content_type = 'application/json'
+
+        res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request(req)
+        end
+        chef_server.with_server_config do
+
+
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            databag_item[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.save()
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
+            databag_item = Chef::DataBagItem.new
+            databag_item.data_bag = 'delivery'
+            databag_item.id = node['delivery']['config']['truck']['application']
+            databag_item[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.create()
           end
         end
       end
     end
+  end
 
-    module DSL
+  module DSL
 
-      def check_failed?(node)
-        CoffeeTruck::Helpers::Unit.check_failed?(node)
-      end
+    def check_failed?(node)
+      CoffeeTruck::Helpers::Unit.check_failed?(node)
+    end
 
-      def check_surefire_errors(node)
-        CoffeeTruck::Helpers::Unit.check_surefire_errors(node)
-      end
+    def check_surefire_errors(node)
+      CoffeeTruck::Helpers::Unit.check_surefire_errors(node)
+    end
 
-      def save_test_results(node)
-        CoffeeTruck::Helpers::Unit.save_test_results(node)
-      end
+    def save_test_results(node)
+      CoffeeTruck::Helpers::Unit.save_test_results(node)
     end
   end
+end
