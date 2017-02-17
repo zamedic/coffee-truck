@@ -29,7 +29,7 @@ module CoffeeTruck
         req.body = body
         req.content_type = 'application/json'
 
-        Net::HTTP.start(uri.hostname, uri.port) do |http|
+        Net::HTTP.start(uri.hostname, uri.port,:verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
           http.request(req)
         end
       end
