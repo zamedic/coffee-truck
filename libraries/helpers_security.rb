@@ -13,7 +13,7 @@ module CoffeeTruck
         response = http.request(request)
         Chef::Log.warn(http)
         Chef::Log.warn(response)
-        raw = JSON.parse(response)
+        raw = JSON.parse(response.body)
         last_record = raw['value'][-1]
 
         body = {
