@@ -41,7 +41,7 @@ module CoffeeTruck
 
   module DSL
 
-    def getSecurityStats()
+    def getSecurityStats(node)
       CoffeeTruck::Helpers::Security.getSecurityStats(node)
     end
 
