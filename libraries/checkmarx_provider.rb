@@ -15,14 +15,14 @@ class Chef
 
       action :update_demoncat do
         converge_by "Retreiving Security stats from checkmarx" do
-          getSecurityStats()
+          if(node['delivery']['config']['truck']['security_url'])
+            getSecurityStats(node)
+          end
         end
 
       end
 
-
       private
-
 
     end
   end
