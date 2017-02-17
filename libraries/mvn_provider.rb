@@ -37,8 +37,8 @@ class Chef
       end
 
       action :functional do
-        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
-        command_verify = "mvn failsafe:verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver | tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q| tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
+        command_verify = "mvn failsafe:verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q| tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
           system({"DISPLAY" => ":10"}, "#{command}")
             if(system({"DISPLAY" => ":10"}, "#{command_verify}"))
