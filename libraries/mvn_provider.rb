@@ -158,7 +158,7 @@ class Chef
             'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
-        Chef::Log.warn("Exec Result: #{out}")
+        Chef::Log.warn("Exec Result: #{out.exitstatus}")
         out.stdout.chomp
       end
 
