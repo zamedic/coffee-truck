@@ -40,8 +40,7 @@ class Chef
         command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q| tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         command_verify = "mvn failsafe:verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q| tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         converge_by "Functional tests: #{command}" do
-          system({"DISPLAY" => ":10"}, "#{command}")
-            if(system({"DISPLAY" => ":10"}, "#{command_verify}"))
+            exec command_verify
             http_request 'test-results' do
               action :post
               url 'http://spambot.standardbank.co.za/events/test-results'
@@ -54,9 +53,7 @@ class Chef
                 }.to_json
               }
             end
-          else
-            raise RuntimeError, "Integration Tests Failed. "
-          end
+
 
         end
       end
@@ -155,10 +152,12 @@ class Chef
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
         options[:timeout] = 1200
         options[:environment] = {
-            'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}"
+            'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}","DISPLAY" => ":10"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
-        Chef::Log.warn("Exec Result: #{out.exitstatus}")
+        if out.exitstatus != 0
+          raise RuntimeError, "Execution Failed. "
+        end
         out.stdout.chomp
       end
 
