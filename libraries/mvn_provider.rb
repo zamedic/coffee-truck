@@ -129,6 +129,18 @@ class Chef
         end
       end
 
+      action :findbugs do
+        command = "mvn findbugs:findbugs #{args}"
+        converge_by "running findbugs #{command}" do
+          exec command
+          check_bugs(node) unless node['delivery']['config']['truck']['skip_findbugs_enforcement']
+          if node['delivery']['change']['stage'] == "build"
+            save_complexity(node)
+          end
+        end
+
+      end
+
       action :compile do
         command = "mvn compile package install -Dmaven.test.skip=true #{args}"
         converge_by "running compile #{command}" do

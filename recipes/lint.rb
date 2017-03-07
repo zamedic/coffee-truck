@@ -12,4 +12,8 @@ if (java_changes?(changed_files))
   mvn 'pmd' do
     action :pmd
   end
+
+  mvn 'find_bugs' do
+    action :findbugs
+  end
 end

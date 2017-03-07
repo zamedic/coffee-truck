@@ -10,6 +10,7 @@ module CoffeeTruck
 
       COMPLEXITY = 'complexity'
       PMD_VIOLATIONS = 'violations'
+      BUGS = 'bugs'
 
       def count_pmd_violations(node)
         file = "#{node['delivery']['workspace']['repo']}/target/pmd.xml"
@@ -164,6 +165,66 @@ module CoffeeTruck
         end
       end
 
+      def check_bugs(node)
+        current_bugs = count_current_bugs(node)
+        previous_bugs = previous_bug_count(node)
+        Chef::Log.warn("Findbugs - Previous: #{previous_bugs} Current: #{current_bugs}")
+        if(current_bugs > previous_bugs)
+          raise RuntimeError, "Number of bugs found with Findbugs has increased from #{previous_bugs} to #{current_bugs}"
+        end
+      end
+
+      def count_current_bugs(node)
+        total = 0;
+        Dir.entries(node['delivery']['workspace']['repo']).select {
+            |entry| File.directory? File.join(node['delivery']['workspace']['repo'], entry) and !(entry == '..')
+        }.collect { |directory|
+          current_path_bug_count(directory, node)
+        }.each { |result|
+          total += result
+        }
+        return total
+      end
+
+      def current_path_bug_count(directory,node)
+        path = "#{node['delivery']['workspace']['repo']}/#{path}/target/findbugsXml.xml"
+        pn = Pathname.new(path)
+        if (pn.exist?)
+          doc = ::File.open(path) { |f| Nokogiri::XML(f) }
+          return doc.xpath('/BugCollection/FindBugsSummary/@total_bugs').first.value.to_i
+        end
+        return 0
+      end
+
+      def previous_bug_count(node)
+        chef_server.with_server_config do
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            return databag_item.raw_data[BUGS] ? databag_item.raw_data[BUGS] : 99999
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with complexity stats found for #{node['delivery']['config']['truck']['application']} - returning 99999")
+            return 99999
+          end
+        end
+      end
+
+      def save_bug_count(node)
+        chef_server.with_server_config do
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            databag_item.raw_data[BUGS] = count_current_bugs(node)
+            databag_item.save()
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
+            databag_item = Chef::DataBagItem.new
+            databag_item.data_bag('delivery')
+            databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
+            databag_item.raw_data[BUGS] = count_current_bugs(node)
+            databag_item.create()
+          end
+        end
+      end
+
       private
 
       def chef_server
@@ -196,6 +257,15 @@ module CoffeeTruck
     def save_pmd_violations(node)
       CoffeeTruck::Helpers::Lint.save_pmd_violations(node)
     end
+
+    def check_bugs(node)
+      CoffeeTruck::Helpers::Lint.check_bugs(node)
+    end
+
+    def save_bug_count(node)
+      CoffeeTruck::Helpers::Lint.save_bug_count(node)
+    end
+
 
 
   end
