@@ -187,7 +187,7 @@ module CoffeeTruck
       end
 
       def current_path_bug_count(directory,node)
-        path = "#{node['delivery']['workspace']['repo']}/#{path}/target/findbugsXml.xml"
+        path = "#{node['delivery']['workspace']['repo']}/#{directory}/target/findbugsXml.xml"
         Chef::Log.warn("Searching for file: #{path}")
         pn = Pathname.new(path)
         if (pn.exist?)
