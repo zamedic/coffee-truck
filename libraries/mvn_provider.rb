@@ -135,7 +135,7 @@ class Chef
           exec command
           check_bugs(node) unless node['delivery']['config']['truck']['skip_findbugs_enforcement']
           if node['delivery']['change']['stage'] == "build"
-            save_complexity(node)
+            save_bug_count(node)
           end
         end
 
