@@ -11,6 +11,7 @@ module CoffeeTruck
       COMPLEXITY = 'complexity'
       PMD_VIOLATIONS = 'violations'
       BUGS = 'bugs'
+      CHECKSTYLE = 'checkstyle'
 
       def count_pmd_violations(node)
         file = "#{node['delivery']['workspace']['repo']}/target/pmd.xml"
@@ -71,6 +72,14 @@ module CoffeeTruck
         Chef::Log.warn("Projects previous average cyclic complexity #{previous['average']}, new average cyclic complexity #{current[:average]}.")
         Chef::Log.warn("Projects previous maximum cyclic complexity #{previous['max']}, new maximum cyclic complexity #{current[:max][:complexity]}.")
 
+        current = count_checkstyle_violations(node)
+        previous = previous_checkstyle_violations(node)
+
+        if (current > previous)
+          raise RuntimeError, "Checkstyle Violations increased from #{previous} to #{current} - Failing build"
+        end
+        Chef::Log.warn("Previous Checkstyle Violations #{previous}. Current Checkstyle Violations #{current}")
+
         return true
       end
 
@@ -88,6 +97,8 @@ module CoffeeTruck
           end
         end
       end
+
+
 
       def save_complexity(node)
         uri = URI('http://spambot.standardbank.co.za/events/quality-results')
@@ -117,8 +128,7 @@ module CoffeeTruck
           end
         end
 
-
-
+        save_checkstyle_count(node)
       end
 
       def previous_pmd_violations(node)
@@ -222,6 +232,41 @@ module CoffeeTruck
             databag_item.data_bag('delivery')
             databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
             databag_item.raw_data[BUGS] = count_current_bugs(node)
+            databag_item.create()
+          end
+        end
+      end
+
+      def count_checkstyle_violations(node)
+        file = "#{node['delivery']['workspace']['repo']}/target/checkstyle-result.xml"
+        doc = ::File.open(file) { |f| Nokogiri::XML(f) }
+        return doc.xpath("count(//error[@source!='com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck'])").to_i
+      end
+
+      def previous_checkstyle_violations(node)
+        chef_server.with_server_config do
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            return databag_item.raw_data[CHECKSTYLE] ?databag_item.raw_data[CHECKSTYLE] :   99999
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with checkstyle violation stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
+            return 99999
+          end
+        end
+      end
+
+      def save_checkstyle_count(node)
+        chef_server.with_server_config do
+          begin
+            databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
+            databag_item.raw_data[CHECKSTYLE] = count_checkstyle_violations(node)
+            databag_item.save()
+          rescue Net::HTTPServerException
+            Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
+            databag_item = Chef::DataBagItem.new
+            databag_item.data_bag('delivery')
+            databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
+            databag_item.raw_data[CHECKSTYLE] = count_checkstyle_violations(node)
             databag_item.create()
           end
         end
