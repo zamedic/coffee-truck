@@ -29,7 +29,7 @@ if (java_changes?(changed_files))
     action :create
   end
 
-  if (node['delivery']['change']['phase'] == 'lint')
+  if (node['delivery']['change']['phase'] == 'syntax')
     cookbook_file "/tmp/checkstyle.xml" do
       source 'checkstyle-checker.xml'
       owner 'dbuild'
