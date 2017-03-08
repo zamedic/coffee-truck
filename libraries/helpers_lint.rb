@@ -247,10 +247,10 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item.raw_data[CHECKSTYLE] ?databag_item.raw_data[CHECKSTYLE] :   99999
+            return databag_item.raw_data[CHECKSTYLE] ?databag_item.raw_data[CHECKSTYLE] :   999999
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with checkstyle violation stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
-            return 99999
+            return 999999
           end
         end
       end
