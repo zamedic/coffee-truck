@@ -197,10 +197,8 @@ module CoffeeTruck
 
       def current_path_bug_count(directory, node)
         path = "#{node['delivery']['workspace']['repo']}/#{directory}/target/findbugsXml.xml"
-        Chef::Log.warn("Searching for file: #{path}")
         pn = Pathname.new(path)
         if (pn.exist?)
-          Chef::Log.warn("Found file: #{path}")
           doc = ::File.open(path) { |f| Nokogiri::XML(f) }
           return doc.xpath('/BugCollection/FindBugsSummary/@total_bugs').first.value.to_i
         end
