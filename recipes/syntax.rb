@@ -10,6 +10,10 @@ if (java_changes?(changed_files))
     raise RuntimeError, "-SNAPSHOT artifact required in your pom.xml file"
   end
 
+  mvn 'compile' do
+    action :compile
+  end
+
   mvn 'pmd' do
     action :pmd
   end

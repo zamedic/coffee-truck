@@ -87,17 +87,16 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item.raw_data[COMPLEXITY] ?databag_item.raw_data[COMPLEXITY] :   {"average"=>  999.0,  "max"=> {"complexity" => 999}}
+            return databag_item.raw_data[COMPLEXITY] ? databag_item.raw_data[COMPLEXITY] : {"average" => 999.0, "max" => {"complexity" => 999}}
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with complexity stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
             return {
-                "average" =>  999.0,
-                "max" =>{"complexity" => 999}
+                "average" => 999.0,
+                "max" => {"complexity" => 999}
             }
           end
         end
       end
-
 
 
       def save_complexity(node)
@@ -149,7 +148,7 @@ module CoffeeTruck
         req = Net::HTTP::Post.new(uri)
         req.body = {
             application: node['delivery']['config']['truck']['application'],
-            results:{
+            results: {
                 issues: count_pmd_violations(node)
             }
         }.to_json
@@ -179,7 +178,7 @@ module CoffeeTruck
         current_bugs = count_current_bugs(node)
         previous_bugs = previous_bug_count(node)
         Chef::Log.warn("Findbugs - Previous: #{previous_bugs} Current: #{current_bugs}")
-        if(current_bugs > previous_bugs)
+        if (current_bugs > previous_bugs)
           raise RuntimeError, "Number of bugs found with Findbugs has increased from #{previous_bugs} to #{current_bugs}"
         end
       end
@@ -196,7 +195,7 @@ module CoffeeTruck
         return total
       end
 
-      def current_path_bug_count(directory,node)
+      def current_path_bug_count(directory, node)
         path = "#{node['delivery']['workspace']['repo']}/#{directory}/target/findbugsXml.xml"
         Chef::Log.warn("Searching for file: #{path}")
         pn = Pathname.new(path)
@@ -247,7 +246,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item.raw_data[CHECKSTYLE] ?databag_item.raw_data[CHECKSTYLE] :   999999
+            return databag_item.raw_data[CHECKSTYLE] ? databag_item.raw_data[CHECKSTYLE] : 999999
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with checkstyle violation stats found for #{node['delivery']['config']['truck']['application']} - returning maximum values")
             return 999999
@@ -312,7 +311,6 @@ module CoffeeTruck
     def save_bug_count(node)
       CoffeeTruck::Helpers::Lint.save_bug_count(node)
     end
-
 
 
   end
