@@ -115,9 +115,9 @@ class Chef
 
       action :checkstyle do
         if (node['delivery']['config']['truck']['single_level_project'])
-          command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle #{args}"
+          command = "mvn checkstyle:checkstyle #{args}"
         else
-          command = "mvn -Dcheckstyle.config.location=/tmp/checkstyle.xml checkstyle:checkstyle-aggregate #{args}"
+          command = "mvn checkstyle:checkstyle-aggregate #{args}"
         end
 
         converge_by "running checkstyle for complexity #{command}" do
