@@ -122,9 +122,9 @@ class Chef
 
         converge_by "running checkstyle for complexity #{command}" do
           exec command
-          check_complexity?(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
+          check_checkstyle_violations(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
           if node['delivery']['change']['stage'] == "build"
-           save_complexity(node)
+            save_checkstyle_violations(node)
           end
         end
       end

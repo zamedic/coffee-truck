@@ -29,16 +29,6 @@ if (java_changes?(changed_files))
     action :create
   end
 
-  if (node['delivery']['change']['phase'] == 'syntax')
-    cookbook_file "/tmp/checkstyle.xml" do
-      source 'checkstyle-checker.xml'
-      owner 'dbuild'
-      group 'root'
-      mode 00644
-      action :create
-    end
-  end
-
   if (node['delivery']['change']['phase'] == 'functional')
     hostsfile_entry '127.0.0.1' do
       hostname 'localhost'
