@@ -68,6 +68,9 @@ module CoffeeTruck
         if (failed_tests > 0)
           raise RuntimeError, "#{failed_tests} tests failed with an test case failure. Failing Build"
         end
+        if (total_tests == 0)
+          raise RuntimeError, 'No tests detected. Either the tests failed or you have no tests'
+        end
         return {
             total: total_tests-skipped_tests,
             errors: error_test,

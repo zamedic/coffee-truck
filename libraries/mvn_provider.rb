@@ -167,6 +167,7 @@ class Chef
             'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}","DISPLAY" => ":10"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
+        Chef::Log.warn("Exit Status: #{out.exitstatus} ")
         if out.exitstatus != 0
           raise RuntimeError, "Execution Failed. "
         end
