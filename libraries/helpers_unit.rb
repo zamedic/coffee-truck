@@ -20,7 +20,7 @@ module CoffeeTruck
           covered = covered + result[:covered]
         }
         if ((covered.to_f + missed.to_f) == 0.0)
-          raise RuntimeError, "Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
+          raise RuntimeError, 'Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests'
         end
 
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
@@ -44,7 +44,7 @@ module CoffeeTruck
       def check_failed?(node)
         coverage = current_unit_coverage(node)
         if (coverage == 0.0)
-          raise RuntimeError, "Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests"
+          raise RuntimeError, 'Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests'
         end
         previous = previous_unit_coverage(node)
         if (previous > coverage)
@@ -97,7 +97,7 @@ module CoffeeTruck
             check_surefire_file("#{path}/#{surefire}")
           }.select { |item| item == true }.length
           if (errors > 0)
-            raise RuntimeError, "Failing build due to previous warning related to either unit test speed or errors."
+            raise RuntimeError, 'Failing build due to previous warning related to either unit test speed or errors.'
           end
         end
       end
@@ -105,16 +105,16 @@ module CoffeeTruck
       def check_surefire_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
         failed = false
-        doc.xpath("/testsuite/testcase").each { |testcase|
-          runtime = testcase.xpath("@time").first.text.to_f
-          name = testcase.xpath("@name").first.text
-          class_name = testcase.xpath("@classname").first.text
+        doc.xpath('/testsuite/testcase').each { |testcase|
+          runtime = testcase.xpath('@time').first.text.to_f
+          name = testcase.xpath('@name').first.text
+          class_name = testcase.xpath('@classname').first.text
 
           if (runtime > 3)
             Chef::Log.warn("Runtime for test #{name} in class #{class_name} has a runtime of #{runtime}, this exceeded the 3 second threshold. This is probably not a valid unit test")
           end
-          testcase.xpath("failure").each { |error|
-            Chef::Log.warn("the following error was encountered with unit test #{name} in class #{class_name}. #{error.xpath('@message')}")
+          testcase.xpath('failure').each { |error|
+            Chef::Log.error("the following error was encountered with unit test #{name} in class #{class_name}. #{error.xpath('@message')}")
             failed = true
           }
         }
