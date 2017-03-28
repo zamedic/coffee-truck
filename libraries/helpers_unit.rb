@@ -112,7 +112,7 @@ module CoffeeTruck
         if (runtime > 3)
           Chef::Log.warn("Runtime for test #{name} in class #{class_name} has a runtime of #{runtime}, this exceeded the 5 second threshold. This is probably not a valid unit test")
         end
-        if (error.first)
+        if (error)
           Chef::Log.warn("the following error was encountered with unit test #{name} in class #{class_name}. #{error}")
           failed = true
         end
