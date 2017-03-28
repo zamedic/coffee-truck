@@ -109,7 +109,8 @@ module CoffeeTruck
           runtime = testcase.xpath("@time").first.text.to_f
           name = testcase.xpath("@name").first.text
           class_name = testcase.xpath("@classname").first.text
-          error = testcase.xpath("/failure").first
+          error = testcase.xpath("/failure")
+          Chef::Log.warn("Error? #{error}")
 
           if (runtime > 3)
             Chef::Log.warn("Runtime for test #{name} in class #{class_name} has a runtime of #{runtime}, this exceeded the 3 second threshold. This is probably not a valid unit test")
