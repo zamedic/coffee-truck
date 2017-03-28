@@ -104,15 +104,22 @@ module CoffeeTruck
 
       def check_surefire_file(surefire)
         doc = ::File.open(surefire) { |f| Nokogiri::XML(f) }
-        runtime = doc.xpath("/testsuite/testcase/@time").first.text.to_f
-        name = doc.xpath("/testsuite/testcase/@name").first.text
-        class_name = doc.xpath("/testsuite/testcase/@classname").first.text
         failed = false
-        if (runtime > 3)
-          Chef::Log.warn("Runtime for test #{name} in class #{class_name} has a runtime of #{runtime}, this exceeded the 5 second threshold. This is probably not a valid unit test")
-        end
-        return failed
+        doc.xpath("/testsuite/testcase").each { |testcase|
+          runtime = testcase.xpath("@time").first.text.to_f
+          name = testcase.xpath("@name").first.text
+          class_name = testcase.xpath("@classname").first.text
+          error = testcase.xpath("/failure").first
 
+          if (runtime > 3)
+            Chef::Log.warn("Runtime for test #{name} in class #{class_name} has a runtime of #{runtime}, this exceeded the 3 second threshold. This is probably not a valid unit test")
+          end
+          if (error)
+            Chef::Log.warn("the following error was encountered with unit test #{name} in class #{class_name}. #{error.xpath('@message')}")
+            failed = true
+          end
+        }
+        return failed
       end
 
       def sonarmetrics(node)
