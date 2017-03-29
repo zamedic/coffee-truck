@@ -15,7 +15,12 @@ class Chef
 
       action :unit do
         command = "mvn clean verify -Punit-tests #{args} --fail-at-end | tee maven-unit.log"
-        report = "mvn surefire-report:report-only -Daggregate=true #{args}"
+        if (node['delivery']['config']['truck']['single_level_project'])
+          report = "mvn surefire-report:report-only #{args}"
+        else
+          report = "mvn surefire-report:report-only -Daggregate=true #{args}"
+        end
+
         converge_by "Unit tests: #{command}" do
           exec command
           exec report
