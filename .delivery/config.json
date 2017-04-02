@@ -7,6 +7,12 @@
     "name": "build_cookbook",
     "path": ".delivery/build_cookbook"
   },
+   "delivery-truck": {
+    "publish": {
+      "chef_server": true,
+      "supermarket": "https://supermarket.chef.io"
+	}
+ },
   "skip_phases": [],
   "build_nodes": {},
   "dependencies": []
