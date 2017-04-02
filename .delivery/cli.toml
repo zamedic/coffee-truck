@@ -1,0 +1,7 @@
+api_protocol = "https"
+enterprise = "default"
+git_port = "8989"
+organization = "Marc"
+pipeline = "master"
+server = "autobot-wkbxttwhfapcogjk.us-east-1.opsworks-cm.io"
+user = "zamedic"
