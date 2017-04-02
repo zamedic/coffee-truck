@@ -15,7 +15,7 @@ default['java']['jdk_version'] = '8'
 default['java']['oracle']['accept_oracle_download_terms'] = true
 
 
-default['maven']['settings'] = '/tmp/maven/settings.xml'
+default['maven']['settings'] = ''
 
 default['delivery']['config']['truck']['application'] = node['delivery']['change']['project']
 
