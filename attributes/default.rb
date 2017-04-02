@@ -15,7 +15,7 @@ default['java']['jdk_version'] = '8'
 default['java']['oracle']['accept_oracle_download_terms'] = true
 
 
-default['maven']['settings'] = ''
+default['maven']['settings'] = nil
 
 default['delivery']['config']['truck']['application'] = node['delivery']['change']['project']
 
