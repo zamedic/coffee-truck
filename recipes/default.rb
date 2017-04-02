@@ -1,48 +1,23 @@
 include_recipe 'delivery-truck::default'
 
-gem_package  'ruby-ntlm' do
+gem_package 'ruby-ntlm' do
   clear_sources true
-  source 'http://rubygems.standardbank.co.za'
+  source node['coffee-truck']['gem-server'] if node['coffee-truck']['gem-server']
   action :nothing
 end.run_action(:install)
 
-
-hostsfile_entry '10.144.173.72' do
-  hostname 'psdc-pa001gth1v.za.sbicdirectory.com'
-  action :create
-end
-
 if (java_changes?(changed_files))
-  include_recipe 'maven-wrapper::default'
-  directory '/tmp/maven' do
-    owner 'dbuild'
-    group 'root'
-    mode '0755'
-    action :create
-  end
+  include_recipe 'maven::default' if node['coffee-truck']['install-maven']
 
-  cookbook_file node['maven']['settings'] do
-    source 'settings.xml'
-    owner 'dbuild'
-    group 'root'
-    mode 00644
-    action :create
-  end
 
-  if (node['delivery']['change']['phase'] == 'functional')
-    hostsfile_entry '127.0.0.1' do
-      hostname 'localhost'
-      aliases ['localhost.localdomain', 'lar.standardbank.co.za', 'rwp.standardbank.co.za', 'cdn.standardbank.co.za', 'dfib.standardbank.co.za', 'dspk.standardbank.co.za', 'trk.standardbank.co.za', 'accstandardbank.d1.sc.omtrdc.net']
-      action :create
-    end
-
+  if (node['coffee-truck']['functional']['selenium'] && node['delivery']['change']['phase'] == 'functional')
     directory '/tmp/geckodriver' do
       action :create
       recursive true
     end
 
     remote_file 'gecko driver' do
-      source 'http://plinrepo1v.standardbank.co.za/repo/software/selenium/geckodriver-v0.12.0-linux64.tar.gz'
+      source node['coffee-truck']['functional']['gecko-driver']
       path '/tmp/geckodriver/geckodriver.tar.gz'
     end
 
