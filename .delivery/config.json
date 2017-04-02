@@ -10,7 +10,8 @@
    "delivery-truck": {
     "publish": {
       "chef_server": true,
-      "supermarket": "https://supermarket.chef.io"
+      "supermarket": "https://supermarket.chef.io",
+	  "supermarket-custom-credentials" = true
 	}
  },
   "skip_phases": [],
