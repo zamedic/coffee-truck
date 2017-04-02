@@ -143,20 +143,7 @@ module CoffeeTruck
 
 
       def save_test_results(node)
-        uri = URI('http://spambot.standardbank.co.za/events/test-results')
-        req = Net::HTTP::Post.new(uri)
-        req.body = {
-            application: node['delivery']['config']['truck']['application'],
-            results: sonarmetrics(node)
-        }.to_json
-        req.content_type = 'application/json'
-
-        res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-          http.request(req)
-        end
         chef_server.with_server_config do
-
-
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
             databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)

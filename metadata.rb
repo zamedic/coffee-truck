@@ -1,12 +1,12 @@
 name             'coffee-truck'
-maintainer       'Standard Bank'
-maintainer_email 'Stephen.Breyer-Menke@standardbank.co.za'
+maintainer       'Marc Arndt'
+maintainer_email 'marc@marcarndt.com'
 license          'All rights reserved'
-description      'Installs/Configures sbg-truck'
+description      'Installs/Configures coffee-truck'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.1.0'
+version          '1.1.1'
 
 depends 'delivery-truck'
-depends 'maven-wrapper'
-depends 'hostsfile'
+depends 'maven'
+
 
