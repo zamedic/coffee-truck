@@ -7,6 +7,7 @@ gem_package 'ruby-ntlm' do
 end.run_action(:install)
 
 if (java_changes?(changed_files))
+  include_recipe 'java::default' if node['coffee-truck']['install-java']
   include_recipe 'maven::default' if node['coffee-truck']['install-maven']
 
 
