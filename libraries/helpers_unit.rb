@@ -6,7 +6,11 @@ module CoffeeTruck
     module Unit
       extend self
 
-      UNIT_COVERAGE = 'unit_coverage'
+      @@unit_coverage = 'unit_coverage'
+
+      def unit_coverage_key
+        @@unit_coverage
+      end
 
       def current_unit_coverage(node)
         missed = 0;
@@ -132,7 +136,7 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            return databag_item.raw_data[UNIT_COVERAGE] && databag_item.raw_data[UNIT_COVERAGE]['coverage'] ? databag_item.raw_data[UNIT_COVERAGE]['coverage']  : 0
+            return databag_item.raw_data[unit_coverage_key] && databag_item.raw_data[unit_coverage_key]['coverage'] ? databag_item.raw_data[unit_coverage_key]['coverage'] : 0
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - returning 0")
             return 0
@@ -146,17 +150,37 @@ module CoffeeTruck
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])
-            databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.raw_data[unit_coverage_key] = sonarmetrics(node)
             databag_item.save()
           rescue Net::HTTPServerException
             Chef::Log.warn("No Databag with Unit Test coverage found for #{node['delivery']['config']['truck']['application']} - creating")
             databag_item = Chef::DataBagItem.new
             databag_item.data_bag('delivery')
             databag_item.raw_data['id'] = node['delivery']['config']['truck']['application']
-            databag_item.raw_data[UNIT_COVERAGE] = sonarmetrics(node)
+            databag_item.raw_data[unit_coverage_key] = sonarmetrics(node)
             databag_item.create()
           end
         end
+      end
+
+      def load_data_bag(node)
+        Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application']).raw_data
+      end
+
+      def unit_coverage(node)
+        load_data_bag(node)['coverage']
+      end
+
+      def unit_failed_tests(node)
+        load_data_bag(node)['unit']['failures']
+      end
+
+      def unit_error_tests(node)
+        load_data_bag(node)['unit']['errors']
+      end
+
+      def unit_total_tests(node)
+        load_data_bag(node)['unit']['total']
       end
 
       private
@@ -179,6 +203,22 @@ module CoffeeTruck
 
     def save_test_results(node)
       CoffeeTruck::Helpers::Unit.save_test_results(node)
+    end
+
+    def unit_coverage(node)
+      CoffeeTruck::Helpers::Unit.unit_coverage(node)
+    end
+
+    def unit_failed_tests(node)
+      CoffeeTruck::Helpers::Unit.unit_failed_tests(node)
+    end
+
+    def unit_error_tests(node)
+      CoffeeTruck::Helpers::Unit.unit_error_tests(node)
+    end
+
+    def unit_total_tests(node)
+      CoffeeTruck::Helpers::Unit.unit_total_tests(node)
     end
   end
 end
