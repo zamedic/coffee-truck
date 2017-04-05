@@ -165,13 +165,16 @@ module CoffeeTruck
 
       def load_data_bag(node)
         chef_server.with_server_config do
-          Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application']).raw_data
+          Chef::Log.warn("loading data bag for #{node['delivery']['config']['truck']['application']}")
+          databag = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application']).raw_data
+          Chef::Log.warn("databag value: #{databag}")
+          return databag
         end
       end
 
       def unit_coverage(node)
         begin
-          load_data_bag(node)['coverage']
+          load_data_bag(node)[unit_coverage_key]['coverage']
         rescue
           0
         end
@@ -180,7 +183,7 @@ module CoffeeTruck
 
       def unit_failed_tests(node)
         begin
-          load_data_bag(node)['unit']['failures']
+          load_data_bag(node)[unit_coverage_key]['unit']['failures']
         rescue
           0
         end
@@ -189,7 +192,7 @@ module CoffeeTruck
 
       def unit_error_tests(node)
         begin
-          load_data_bag(node)['unit']['errors']
+          load_data_bag(node)[unit_coverage_key]['unit']['errors']
         rescue
           0
         end
@@ -198,7 +201,7 @@ module CoffeeTruck
 
       def unit_total_tests(node)
         begin
-          load_data_bag(node)['unit']['total']
+          load_data_bag(node)[unit_coverage_key]['unit']['total']
         rescue
           0
         end
