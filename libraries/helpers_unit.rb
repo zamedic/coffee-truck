@@ -168,19 +168,38 @@ module CoffeeTruck
       end
 
       def unit_coverage(node)
-        load_data_bag(node)['coverage']
+        begin
+          load_data_bag(node)['coverage']
+        rescue
+          0
+        end
+
       end
 
       def unit_failed_tests(node)
-        load_data_bag(node)['unit']['failures']
+        begin
+          load_data_bag(node)['unit']['failures']
+        rescue
+          0
+        end
+
       end
 
       def unit_error_tests(node)
-        load_data_bag(node)['unit']['errors']
+        begin
+          load_data_bag(node)['unit']['errors']
+        rescue
+          0
+        end
+
       end
 
       def unit_total_tests(node)
-        load_data_bag(node)['unit']['total']
+        begin
+          load_data_bag(node)['unit']['total']
+        rescue
+          0
+        end
       end
 
       private
