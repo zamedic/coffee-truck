@@ -164,7 +164,9 @@ module CoffeeTruck
       end
 
       def load_data_bag(node)
-        Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application']).raw_data
+        chef_server.with_server_config do
+          Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application']).raw_data
+        end
       end
 
       def unit_coverage(node)
