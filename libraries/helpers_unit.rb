@@ -121,6 +121,10 @@ module CoffeeTruck
             Chef::Log.error("the following error was encountered with unit test #{name} in class #{class_name}. #{error.xpath('@message')}")
             failed = true
           }
+          testcase.xpath('error').each { |error|
+            Chef::Log.error("the following error was encountered with unit test #{name} in class #{class_name}. #{error.xpath('@message')}")
+            failed = true
+          }
         }
         return failed
       end
