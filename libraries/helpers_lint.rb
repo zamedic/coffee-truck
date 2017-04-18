@@ -42,20 +42,6 @@ module CoffeeTruck
 
       def save_pmd_violations(node)
 
-        uri = URI('http://spambot.standardbank.co.za/events/lint-results')
-        req = Net::HTTP::Post.new(uri)
-        req.body = {
-            application: node['delivery']['config']['truck']['application'],
-            results: {
-                issues: count_pmd_violations(node)
-            }
-        }.to_json
-        req.content_type = 'application/json'
-
-        res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-          http.request(req)
-        end
-
         chef_server.with_server_config do
           begin
             databag_item = Chef::DataBagItem.load('delivery', node['delivery']['config']['truck']['application'])

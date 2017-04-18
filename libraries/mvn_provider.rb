@@ -156,13 +156,10 @@ class Chef
       private
 
       def args
-        definitions = @new_resource.definitions.map do |k, v|
-          v ? "-D#{k}=#{v}" : "-D#{k}"
-        end.join(" ")
-        settings = "-s #{@new_resource.settings || node['maven']['settings']}"
-        "#{settings} #{definitions}"
+        if(node['maven']['settings'])
+          "-s #{node['maven']['settings']}"
+        end
       end
-
 
       def exec(command)
         options = Hash.new
