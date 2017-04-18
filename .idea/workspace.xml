@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c0d4e55a-65c2-4aef-bdc6-724e1b0afa30" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libraries/helpers_lint.rb" afterPath="$PROJECT_DIR$/libraries/helpers_lint.rb" />
     </list>
     <ignored path="coffee-truck.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -707,16 +706,16 @@
       <workItem from="1492109004472" duration="836000" />
       <workItem from="1492186448817" duration="38000" />
       <workItem from="1492491198551" duration="1236000" />
-      <workItem from="1492495496762" duration="14041000" />
+      <workItem from="1492495496762" duration="14558000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20334000" />
+    <option name="totallyTimeSpent" value="20851000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="992" y="52" width="928" height="1028" extended-state="4" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
