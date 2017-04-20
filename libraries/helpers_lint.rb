@@ -213,6 +213,9 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Lint.save_checkstyle_count(node)
     end
 
+    def count_current_bugs(node)
+      CoffeeTruck::Helpers::Lint.count_current_bugs(node)
+    end
 
   end
 end
