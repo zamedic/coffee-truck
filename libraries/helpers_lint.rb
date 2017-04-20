@@ -162,6 +162,15 @@ module CoffeeTruck
         end
       end
 
+      def lint_issues(node)
+        begin
+          load_data_bag(node)[lint_issues]['issues']
+        rescue
+          0
+        end
+
+      end
+
       private
 
       def chef_server
@@ -199,6 +208,9 @@ module CoffeeTruck
       CoffeeTruck::Helpers::Lint.save_checkstyle_count(node)
     end
 
+    def lint_issues(node)
+      CoffeeTruck::Helpers::Lint.lint_issues(node)
+    end
 
   end
 end
