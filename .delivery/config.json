@@ -1,0 +1,20 @@
+{
+  "version": "2",
+  "job_dispatch": {
+  "version": "v2"
+},
+  "build_cookbook": {
+    "name": "build_cookbook",
+    "path": ".delivery/build_cookbook"
+  },
+   "delivery-truck": {
+    "publish": {
+      "chef_server": true,
+      "supermarket": "https://supermarket.chef.io",
+	  "supermarket-custom-credentials": true
+	}
+ },
+  "skip_phases": [],
+  "build_nodes": {},
+  "dependencies": []
+}
