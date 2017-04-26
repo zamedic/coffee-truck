@@ -161,15 +161,7 @@ module CoffeeTruck
           end
         end
       end
-
-      def lint_issues(node)
-        begin
-          load_data_bag(node)[lint_issues]['issues']
-        rescue
-          0
-        end
-
-      end
+      
 
       private
 
