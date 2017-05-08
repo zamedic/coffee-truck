@@ -1,5 +1,3 @@
-default['coffee-truck']['gem-server'] = nil
-
 default['coffee-truck']['install-maven'] = true
 default['coffee-truck']['install-java'] = true
 
