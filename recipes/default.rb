@@ -1,11 +1,5 @@
 include_recipe 'delivery-truck::default'
 
-gem_package 'ruby-ntlm' do
-  clear_sources true
-  source node['coffee-truck']['gem-server'] if node['coffee-truck']['gem-server']
-  action :nothing
-end.run_action(:install)
-
 if (java_changes?(changed_files))
   include_recipe 'java::default' if node['coffee-truck']['install-java']
   include_recipe 'maven::default' if node['coffee-truck']['install-maven']

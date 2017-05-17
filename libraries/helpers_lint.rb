@@ -64,6 +64,7 @@ module CoffeeTruck
         Chef::Log.warn("Findbugs - Previous: #{previous_bugs} Current: #{current_bugs}")
         if (current_bugs > previous_bugs)
           raise RuntimeError, "Number of bugs found with Findbugs has increased from #{previous_bugs} to #{current_bugs}"
+        endt
         end
       end
 
@@ -161,15 +162,7 @@ module CoffeeTruck
           end
         end
       end
-
-      def lint_issues(node)
-        begin
-          load_data_bag(node)[lint_issues]['issues']
-        rescue
-          0
-        end
-
-      end
+      
 
       private
 
@@ -179,38 +172,38 @@ module CoffeeTruck
     end
   end
 
-  module DSL
-    def check_pmd?(node)
-      CoffeeTruck::Helpers::Lint.check_pmd?(node)
-    end
+    module DSL
+      def check_pmd?(node)
+        CoffeeTruck::Helpers::Lint.check_pmd?(node)
+      end
 
-    def count_pmd_violations(node)
-      CoffeeTruck::Helpers::Lint.count_pmd_violations(node)
-    end
+      def count_pmd_violations(node)
+        CoffeeTruck::Helpers::Lint.count_pmd_violations(node)
+      end
 
-       def save_pmd_violations(node)
-      CoffeeTruck::Helpers::Lint.save_pmd_violations(node)
-    end
+         def save_pmd_violations(node)
+        CoffeeTruck::Helpers::Lint.save_pmd_violations(node)
+      end
 
-    def check_bugs(node)
-      CoffeeTruck::Helpers::Lint.check_bugs(node)
-    end
+      def check_bugs(node)
+        CoffeeTruck::Helpers::Lint.check_bugs(node)
+      end
 
-    def save_bug_count(node)
-      CoffeeTruck::Helpers::Lint.save_bug_count(node)
-    end
+      def save_bug_count(node)
+        CoffeeTruck::Helpers::Lint.save_bug_count(node)
+      end
 
-    def check_checkstyle_violations(node)
-      CoffeeTruck::Helpers::Lint.check_checkstyle_violations(node)
-    end
+      def check_checkstyle_violations(node)
+        CoffeeTruck::Helpers::Lint.check_checkstyle_violations(node)
+      end
 
-    def save_checkstyle_violations(node)
-      CoffeeTruck::Helpers::Lint.save_checkstyle_count(node)
-    end
+      def save_checkstyle_violations(node)
+        CoffeeTruck::Helpers::Lint.save_checkstyle_count(node)
+      end
 
-    def count_current_bugs(node)
-      CoffeeTruck::Helpers::Lint.count_current_bugs(node)
-    end
+      def count_current_bugs(node)
+        CoffeeTruck::Helpers::Lint.count_current_bugs(node)
+      end
 
-  end
+    end
 end
