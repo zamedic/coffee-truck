@@ -7,35 +7,39 @@ The truck performs the following operations
 ### Default
 As the default phase runs before each of the phases and runs as root, we install the following 
 packages required by the coffee-truck
-* Java
-* Maven
+- Java
+- Maven
 
 The following packages are also installed if the Selenium Attribute is enabled
-* Gecko Driver
-* Firefox
-* Xvfb
+- Gecko Driver
+- Firefox
+- Xvfb
 
 ### Syntax
 The following checks are performed
-#### Has the pom.xml version been bumped
-#### Is the artifact a -SNAPSHOT
+- Has the pom.xml version been bumped
+- Is the artifact a -SNAPSHOT
 #### Does the code compile
+
 ```
 mvn compile package install -Dmaven.test.skip=true
 ```
 #### Run PMD scans
 
 By default it runs
+
 ```
 mvn pmd:pmd -Daggregate=true -Dformat=xml
 ```
 When the attribute ['delivery']['config']['truck']['single_level_project'] is set to true, 
 coffee-truck runs
+
 ```
 mvn pmd:pmd -Daggregate=false -Dformat=xml
 ```
 
 the PMD rules can be configured via the pom.xml file
+
 ````xml
 <project>
   <build>
@@ -79,11 +83,13 @@ Once code is accepted via Chef Automate, a data bag with the name of 'delivery' 
 
 #### Run Checkstyle checks
 By default, the following command is executed
+
 ````
 mvn checkstyle:checkstyle-aggregate
 ````
 unless the attribute ['delivery']['config']['truck']['single_level_project'] is set to true, in 
 which case the following is executed
+
 ````
 mvn checkstyle:checkstyle
 ````
@@ -114,16 +120,19 @@ Once code is accepted via Chef Automate, a data bag with the name of 'delivery' 
 ### Unit
 #### Unit Tests
 By default, the following command is executed
+
 ````
 mvn surefire-report:report-only -Daggregate=true
 ````
 Unless the ['delivery']['config']['truck']['single_level_project'] attribute is set to true, in which 
 case the following is executed
+
 ```
 mvn surefire-report:report-only
 ```
 
 Surefire can be configured via the pom.xml file
+
 ```xml
 <project>
   <build>
@@ -151,6 +160,7 @@ Surefire can be configured via the pom.xml file
 Jacoco is used to measure the unit test coverage of the build
  
  the following command is executed
+
 ```
 mvn org.jacoco:jacoco-maven-plugin:report
 ```
@@ -172,11 +182,13 @@ mvn deploy -Pno-tests
 The code is compiled in this phase as Find Bugs scans compiled code. 
 #### Findbugs
 The following command is executed
+
 ```
 mvn findbugs:findbugs
 ```
 Findbugs can be configured via your pom.xml file
-```xml
+
+````xml
 <project>
   <build>
     <plugins>
@@ -191,7 +203,7 @@ Findbugs can be configured via your pom.xml file
     </plugins>
   </build>
 </project>
-```
+````
 
 If the coffee-truck detects an increase in the number of findbugs violations, the build is failed.  
 
@@ -199,6 +211,7 @@ Once code is accepted via Chef Automate, a data bag with the name of 'delivery' 
 
 ###Functional
 The following command is executed
+
 ```commandline
 mvn failsafe:verify -Pintegration-tests -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q
 ```
@@ -210,6 +223,7 @@ No special operations happen in the provision phase
 This phase performs a Maven release, first, the following command is executed
 
 First, the code sets up git
+
 ```commandline
 git config user.email '#{node['coffee-truck']['release']['email']}'
 git config user.name '#{node['coffee-truck']['release']['user']}'
@@ -217,16 +231,19 @@ git pull
 ```
 
 Then it prepares the release
+
 ```commandline
 mvn -B release:prepare -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true
 ```
 
 Coffee-truck checks if the prepare was successful
+
 ```commandline
 mvn surefire-report:report-only -Daggregate=true
 ```
 
 The release is then performed 
+
 ```commandline
 mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true
 ```
@@ -336,7 +353,8 @@ Once your project is added to delivery, you should have a .delivery folder withi
 
  If your project is a single level project, so it doesnt contain multiple pom.xml files, update the 
  config.json file to set the attribute as
- ```json
+
+```json
  {
    "version": "2",
    "job_dispatch": {
@@ -353,12 +371,13 @@ Once your project is added to delivery, you should have a .delivery folder withi
    "build_nodes": {},
    "dependencies": []
  }
- ```
+```
 
 within each of the recipes inside the .delivery/recipes/ update the recipes to call the coffee truck
 
 for example, deploy.rb
-```
+
+```commandline
 include_recipe 'coffee-truck::deploy'
 ```
 

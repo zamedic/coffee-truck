@@ -1,13 +1,17 @@
 name             'coffee-truck'
 maintainer       'Marc Arndt'
 maintainer_email 'marc@marcarndt.com'
-license          'All rights reserved'
-description      'Installs/Configures coffee-truck'
+license          'MIT'
+description      'Java Delivery cookbook'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.3.0'
+version          '1.3.1'
 
 depends 'delivery-truck'
 depends 'maven'
 depends 'java'
+
+source_url 'https://github.com/zamedic/coffee-truck'
+issues_url 'https://github.com/zamedic/coffee-truck/issues'
+
 
 
