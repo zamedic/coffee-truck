@@ -7,10 +7,12 @@ The truck performs the following operations
 ### Default
 As the default phase runs before each of the phases and runs as root, we install the following 
 packages required by the coffee-truck
+
 - Java
 - Maven
 
 The following packages are also installed if the Selenium Attribute is enabled
+
 - Gecko Driver
 - Firefox
 - Xvfb
@@ -270,6 +272,7 @@ Requirements
 Attributes
 ----------
 #### coffee-truck::default
+
 <table>
   <tr>
     <th>Key</th>
