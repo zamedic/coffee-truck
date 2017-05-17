@@ -42,24 +42,9 @@ class Chef
       end
 
       action :functional do
-        command = "mvn clean verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q| tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
         command_verify = "mvn failsafe:verify -Pintegration-tests #{args} -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q| tee #{node['delivery']['workspace']['repo']}/mvn-integration-test.log"
-        converge_by "Functional tests: #{command}" do
-            exec command_verify
-            http_request 'test-results' do
-              action :post
-              url 'http://spambot.standardbank.co.za/events/test-results'
-              ignore_failure true
-              headers('Content-Type' => 'application/json')
-              message lazy {
-                {
-                    application: node['delivery']['config']['truck']['application'],
-                    results: functional_metrics(node)
-                }.to_json
-              }
-            end
-
-
+        converge_by "Functional tests: #{command_verify}" do
+          exec command_verify
         end
       end
 
@@ -80,8 +65,8 @@ class Chef
 
       action :release_prepare do
         command_pull = "git pull"
-        command_email = "git config user.email 'delivery@standardbank.co.za'"
-        command_user = "git config user.name 'Delivery Server'"
+        command_email = "git config user.email '#{node['coffee-truck']['release']['email']}'"
+        command_user = "git config user.name '#{node['coffee-truck']['release']['user']}'"
         command = "mvn -B release:prepare -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
         report = "mvn surefire-report:report-only -Daggregate=true #{args}"
         converge_by "Preparing Release: #{command}" do
@@ -98,7 +83,7 @@ class Chef
         command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} | tee mvn-release-perform.log"
         converge_by "Performing Release: #{command} to version #{version_number}" do
           exec command
-          define_project_application(node['delivery']['change']['project'], version_number,Hash.new)
+          define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
         end
       end
 
@@ -156,8 +141,8 @@ class Chef
       private
 
       def args
-        if(node['maven']['settings'])
-          "-s #{node['maven']['settings']}"
+        if (node['coffee-truck']['maven']['settings'])
+          "-s #{node['coffee-truck']['maven']['settings']}"
         end
       end
 
@@ -166,7 +151,7 @@ class Chef
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
         options[:timeout] = 1200
         options[:environment] = {
-            'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}","DISPLAY" => ":10"
+            'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}", "DISPLAY" => ":10"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
         Chef::Log.warn("Exit Status: #{out.exitstatus} ")
