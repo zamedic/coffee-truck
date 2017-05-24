@@ -152,7 +152,7 @@ class Chef
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
         options[:timeout] = 1200
         options[:environment] = {
-            'PATH' => "#{ENV['PATH']}", "DISPLAY" => ":10"
+            'PATH' => "#{node['maven']['m2_home']}-#{node['maven']['version']}/bin:#{ENV['PATH']}", "DISPLAY" => ":10"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
         Chef::Log.warn("Exit Status: #{out.exitstatus} ")
