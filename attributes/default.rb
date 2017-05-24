@@ -16,3 +16,4 @@ default['coffee-truck']['release']['user'] = ""
 default['coffee-truck']['release']['email'] = ""
 
 default['maven']['setup_bin'] = true
+default['java']['jdk_version'] = 8

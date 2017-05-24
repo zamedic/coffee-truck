@@ -3,6 +3,11 @@ sbis-truck CHANGELOG
 
 This file is used to list changes made in each version of the sbis-truck cookbook.
 
+1.3.4
+-----
+- Fixing mvn path
+- Settting default jdk version to 8
+
 1.3.3
 ------
 - Marc Arndt - Setting node['maven']['setup_bin'] to true
