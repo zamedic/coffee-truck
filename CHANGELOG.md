@@ -5,7 +5,8 @@ This file is used to list changes made in each version of the sbis-truck cookboo
 
 1.3.4
 -----
-- Marc Arndt - Fixing mvn path
+- Fixing mvn path
+- Settting default jdk version to 8
 
 1.3.3
 ------
