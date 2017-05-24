@@ -147,11 +147,12 @@ class Chef
       end
 
       def exec(command)
+        Chef::Log.warn("Path: #{ENV['PATH']} ")
         options = Hash.new
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
         options[:timeout] = 1200
         options[:environment] = {
-            'PATH' => "/usr/local/maven-3.3.9/bin:#{ENV['PATH']}", "DISPLAY" => ":10"
+            'PATH' => "#{ENV['PATH']}", "DISPLAY" => ":10"
         }.merge @new_resource.environment
         out = shell_out!(command, options)
         Chef::Log.warn("Exit Status: #{out.exitstatus} ")

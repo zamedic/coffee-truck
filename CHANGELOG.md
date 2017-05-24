@@ -3,6 +3,10 @@ sbis-truck CHANGELOG
 
 This file is used to list changes made in each version of the sbis-truck cookbook.
 
+1.3.4
+-----
+- Marc Arndt - Fixing mvn path
+
 1.3.3
 ------
 - Marc Arndt - Setting node['maven']['setup_bin'] to true
