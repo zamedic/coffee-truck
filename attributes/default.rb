@@ -12,6 +12,7 @@ default['coffee-truck']['maven']['settings'] = nil
 
 default['delivery']['config']['truck']['application'] = node['delivery']['change']['project']
 
-
 default['coffee-truck']['release']['user'] = ""
 default['coffee-truck']['release']['email'] = ""
+
+default['maven']['setup_bin'] = true
