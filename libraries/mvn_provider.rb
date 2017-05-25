@@ -156,9 +156,8 @@ class Chef
         options[:environment] = {
             'PATH' => "#{node['maven']['m2_home']}-#{node['maven']['version']}/bin:#{ENV['PATH']}", "DISPLAY" => ":10"
         }.merge @new_resource.environment
-        Chef::Log.warn("Path: #{options[:environment]} ")
+        Chef::Log.warn("Executing #{command} ")
         out = shell_out!(command, options)
-        Chef::Log.warn("Exit Status: #{out.exitstatus} ")
         if out.exitstatus != 0
           raise RuntimeError, "Execution Failed. "
         end
