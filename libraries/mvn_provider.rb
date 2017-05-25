@@ -67,8 +67,8 @@ class Chef
         command_pull = "git pull"
         command_email = "git config user.email '#{node['coffee-truck']['release']['email']}'"
         command_user = "git config user.name '#{node['coffee-truck']['release']['user']}'"
-        command = "mvn -B release:prepare -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args}"
-        report = "mvn surefire-report:report-only -Daggregate=true #{args}"
+        command = "mvn -B release:prepare -Darguments='-Dmaven.test.skip=true' -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} | tee mvn-release-prepare.log"
+        report = "tail -40  mvn-release-prepare.log | grep 'BUILD SUCCESS'"
         converge_by "Preparing Release: #{command}" do
           exec command_email
           exec command_user
@@ -81,8 +81,10 @@ class Chef
       action :release_perform do
 
         command = "mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBeforeTagOrBranch=true #{args} | tee mvn-release-perform.log"
+        report = "tail -40 mvn-release-perform.log | grep 'BUILD SUCCESS'"
         converge_by "Performing Release: #{command} to version #{version_number}" do
           exec command
+          exec report
           define_project_application(node['delivery']['change']['project'], version_number, Hash.new)
         end
       end
