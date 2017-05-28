@@ -3,6 +3,11 @@ sbis-truck CHANGELOG
 
 This file is used to list changes made in each version of the sbis-truck cookbook.
 
+1.4.0
+-----
+- Checking if maven released successfully by tailing the end of the log file and checking for 
+"BUILD SUCCESS" since mvn doesnt appear to be returning a response code of non 0 when the build fails
+
 1.3.4
 -----
 - Fixing mvn path
