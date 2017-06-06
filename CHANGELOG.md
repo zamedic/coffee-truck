@@ -2,6 +2,9 @@ sbis-truck CHANGELOG
 ====================
 
 This file is used to list changes made in each version of the sbis-truck cookbook.
+1.5.0
+-----
+- Adding ability to disable functional tests with ['delivery']['config']['truck']['skip_functional_tests']['delivery']['config']['truck']['skip_functional_tests'] attribute
 
 1.4.0
 -----
