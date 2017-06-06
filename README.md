@@ -218,6 +218,10 @@ The following command is executed
 mvn failsafe:verify -Pintegration-tests -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q
 ```
 
+the functional tests can be disabled by setting ['delivery']['config']['truck']['skip_functional_tests'] to true via the config.json file
+
+
+
 ###Provision
 No special operations happen in the provision phase
 
