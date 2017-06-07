@@ -1,7 +1,7 @@
 include_recipe 'delivery-truck::functional'
 
 
-unless node['delivery']['change']['stage'] == 'delivered'
+if !node['delivery']['config']['truck']['skip_functional_tests'] && node['delivery']['change']['stage'] != 'delivered'
   mvn 'functional' do
     action :functional
   end
