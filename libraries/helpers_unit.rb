@@ -178,9 +178,9 @@ module CoffeeTruck
 
       def unit_coverage(node)
         begin
-          load_data_bag(node)[unit_coverage_key]['coverage']
+          load_data_bag(node)[unit_coverage_key]['coverage'].to_f
         rescue
-          0
+          0.to_f
         end
 
       end

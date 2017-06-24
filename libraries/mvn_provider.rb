@@ -140,6 +140,13 @@ class Chef
         end
       end
 
+      sction :security do
+        command = "mvn findbugs:findbugs -Psecurity #{args}"
+        converge_by "running security scan #{command}" do
+          exec command
+        end
+      end
+
       private
 
       def args
@@ -152,7 +159,7 @@ class Chef
 
         options = Hash.new
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
-        options[:timeout] = 1200
+        options[:timeout] = 3000
         options[:environment] = {
             'PATH' => "#{node['maven']['m2_home']}-#{node['maven']['version']}/bin:#{ENV['PATH']}", "DISPLAY" => ":10"
         }.merge @new_resource.environment
