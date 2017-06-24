@@ -140,7 +140,7 @@ class Chef
         end
       end
 
-      sction :security do
+      action :security do
         command = "mvn findbugs:findbugs -Psecurity #{args}"
         converge_by "running security scan #{command}" do
           exec command
