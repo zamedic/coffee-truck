@@ -120,6 +120,16 @@ build.
 Once code is accepted via Chef Automate, a data bag with the name of 'delivery' is updated with the new value of the PMD violations. 
 
 ### Unit
+#### Bump Child versions
+By default, this is disabled unless ['delivery']['config']['truck']['update_dependencies']['active'] is set to true
+
+Should you wish to automatically bump any of your dependencies to the latest version, set this to true. Additionally, to limit the scope of the dependencies change you can use ['delivery']['config']['truck']['update_dependencies']['include'] attribute
+
+when enabled, the following is executed
+
+````
+mvn versions:use-latest-releases -Dinclude=['delivery']['config']['truck']['update_dependencies']['include']
+````
 #### Unit Tests
 By default, the following command is executed
 
@@ -172,6 +182,8 @@ If coffee-truck detects a drop in the overall coverage of the build, it will fai
 Once code is accepted via Chef Automate, a data bag with the name of 'delivery' is updated with the new value of the PMD violations. 
 
 #### Upload Artifact
+if you enable ['delivery']['config']['truck']['maven']['upload_snapshot'] the snapshot artifact will be uploaded to your distribution management system. 
+
 The SNAPSHOT artifact is uploaded to your Distribution Management as defined in your pom.xml.
 
 The following command is executed

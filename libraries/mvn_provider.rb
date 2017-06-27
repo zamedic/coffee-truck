@@ -147,6 +147,31 @@ class Chef
         end
       end
 
+      action :updateDependencies do
+        command = 'mvn versions:use-latest-releases'
+        if node['delivery']['config']['truck']['update_dependencies']['include']
+          command = "#{command} -Dincludes=#{node['delivery']['config']['truck']['update_dependencies']['include']}"
+        end
+        command_commit_bump = 'mvn versions:commit'
+        command_email = "git config user.email '#{node['coffee-truck']['release']['email']}'"
+        command_user = "git config user.name '#{node['coffee-truck']['release']['user']}'"
+        command_update = 'git add --all'
+        command_commit = 'git commit -m "updating pom to latest"'
+        command_push = 'git push'
+
+        converge_by "bumping versions: #{command}" do
+          exec command
+          exec command_commit_bump
+          exec command_email
+          exec command_user
+          exec command_update
+          exec command_commit
+          exec command_push
+        end
+
+
+      end
+
       private
 
       def args
