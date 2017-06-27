@@ -152,6 +152,7 @@ class Chef
         if node['delivery']['config']['truck']['update_dependencies']['include']
           command = "#{command} -Dincludes=#{node['delivery']['config']['truck']['update_dependencies']['include']}"
         end
+        command_commit_bump = 'mvn versions:commit'
         command_email = "git config user.email '#{node['coffee-truck']['release']['email']}'"
         command_user = "git config user.name '#{node['coffee-truck']['release']['user']}'"
         command_update = 'git add --all'
@@ -160,6 +161,7 @@ class Chef
 
         converge_by "bumping versions: #{command}" do
           exec command
+          exec command_commit_bump
           exec command_email
           exec command_user
           exec command_update
