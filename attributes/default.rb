@@ -12,8 +12,11 @@ default['coffee-truck']['maven']['settings'] = nil
 
 default['delivery']['config']['truck']['application'] = node['delivery']['change']['project']
 
-default['coffee-truck']['release']['user'] = ""
-default['coffee-truck']['release']['email'] = ""
+default['coffee-truck']['release']['user'] = ''
+default['coffee-truck']['release']['email'] = ''
+default['delivery']['config']['truck']['update_dependencies']['include'] = nil
+default['delivery']['config']['truck']['update_dependencies']['active'] =false
+default['delivery']['config']['truck']['maven']['upload_snapshot'] = false
 
 default['maven']['setup_bin'] = true
 default['java']['jdk_version'] = 8
