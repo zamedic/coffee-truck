@@ -2,6 +2,15 @@ sbis-truck CHANGELOG
 ====================
 
 This file is used to list changes made in each version of the sbis-truck cookbook.
+
+1.7.0
+-----
+- Added Codacy support. 
+
+1.6.0
+-----
+- Added ability to bump versions of dependencies in pom.xml 
+
 1.5.0
 -----
 - Adding ability to disable functional tests with ['delivery']['config']['truck']['skip_functional_tests']['delivery']['config']['truck']['skip_functional_tests'] attribute
