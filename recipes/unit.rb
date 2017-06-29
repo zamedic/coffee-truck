@@ -22,8 +22,10 @@ if (java_changes?(changed_files))
       source 'https://github.com/codacy/codacy-coverage-reporter/releases/download/2.0.0/codacy-coverage-reporter-2.0.0-assembly.jar'
     end
 
-    execute "java -cp /tmp/codacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./repo/target/jacoco.xml --projectToken #{node['delivery']['config']['truck']['codacy']['token']}"
-   
+    execute "java -cp /tmp/codacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./target/site/jacoco/jacoco.xml --projectToken #{node['delivery']['config']['truck']['codacy']['token']}" do
+      cwd './repo'
+    end
+
   end
 
 #Upload Snapshot
