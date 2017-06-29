@@ -19,7 +19,7 @@ default['delivery']['config']['truck']['update_dependencies']['active'] =false
 default['delivery']['config']['truck']['maven']['upload_snapshot'] = false
 
 default['delivery']['config']['truck']['codacy']['upload'] = false
-default['delivery']['config']['truck']['codacy']['key'] = nil
+default['delivery']['config']['truck']['codacy']['token'] = nil
 
 default['maven']['setup_bin'] = true
 default['java']['jdk_version'] = 8

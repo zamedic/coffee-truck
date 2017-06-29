@@ -23,7 +23,7 @@ if (java_changes?(changed_files))
     end
 
     execute "java -cp /tmp/codacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./target/site/jacoco/jacoco.xml --projectToken #{node['delivery']['config']['truck']['codacy']['token']}" do
-      cwd './repo'
+      cwd node['delivery']['workspace']['repo']
     end
 
   end
