@@ -22,7 +22,7 @@ if (java_changes?(changed_files))
       source 'https://github.com/codacy/codacy-coverage-reporter/releases/download/2.0.0/codacy-coverage-reporter-2.0.0-assembly.jar'
     end
 
-    execute 'java -cp /tmp/cadacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./repo/target/jacoco.xml' do
+    execute 'java -cp /tmp/codacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./repo/target/jacoco.xml' do
       environment ({'CODACY_PROJECT_TOKEN' => node['delivery']['config']['truck']['codacy']['token']})
     end
   end
