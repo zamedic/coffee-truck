@@ -160,16 +160,18 @@ class Chef
         command_push = 'git push'
 
         converge_by "bumping versions: #{command}" do
-          exec command
-          exec command_commit_bump
-          exec command_email
-          exec command_user
-          exec command_update
-          exec command_commit
-          exec command_push
+          begin
+            exec command
+            exec command_commit_bump
+            exec command_email
+            exec command_user
+            exec command_update
+            exec command_commit
+            exec command_push
+          rescue
+            Chef::Log.warn("Bump failed - chances are that nothing needed to be bumped")
+          end
         end
-
-
       end
 
       private
@@ -199,7 +201,7 @@ class Chef
       def version_number
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
-        doc = ::File.open(path) { |f| Nokogiri::XML(f) }
+        doc = ::File.open(path) {|f| Nokogiri::XML(f)}
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT', '')
       end
     end
