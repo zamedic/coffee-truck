@@ -4,7 +4,7 @@ maintainer_email 'marc@marcarndt.com'
 license          'MIT'
 description      'Java Delivery cookbook'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.6.2'
+version          '1.7.0'
 
 depends 'delivery-truck'
 depends 'maven'

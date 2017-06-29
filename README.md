@@ -181,6 +181,10 @@ If coffee-truck detects a drop in the overall coverage of the build, it will fai
 
 Once code is accepted via Chef Automate, a data bag with the name of 'delivery' is updated with the new value of the PMD violations. 
 
+#### Codacy Upload
+If you wish to upload your unit tests results to codacy.com then enable ['delivery']['config']['truck']['codacy']['upload'] and set ['delivery']['config']['truck']['codacy']['key'] to the project key. 
+
+
 #### Upload Artifact
 if you enable ['delivery']['config']['truck']['maven']['upload_snapshot'] the snapshot artifact will be uploaded to your distribution management system. 
 
