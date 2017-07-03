@@ -231,7 +231,7 @@ Once code is accepted via Chef Automate, a data bag with the name of 'delivery' 
 The following command is executed
 
 ```commandline
-mvn failsafe:verify -Pintegration-tests -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q
+mvn failsafe:verify -Pintegration-tests -f #{chefNode['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q
 ```
 
 the functional tests can be disabled by setting ['delivery']['config']['truck']['skip_functional_tests'] to true via the config.json file
@@ -247,8 +247,8 @@ This phase performs a Maven release, first, the following command is executed
 First, the code sets up git
 
 ```commandline
-git config user.email '#{node['coffee-truck']['release']['email']}'
-git config user.name '#{node['coffee-truck']['release']['user']}'
+git config user.email '#{chefNode['coffee-truck']['release']['email']}'
+git config user.name '#{chefNode['coffee-truck']['release']['user']}'
 git pull
 ```
 
@@ -271,7 +271,7 @@ mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBefore
 ```
 
 If everything ran succesfully, the released version number is then used to define the new project 
-version for deployment. The version number is available as a node attribute node['applications']['application name']
+version for deployment. The version number is available as a chefNode attribute chefNode['applications']['application name']
 where application name is derived from ['delivery']['change']['project']
 
 ###Quality
