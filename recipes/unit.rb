@@ -8,15 +8,15 @@ if (java_changes?(changed_files))
     end
   end
 
-  mvn 'unit' do
-    only_if node['delivery']['config']['truck']['unit']['execute_tests']
-    action :unit
-  end
+  if (node['delivery']['config']['truck']['unit']['execute_tests'])
+    mvn 'unit' do
+      action :unit
+    end
 
 #Check Unit Tests
-  mvn 'jacoco' do
-    only_if node['delivery']['config']['truck']['unit']['execute_tests']
-    action :jacoco_report
+    mvn 'jacoco' do
+      action :jacoco_report
+    end
   end
 
   if (node['delivery']['config']['truck']['codacy']['upload'] && node['delivery']['change']['stage']=='build')
@@ -31,9 +31,10 @@ if (java_changes?(changed_files))
   end
 
 #Upload Snapshot
-  mvn 'upload' do
-    only_if node['delivery']['config']['truck']['maven']['upload_snapshot']
-    action :upload
+  if (node['delivery']['config']['truck']['maven']['upload_snapshot'])
+    mvn 'upload' do
+      action :upload
+    end
   end
 
 end
