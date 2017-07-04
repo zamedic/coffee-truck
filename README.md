@@ -120,6 +120,16 @@ build.
 Once code is accepted via Chef Automate, a data bag with the name of 'delivery' is updated with the new value of the PMD violations. 
 
 ### Unit
+#### Bump Child versions
+By default, this is disabled unless ['delivery']['config']['truck']['update_dependencies']['active'] is set to true
+
+Should you wish to automatically bump any of your dependencies to the latest version, set this to true. Additionally, to limit the scope of the dependencies change you can use ['delivery']['config']['truck']['update_dependencies']['include'] attribute
+
+when enabled, the following is executed
+
+````
+mvn versions:use-latest-releases -Dinclude=['delivery']['config']['truck']['update_dependencies']['include']
+````
 #### Unit Tests
 By default, the following command is executed
 
@@ -171,7 +181,13 @@ If coffee-truck detects a drop in the overall coverage of the build, it will fai
 
 Once code is accepted via Chef Automate, a data bag with the name of 'delivery' is updated with the new value of the PMD violations. 
 
+#### Codacy Upload
+If you wish to upload your unit tests results to codacy.com then enable ['delivery']['config']['truck']['codacy']['upload'] and set ['delivery']['config']['truck']['codacy']['key'] to the project key. 
+
+
 #### Upload Artifact
+if you enable ['delivery']['config']['truck']['maven']['upload_snapshot'] the snapshot artifact will be uploaded to your distribution management system. 
+
 The SNAPSHOT artifact is uploaded to your Distribution Management as defined in your pom.xml.
 
 The following command is executed
@@ -215,7 +231,7 @@ Once code is accepted via Chef Automate, a data bag with the name of 'delivery' 
 The following command is executed
 
 ```commandline
-mvn failsafe:verify -Pintegration-tests -f #{node['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q
+mvn failsafe:verify -Pintegration-tests -f #{chefNode['delivery']['workspace']['repo']}/pom.xml -Dwebdriver.gecko.driver=/usr/bin/geckodriver -q
 ```
 
 the functional tests can be disabled by setting ['delivery']['config']['truck']['skip_functional_tests'] to true via the config.json file
@@ -231,8 +247,8 @@ This phase performs a Maven release, first, the following command is executed
 First, the code sets up git
 
 ```commandline
-git config user.email '#{node['coffee-truck']['release']['email']}'
-git config user.name '#{node['coffee-truck']['release']['user']}'
+git config user.email '#{chefNode['coffee-truck']['release']['email']}'
+git config user.name '#{chefNode['coffee-truck']['release']['user']}'
 git pull
 ```
 
@@ -255,7 +271,7 @@ mvn -B release:perform  -DupdateWorkingCopyVersions=false -DsuppressCommitBefore
 ```
 
 If everything ran succesfully, the released version number is then used to define the new project 
-version for deployment. The version number is available as a node attribute node['applications']['application name']
+version for deployment. The version number is available as a chefNode attribute chefNode['applications']['application name']
 where application name is derived from ['delivery']['change']['project']
 
 ###Quality

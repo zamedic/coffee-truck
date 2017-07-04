@@ -1,7 +1,16 @@
 sbis-truck CHANGELOG
 ====================
 
-This file is used to list changes made in each version of the sbis-truck cookbook.
+This file is used to list changes made in each version of the sbis-truck cookbookName.
+
+1.7.0
+-----
+- Added Codacy support. 
+
+1.6.0
+-----
+- Added ability to bump versions of dependencies in pom.xml 
+
 1.5.0
 -----
 - Adding ability to disable functional tests with ['delivery']['config']['truck']['skip_functional_tests']['delivery']['config']['truck']['skip_functional_tests'] attribute
@@ -18,7 +27,7 @@ This file is used to list changes made in each version of the sbis-truck cookboo
 
 1.3.3
 ------
-- Marc Arndt - Setting node['maven']['setup_bin'] to true
+- Marc Arndt - Setting chefNode['maven']['setup_bin'] to true
 
 1.3.2
 -----

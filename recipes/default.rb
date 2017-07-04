@@ -31,11 +31,11 @@ if (java_changes?(changed_files))
     end
 
     package 'firefox'
-    package 'Xvfb'
+    #package 'xvfb'
 
-    execute 'start_xvfb' do
-      command 'Xvfb :10 -ac &'
-    end
+    #execute 'start_xvfb' do
+    #  command 'Xvfb :10 -ac &'
+    #end
   end
 
 end

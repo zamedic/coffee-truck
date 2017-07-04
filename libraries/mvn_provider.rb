@@ -140,6 +140,40 @@ class Chef
         end
       end
 
+      action :security do
+        command = "mvn findbugs:findbugs -Psecurity #{args}"
+        converge_by "running security scan #{command}" do
+          exec command
+        end
+      end
+
+      action :updateDependencies do
+        command = 'mvn versions:use-latest-releases'
+        if node['delivery']['config']['truck']['update_dependencies']['include']
+          command = "#{command} -Dincludes=#{node['delivery']['config']['truck']['update_dependencies']['include']}"
+        end
+        command_commit_bump = 'mvn versions:commit'
+        command_email = "git config user.email '#{node['coffee-truck']['release']['email']}'"
+        command_user = "git config user.name '#{node['coffee-truck']['release']['user']}'"
+        command_update = 'git add --all'
+        command_commit = 'git commit -m "updating pom to latest"'
+        command_push = 'git push'
+
+        converge_by "bumping versions: #{command}" do
+          begin
+            exec command
+            exec command_commit_bump
+            exec command_email
+            exec command_user
+            exec command_update
+            exec command_commit
+            exec command_push
+          rescue
+            Chef::Log.warn("Bump failed - chances are that nothing needed to be bumped")
+          end
+        end
+      end
+
       private
 
       def args
@@ -152,7 +186,7 @@ class Chef
 
         options = Hash.new
         options[:cwd] = @new_resource.cwd || node['delivery']['workspace']['repo']
-        options[:timeout] = 1200
+        options[:timeout] = 3000
         options[:environment] = {
             'PATH' => "#{node['maven']['m2_home']}-#{node['maven']['version']}/bin:#{ENV['PATH']}", "DISPLAY" => ":10"
         }.merge @new_resource.environment
@@ -167,7 +201,7 @@ class Chef
       def version_number
         cwd = @new_resource.cwd || node['delivery']['workspace']['repo']
         path = "#{cwd}/pom.xml"
-        doc = ::File.open(path) { |f| Nokogiri::XML(f) }
+        doc = ::File.open(path) {|f| Nokogiri::XML(f)}
         doc.xpath('/xmlns:project/xmlns:version/text()').first.content.sub('-SNAPSHOT', '')
       end
     end
