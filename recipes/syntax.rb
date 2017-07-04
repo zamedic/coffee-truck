@@ -14,14 +14,17 @@ if (java_changes?(changed_files))
     action :compile
   end
 
-  mvn 'pmd' do
-    only_if node['delivery']['config']['truck']['syntax']['execute_pmd']
-    action :pmd
+  if (node['delivery']['config']['truck']['syntax']['execute_pmd'])
+    mvn 'pmd' do
+      action :pmd
+    end
   end
 
-  mvn 'checkstyle' do
-    only_if node['delivery']['config']['truck']['syntax']['execute_checkstyle']
-    action :checkstyle
+  if (node['delivery']['config']['truck']['syntax']['execute_checkstyle'])
+    mvn 'checkstyle' do
+      action :checkstyle
+    end
   end
+  
 
 end
