@@ -6,6 +6,7 @@ if (java_changes?(changed_files))
   end
 
   mvn 'find_bugs' do
+    only_if node['delivery']['config']['truck']['lint']['execute_findbugs']
     action :findbugs
   end
 end

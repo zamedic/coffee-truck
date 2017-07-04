@@ -9,17 +9,19 @@ if (java_changes?(changed_files))
   end
 
   mvn 'unit' do
+    only_if node['delivery']['config']['truck']['unit']['execute_tests']
     action :unit
   end
 
 #Check Unit Tests
   mvn 'jacoco' do
+    only_if node['delivery']['config']['truck']['unit']['execute_tests']
     action :jacoco_report
   end
 
   if (node['delivery']['config']['truck']['codacy']['upload'] && node['delivery']['change']['stage']=='build')
     remote_file '/tmp/codacy.jar' do
-      source 'https://github.com/codacy/codacy-coverage-reporter/releases/download/2.0.0/codacy-coverage-reporter-2.0.0-assembly.jar'
+      source node['delivery']['config']['truck']['unit']['codacy_jar']
     end
 
     execute "java -cp /tmp/codacy.jar com.codacy.CodacyCoverageReporter -l Java -r ./target/site/jacoco/jacoco.xml --projectToken #{node['delivery']['config']['truck']['codacy']['token']}" do
@@ -29,10 +31,9 @@ if (java_changes?(changed_files))
   end
 
 #Upload Snapshot
-  if (node['delivery']['config']['truck']['maven']['upload_snapshot'])
-    mvn 'upload' do
-      action :upload
-    end
+  mvn 'upload' do
+    only_if node['delivery']['config']['truck']['maven']['upload_snapshot']
+    action :upload
   end
 
 end

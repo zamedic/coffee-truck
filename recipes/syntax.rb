@@ -15,10 +15,12 @@ if (java_changes?(changed_files))
   end
 
   mvn 'pmd' do
+    only_if node['delivery']['config']['truck']['syntax']['execute_pmd']
     action :pmd
   end
 
   mvn 'checkstyle' do
+    only_if node['delivery']['config']['truck']['syntax']['execute_checkstyle']
     action :checkstyle
   end
 
