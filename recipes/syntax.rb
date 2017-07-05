@@ -25,6 +25,6 @@ if (java_changes?(changed_files))
       action :checkstyle
     end
   end
-  
+
 
 end
