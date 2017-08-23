@@ -175,7 +175,7 @@ class Chef
       end
 
       action :cpd do
-        command = 'mvn pmd:cpd -Daggregate=true'
+        command = "mvn pmd:cpd -Daggregate=true #{args}"
         converge_by "running cpd detection #{command}" do
           exec command
           checkCpd(node)

@@ -170,6 +170,7 @@ module CoffeeTruck
           doc = ::File.open(path) {|f| Nokogiri::XML(f)}
           duplications = doc.xpath("count(//duplication)").to_i
           previousDuplications = savedDuplications(node)
+          Chef::Log.warn("Previous Copy Paste Blocks #{previousDuplications}, new copy and paste blocks #{duplications}")
           if (duplications > previousDuplications)
             raise RuntimeError, "Number of duplicated blocks of code increased from #{previousDuplications} to #{duplications}. This is normally as a result of copying and pasting code."
           end
