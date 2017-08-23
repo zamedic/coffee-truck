@@ -10,4 +10,8 @@ if (java_changes?(changed_files))
       action :findbugs
     end
   end
+
+  mvn 'cpd' do
+    action :cpd
+  end
 end
