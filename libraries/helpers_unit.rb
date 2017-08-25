@@ -56,7 +56,7 @@ module CoffeeTruck
       def calculate_complexity(doc)
         max = 0
         sum = 0
-        complexities = doc.xpath('/report/package/class/method/counter[@type="COMPLEXITY"]/')
+        complexities = doc.xpath('/report/package/class/method/counter[@type="COMPLEXITY"]')
         complexities.each do |complexity|
           item_value = complexity.missed.value.to_i + complexity.covered.value.to_i
           if item_value > max
