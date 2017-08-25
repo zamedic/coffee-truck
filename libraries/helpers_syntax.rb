@@ -35,11 +35,11 @@ module CoffeeTruck
       def java_changes?(node,changes)
         Chef::Log.warn(changes)
         changes.each do |file|
-          if (file.start_with?('/src','pom.xml'))
+          if file.start_with?('/src', 'pom.xml') or file.include? '/src'
             return true
           end
         end
-        return false
+        false
 
       end
     end
