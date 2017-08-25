@@ -244,7 +244,7 @@ module CoffeeTruck
 
       def max_complexity(node)
         begin
-          load_data_bag(node)[unit_coverage_key][:complexity][:max_complexity]
+          load_data_bag(node)[unit_coverage_key]['complexity']['max_complexity']
         rescue
           0
         end
@@ -252,9 +252,9 @@ module CoffeeTruck
 
       def average_complexity(node)
         begin
-          load_data_bag(node)[unit_coverage_key][:complexity][:average_complexity]
-        rescue
-          0
+          value = load_data_bag(node)[unit_coverage_key]['complexity']['average_complexity']
+        rescues
+          0.to_f
         end
 
       end
