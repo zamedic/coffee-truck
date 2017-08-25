@@ -296,5 +296,15 @@ module CoffeeTruck
     def unit_total_tests(node)
       CoffeeTruck::Helpers::Unit.unit_total_tests(node)
     end
+
+    def max_complexity(node)
+      CoffeeTruck::Helpers::Unit.max_complexity(node)
+    end
+
+    def average_complexity(node)
+      CoffeeTruck::Helpers::Unit.average_complexity(node)
+    end
+
+
   end
 end
