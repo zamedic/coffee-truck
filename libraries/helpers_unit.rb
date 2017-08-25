@@ -253,7 +253,7 @@ module CoffeeTruck
       def average_complexity(node)
         begin
           value = load_data_bag(node)[unit_coverage_key]['complexity']['average_complexity']
-        rescues
+        rescue
           0.to_f
         end
 
