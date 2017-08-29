@@ -115,7 +115,7 @@ class Chef
         converge_by "running checkstyle for complexity #{command}" do
           exec command
           check_checkstyle_violations(node) unless node['delivery']['config']['truck']['skip_complexity_enforcement']
-          if node['delivery']['change']['stage'] == "build"
+          if node['delivery']['change']['stage'] == 'build'
             save_checkstyle_violations(node)
           end
         end
@@ -126,7 +126,7 @@ class Chef
         converge_by "running findbugs #{command}" do
           exec command
           check_bugs(node) unless node['delivery']['config']['truck']['skip_findbugs_enforcement']
-          if node['delivery']['change']['stage'] == "build"
+          if node['delivery']['change']['stage'] == 'build'
             save_bug_count(node)
           end
         end

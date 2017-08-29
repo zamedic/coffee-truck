@@ -35,6 +35,8 @@ module CoffeeTruck
           raise RuntimeError, 'Project coverage is 0%. Please check your pom.xml to ensure you have enabled jacoco else add some tests'
         end
 
+        Chef::Log.warn("Complexity total record: sum #{complexity_sum}, max #{complexity_max}, count #{complexity_count}")
+
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
         {coverage: ((coverage*1000).round / 1000.0).to_f, max_complexity: complexity_max, average_complexity: ((((complexity_sum.to_f / complexity_sum.to_f) * 10).round)/10).to_f}
       end
@@ -64,7 +66,7 @@ module CoffeeTruck
           end
           sum = sum + item_value
         end
-
+        Chef::Log.warn("Complexity record: sum #{sum}, max #{max}, count #{complexities.length}")
         {max: max, sum: sum, count: complexities.length}
 
       end
