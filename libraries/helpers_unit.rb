@@ -38,7 +38,7 @@ module CoffeeTruck
         Chef::Log.warn("Complexity total record: sum #{complexity_sum}, max #{complexity_max}, count #{complexity_count}")
 
         coverage = covered.to_f / (covered.to_f + missed.to_f) * 100.0
-        {coverage: ((coverage*1000).round / 1000.0).to_f, max_complexity: complexity_max, average_complexity: ((((complexity_sum.to_f / complexity_sum.to_f) * 10).round)/10).to_f}
+        {coverage: ((coverage*1000).round / 1000.0).to_f, max_complexity: complexity_max, average_complexity: ((((complexity_sum.to_f / complexity_sum.to_f) * 10).round)/10.0).to_f}
       end
 
       def current_path_unit_coverage(path, node)
